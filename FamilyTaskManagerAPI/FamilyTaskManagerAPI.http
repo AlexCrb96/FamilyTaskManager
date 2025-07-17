@@ -1,0 +1,6 @@
+@FamilyTaskManagerAPI_HostAddress = http://localhost:5062
+
+GET {{FamilyTaskManagerAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
