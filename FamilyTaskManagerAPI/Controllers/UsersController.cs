@@ -71,7 +71,7 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while logging in the user.");
             }
 
-            var token = _jwtProvider.GenerateAuthToken(input); // Replace with actual token generation logic
+            var token = _jwtProvider.GenerateAuthToken(input);
             return Ok(token);
         }
     }

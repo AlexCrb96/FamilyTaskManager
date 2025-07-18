@@ -2,15 +2,15 @@
 {
     public enum UserRole
     {
-        User,
-        Admin
+        Parent,
+        Child
     }
 
     public enum TaskItemStatus
     {
-        Pending,
+        ToDo,
         InProgress,
-        Completed,
+        Done,
         Overdue
     }
 }
