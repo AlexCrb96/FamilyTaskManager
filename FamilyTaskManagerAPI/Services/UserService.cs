@@ -41,7 +41,7 @@ namespace FamilyTaskManagerAPI.Services
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
             if (existingUser == null)
             {
-                throw new ValidationException("User not found.");
+                throw new KeyNotFoundException("User not found.");
             }
 
             // Verify the password

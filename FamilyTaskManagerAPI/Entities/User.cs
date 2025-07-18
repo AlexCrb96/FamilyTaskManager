@@ -16,6 +16,6 @@ namespace FamilyTaskManagerAPI.Entities
         public UserRole Role { get; set; }
 
         // User relationships
-        public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+        public ICollection<TaskItem> AssignedTasks { get; set; } = new List<TaskItem>();
     }
 }

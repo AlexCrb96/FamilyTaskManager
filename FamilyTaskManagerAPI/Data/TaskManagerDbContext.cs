@@ -26,14 +26,14 @@ namespace FamilyTaskManagerAPI.Data
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
             // Default values for properties
-            modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.User);
-            modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.Pending);
+            modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.Child);
+            modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.ToDo);
 
             // Relationships
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Tasks)
-                .WithOne(t => t.User)
-                .HasForeignKey(t => t.UserId)
+                .HasMany(u => u.AssignedTasks)
+                .WithOne(t => t.AssignedUser)
+                .HasForeignKey(t => t.AssignedUserId)
                 .OnDelete(DeleteBehavior.SetNull); // Set to null if user is deleted
         }
 

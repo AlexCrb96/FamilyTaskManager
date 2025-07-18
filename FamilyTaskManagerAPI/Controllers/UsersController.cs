@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using FamilyTaskManagerAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
 using FamilyTaskManagerAPI.DTOs;
 using FamilyTaskManagerAPI.Utils;
+using System.ComponentModel.DataAnnotations;
 
 namespace FamilyTaskManagerAPI.Controllers
 {
@@ -39,7 +33,11 @@ namespace FamilyTaskManagerAPI.Controllers
             {
                 string registeredUserId = await _userService.RegisterUserAsync(input, dto.Password);
             }
-            catch(Exception ex)
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return Problem(
                     detail: ex.Message,
@@ -63,7 +61,15 @@ namespace FamilyTaskManagerAPI.Controllers
             {
                 input = await _userService.LoginUserAsync(input, dto.Password);
             }
-            catch(Exception ex)
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return Problem(
                     detail: ex.Message,
