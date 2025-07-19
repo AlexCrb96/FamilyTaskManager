@@ -9,17 +9,8 @@ namespace FamilyTaskManagerAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController(UserService userService, JwtProvider jwtProvider) : Controller
     {
-        private readonly UserService _userService;
-        private readonly JwtProvider _jwtProvider;
-
-        public UsersController(UserService userService, JwtProvider jwtProvider)
-        {
-            _userService = userService;
-            _jwtProvider = jwtProvider;
-        }
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO dto)
         {
@@ -31,7 +22,7 @@ namespace FamilyTaskManagerAPI.Controllers
             User input = dto.ToUser();
             try
             {
-                string registeredUserId = await _userService.RegisterUserAsync(input, dto.Password);
+                await userService.RegisterUserAsync(input, dto.Password);
             }
             catch (ValidationException ex)
             {
@@ -59,7 +50,7 @@ namespace FamilyTaskManagerAPI.Controllers
             User input = dto.ToUser();
             try
             {
-                input = await _userService.LoginUserAsync(input, dto.Password);
+                input = await userService.LoginUserAsync(input, dto.Password);
             }
             catch (KeyNotFoundException ex)
             {
@@ -77,7 +68,7 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while logging in the user.");
             }
 
-            var token = _jwtProvider.GenerateAuthToken(input);
+            var token = jwtProvider.GenerateAuthToken(input);
             return Ok(token);
         }
     }

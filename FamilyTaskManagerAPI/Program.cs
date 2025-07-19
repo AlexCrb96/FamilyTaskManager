@@ -88,6 +88,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    // Automatically apply migrations in development environment
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
+    dbContext.Database.Migrate();
 }
 
 app.UseHttpsRedirection();

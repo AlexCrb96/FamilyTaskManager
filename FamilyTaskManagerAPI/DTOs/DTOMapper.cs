@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace FamilyTaskManagerAPI.DTOs
 {
+    // sparge clasa asta in mappere pentru fiecare entitate in parte si pune-le intr-un namespace separat
     public static class DTOMapper
     {
         public static User ToUser(this RegisterUserRequestDTO dto)

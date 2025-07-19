@@ -16,6 +16,6 @@ namespace FamilyTaskManagerAPI.Entities
 
         // Task relationships
         public string? AssignedUserId { get; set; }
-        public User? AssignedUser { get; set; } = null;
+        public User? AssignedUser { get; set; }
     }
 }

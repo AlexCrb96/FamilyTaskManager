@@ -4,15 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FamilyTaskManagerAPI.Services
 {
-    public class TaskItemService
+    // desi peste tot folosesti acest context, ar fi mai bine sa iti creezi repositories pentru fiecare entitite (taskItem si users)
+    // si injectezi in fiecare contextul asta. Idee e ca daca la un moment dat schimbi baza de date sau modul in care te conectezi
+    // la baza de date tu va trebui sa faci un refactoring foarte mare, dar daca ai acele repositories, poti sa scapi schimband doar acolo
+    public class TaskItemService(TaskManagerDbContext context)
     {
-        private readonly TaskManagerDbContext _context;
-
-        public TaskItemService(TaskManagerDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
         {
             // Check if another task with the same title exists
@@ -22,8 +18,8 @@ namespace FamilyTaskManagerAPI.Services
             await ValidateAssignedUserExistsAsync(taskItem.AssignedUserId);
 
             // Add to context and save changes
-            _context.Tasks.Add(taskItem);
-            await _context.SaveChangesAsync();
+            context.Tasks.Add(taskItem);
+            await context.SaveChangesAsync();
             return taskItem.Id;
         }
 
@@ -37,20 +33,17 @@ namespace FamilyTaskManagerAPI.Services
 
             // Assign the user to the task item
             taskItem.AssignedUserId = userId;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        public async Task UpdateTaskStatusAsync(int taskId, string newStatus)
+        public async Task UpdateTaskStatusAsync(int taskId, TaskItemStatus newStatus)
         {
-            // Validate the new status
-            var status = await ValidateStatus(newStatus);
-
             // Find the task item
             var taskItem = await GetTaskItemByIdAsync(taskId);
 
             // Update the status
-            taskItem.Status = status;
-            await _context.SaveChangesAsync();
+            taskItem.Status = newStatus;
+            await context.SaveChangesAsync();
         }
 
         public async Task UpdateTaskDueDateAsync(int taskId, DateTime dueDate)
@@ -63,7 +56,7 @@ namespace FamilyTaskManagerAPI.Services
 
             // Update the due date
             taskItem.DueDate = dueDate;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         internal async Task UpdateTaskItemDescriptionAsync(int taskId, string description)
@@ -73,9 +66,9 @@ namespace FamilyTaskManagerAPI.Services
 
             // Update the description
             taskItem.Description = description;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
-
+        
         private async Task<TaskItemStatus> ValidateStatus(string status)
         {
             if (!Enum.TryParse<TaskItemStatus>(status, out var taskStatus))
@@ -85,16 +78,19 @@ namespace FamilyTaskManagerAPI.Services
             return taskStatus;
         }
 
+        // ar merge mutat intr-un validator TaskItemValidator
         private async Task ValidateTitle(TaskItem taskItem)
         {
             // Check if a task with the same title already exists
-            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Title == taskItem.Title);
+            // e cam stricta validarea asta
+            var existingTask = await context.Tasks.FirstOrDefaultAsync(t => t.Title == taskItem.Title);
             if (existingTask != null)
             {
                 throw new ArgumentException("A task with the same title already exists.");
             }
         }
 
+        // TaskItemValidator
         private void ValidateDueDate(DateTime dueDate)
         {
             if (dueDate < DateTime.UtcNow)
@@ -105,7 +101,7 @@ namespace FamilyTaskManagerAPI.Services
 
         private async Task<TaskItem> GetTaskItemByIdAsync(int taskId)
         {
-            var taskItem = await _context.Tasks.FindAsync(taskId);
+            var taskItem = await context.Tasks.FindAsync(taskId);
             if (taskItem == null)
             {
                 throw new KeyNotFoundException("Task item does not exist.");
@@ -113,11 +109,12 @@ namespace FamilyTaskManagerAPI.Services
             return taskItem;
         }
 
+        // UserValidator
         private async Task ValidateAssignedUserExistsAsync(string? assignedUserId)
         {
             if (assignedUserId != null)
             {
-                var user = await _context.Users.FindAsync(assignedUserId);
+                var user = await context.Users.FindAsync(assignedUserId);
                 if (user == null)
                 {
                     throw new ArgumentException("Assigned user does not exist.");
@@ -125,10 +122,11 @@ namespace FamilyTaskManagerAPI.Services
             }
         }
 
+        // UserValidator
         internal async Task IsCurrentUserAssignedOrAdmin(string? currentUserId, int taskId)
         {
             var taskItem = await GetTaskItemByIdAsync(taskId);
-            var currentUser = await _context.Users.FindAsync(currentUserId);
+            var currentUser = await context.Users.FindAsync(currentUserId);
             if (currentUser == null)
             {
                 throw new ArgumentException("Current user does not exist.");

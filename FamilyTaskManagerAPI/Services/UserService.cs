@@ -6,46 +6,39 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FamilyTaskManagerAPI.Services
 {
-    public class UserService
+    public class UserService(TaskManagerDbContext context, IPasswordHasher<User> passwordHasher)
     {
-        private readonly TaskManagerDbContext _context;
-        private readonly IPasswordHasher<User> _passwordHasher;
-
-        public UserService(TaskManagerDbContext context, IPasswordHasher<User> passwordHasher)
-        {
-            _context = context;
-            _passwordHasher = passwordHasher;
-        }
-
         public async Task<string> RegisterUserAsync(User input, string password)
         {
             // Check if user already exists
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
+            var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
             if (existingUser != null)
             {
                 throw new ValidationException("User e-mail is already registered.");
             }
 
             // Hash the password
-            input.PasswordHash = _passwordHasher.HashPassword(input, password);
+            input.PasswordHash = passwordHasher.HashPassword(input, password);
 
             // Add to context and save changes
-            _context.Users.Add(input);
-            await _context.SaveChangesAsync();
+            context.Users.Add(input);
+            await context.SaveChangesAsync();
             return input.Id;
         }
 
         internal async Task<User> LoginUserAsync(User input, string password)
         {
             // Check if the user exists
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
+            var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
             if (existingUser == null)
             {
                 throw new KeyNotFoundException("User not found.");
             }
 
             // Verify the password
-            var result = _passwordHasher.VerifyHashedPassword(existingUser, existingUser.PasswordHash, password);
+            // Nice to know/have: asta nu e secure, oferi o informatie sensibila care iti face aplicatia vulnerabila la atacuri de tip brute force
+            // Best practice e sa ai un mesaj generic de eroare pentru user si parola gresite, din care sa nu isi dea seama nimeni ce e gresit
+            var result = passwordHasher.VerifyHashedPassword(existingUser, existingUser.PasswordHash, password);
             if (result == PasswordVerificationResult.Failed)
             {
                 throw new ValidationException("Invalid password.");

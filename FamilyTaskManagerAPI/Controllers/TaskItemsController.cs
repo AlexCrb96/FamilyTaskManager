@@ -11,16 +11,8 @@ namespace FamilyTaskManagerAPI.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class TaskItemsController : Controller
+    public class TaskItemsController(TaskItemService taskItemService, UserHandler userHandler) : Controller
     {
-        private readonly TaskItemService _taskItemService;
-        private readonly UserHandler _userHandler;
-
-        public TaskItemsController(TaskItemService taskItemService, UserHandler userHandler)
-        {
-            _taskItemService = taskItemService;
-            _userHandler = userHandler;
-        }
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateTaskItem([FromBody] CreateTaskItemRequestDTO dto)
@@ -33,7 +25,7 @@ namespace FamilyTaskManagerAPI.Controllers
             TaskItem input = dto.ToTaskItem();
             try
             {
-                await _taskItemService.CreateTaskItemAsync(input);
+                await taskItemService.CreateTaskItemAsync(input);
             }
             catch (ArgumentException ex)
             {
@@ -59,9 +51,10 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
+                // faci cam multe actiuni aici (pentru un controller), toate astea pot fi mutate in taskItemService si, mai departe, intr-un validator
                 string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.AssignUserToTaskItemAsync(taskId, userId);
+                await taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+                await taskItemService.AssignUserToTaskItemAsync(taskId, userId);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -86,7 +79,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpPut("{taskId}/updateStatus/{newStatus}")]
-        public async Task<IActionResult> UpdateTaskItemStatus(int taskId, string newStatus)
+        public async Task<IActionResult> UpdateTaskItemStatus(int taskId, TaskItemStatus newStatus) // am schimbat aici in Enum ca sa pasez validarea catre framework
         {
             if (!ModelState.IsValid)
             {
@@ -95,9 +88,10 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
+                // la fel si aici, si daca tot repeti primele 2 actiuni cred ca ar fi mai bine sa le scoti intr-un validator
                 string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId); 
-                await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus);
+                await taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId); 
+                await taskItemService.UpdateTaskStatusAsync(taskId, newStatus);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -131,8 +125,8 @@ namespace FamilyTaskManagerAPI.Controllers
             try
             {
                 string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate);
+                await taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+                await taskItemService.UpdateTaskDueDateAsync(taskId, dueDate);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -166,8 +160,8 @@ namespace FamilyTaskManagerAPI.Controllers
             try
             {
                 string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description);
+                await taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+                await taskItemService.UpdateTaskItemDescriptionAsync(taskId, description);
             }
             catch (UnauthorizedAccessException ex)
             {
