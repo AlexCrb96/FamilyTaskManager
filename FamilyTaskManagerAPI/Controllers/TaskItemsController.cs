@@ -59,7 +59,13 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
+                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
                 await _taskItemService.AssignUserToTaskItemAsync(taskId, userId);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -89,7 +95,13 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
+                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId); 
                 await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -118,7 +130,13 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             try
             {
+                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
                 await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -147,7 +165,13 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             try
             {
+                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
                 await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {

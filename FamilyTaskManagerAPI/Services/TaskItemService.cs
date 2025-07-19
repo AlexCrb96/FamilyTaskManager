@@ -125,6 +125,19 @@ namespace FamilyTaskManagerAPI.Services
             }
         }
 
+        internal async Task IsCurrentUserAssignedOrAdmin(string? currentUserId, int taskId)
+        {
+            var taskItem = await GetTaskItemByIdAsync(taskId);
+            var currentUser = await _context.Users.FindAsync(currentUserId);
+            if (currentUser == null)
+            {
+                throw new ArgumentException("Current user does not exist.");
+            }
 
+            if (currentUser.Role != UserRole.Parent || taskItem.AssignedUserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("Current user is not assigned to this task or is not an admin.");
+            }
+        }
     }
 }
