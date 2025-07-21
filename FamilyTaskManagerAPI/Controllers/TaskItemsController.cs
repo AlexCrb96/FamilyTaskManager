@@ -60,9 +60,7 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
-                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.AssignUserToTaskItemAsync(taskId, userId);
+                await _taskItemService.AssignUserToTaskItemAsync(taskId, userId, GetCurrentUserId());
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -96,9 +94,7 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
-                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus);
+                await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus, GetCurrentUserId());
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -131,9 +127,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             try
             {
-                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate);
+                await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate, GetCurrentUserId());
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -166,9 +160,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             try
             {
-                string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
-                await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description);
+                await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description, GetCurrentUserId());
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -190,6 +182,11 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while updating the task item description.");
             }
             return Ok("Task item description updated successfully.");
+        }
+
+        private string? GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

@@ -27,8 +27,11 @@ namespace FamilyTaskManagerAPI.Services
             return taskItem.Id;
         }
 
-        public async Task AssignUserToTaskItemAsync(int taskId, string userId)
+        public async Task AssignUserToTaskItemAsync(int taskId, string userId, string currentUserId)
         {
+            // Check if the current user is assigned to the task or is an admin
+            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+
             // Find the task item
             var taskItem = await GetTaskItemByIdAsync(taskId);
 
@@ -40,8 +43,11 @@ namespace FamilyTaskManagerAPI.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTaskStatusAsync(int taskId, string newStatus)
+        public async Task UpdateTaskStatusAsync(int taskId, string newStatus, string currentUserId)
         {
+            // Check if the current user is assigned to the task or is an admin
+            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+
             // Validate the new status
             var status = await ValidateStatus(newStatus);
 
@@ -53,8 +59,11 @@ namespace FamilyTaskManagerAPI.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTaskDueDateAsync(int taskId, DateTime dueDate)
+        public async Task UpdateTaskDueDateAsync(int taskId, DateTime dueDate, string currentUserId)
         {
+            // Check if the current user is assigned to the task or is an admin
+            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+
             // Find the task item
             var taskItem = await GetTaskItemByIdAsync(taskId);
 
@@ -66,8 +75,11 @@ namespace FamilyTaskManagerAPI.Services
             await _context.SaveChangesAsync();
         }
 
-        internal async Task UpdateTaskItemDescriptionAsync(int taskId, string description)
+        public async Task UpdateTaskItemDescriptionAsync(int taskId, string description, string currentUserId)
         {
+            // Check if the current user is assigned to the task or is an admin
+            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+
             // Find the task item
             var taskItem = await GetTaskItemByIdAsync(taskId);
 
@@ -125,7 +137,7 @@ namespace FamilyTaskManagerAPI.Services
             }
         }
 
-        internal async Task IsCurrentUserAssignedOrAdmin(string? currentUserId, int taskId)
+        private async Task IsCurrentUserAssignedOrAdmin(string? currentUserId, int taskId)
         {
             var taskItem = await GetTaskItemByIdAsync(taskId);
             var currentUser = await _context.Users.FindAsync(currentUserId);
