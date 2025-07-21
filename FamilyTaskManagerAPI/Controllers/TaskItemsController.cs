@@ -1,4 +1,5 @@
 ﻿using FamilyTaskManagerAPI.DTOs;
+using FamilyTaskManagerAPI.DTOs.Mappers;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
 using FamilyTaskManagerAPI.Utils;
@@ -96,7 +97,7 @@ namespace FamilyTaskManagerAPI.Controllers
             try
             {
                 string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId); 
+                await _taskItemService.IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
                 await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus);
             }
             catch (UnauthorizedAccessException ex)
