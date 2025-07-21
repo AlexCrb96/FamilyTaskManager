@@ -1,4 +1,5 @@
 using FamilyTaskManagerAPI.Data;
+using FamilyTaskManagerAPI.Data.Repositories;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
 using FamilyTaskManagerAPI.Utils;
@@ -9,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using static FamilyTaskManagerAPI.Data.Repositories.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +46,7 @@ builder.Services.AddScoped<JwtProvider>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserHandler>();
 builder.Services.AddScoped<TaskItemService>();
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>
