@@ -85,7 +85,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpPut("{taskId}/updateStatus/{newStatus}")]
-        public async Task<IActionResult> UpdateTaskItemStatus(int taskId, string newStatus)
+        public async Task<IActionResult> UpdateTaskItemStatus(int taskId, TaskItemStatus newStatus)
         {
             if (!ModelState.IsValid)
             {

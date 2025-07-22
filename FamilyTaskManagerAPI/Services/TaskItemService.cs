@@ -36,7 +36,7 @@ namespace FamilyTaskManagerAPI.Services
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
             // Check if the current user is assigned or admin
-            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Check if the assigned user exists
             await _userValidator.ValidateUserExists(userId);
@@ -46,19 +46,16 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
-        public async Task UpdateTaskStatusAsync(int taskId, string newStatus, string currentUserId)
+        public async Task UpdateTaskStatusAsync(int taskId, TaskItemStatus newStatus, string currentUserId)
         {
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
             // Check if the current user is assigned or admin
-            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
-
-            // Validate the new status
-            var status = await _taskItemValidator.ValidateStatus(newStatus);
+            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Update the status
-            task.Status = status;
+            task.Status = newStatus;
             await _repo.SaveAsync();
         }
 
@@ -68,7 +65,7 @@ namespace FamilyTaskManagerAPI.Services
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
             // Check if the current user is assigned or admin
-            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Validate the due date
             _taskItemValidator.ValidateDueDate(dueDate);
@@ -84,7 +81,7 @@ namespace FamilyTaskManagerAPI.Services
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
             // Check if the current user is assigned or admin
-            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Update the description
             task.Description = description;
