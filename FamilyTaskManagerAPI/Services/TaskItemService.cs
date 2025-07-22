@@ -1,155 +1,94 @@
 ﻿using FamilyTaskManagerAPI.Data;
 using FamilyTaskManagerAPI.Entities;
+using FamilyTaskManagerAPI.Validators;
 using Microsoft.EntityFrameworkCore;
+using static FamilyTaskManagerAPI.Data.Repositories.IRepository;
 
 namespace FamilyTaskManagerAPI.Services
 {
     public class TaskItemService
     {
-        private readonly TaskManagerDbContext _context;
+        private readonly IRepository<TaskItem, int> _repo;
+        private readonly UserValidator _userValidator;
+        private readonly TaskItemValidator _taskItemValidator;
 
-        public TaskItemService(TaskManagerDbContext context)
+        public TaskItemService(IRepository<TaskItem, int> repository, UserValidator userValidator, TaskItemValidator taskItemValidator)
         {
-            _context = context;
+            _repo = repository;
+            _userValidator = userValidator;
+            _taskItemValidator = taskItemValidator;
         }
 
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
         {
-            // Check if another task with the same title exists
-            await ValidateTitle(taskItem);
-
             // Check if the user exists if provided
-            await ValidateAssignedUserExistsAsync(taskItem.AssignedUserId);
+            await _userValidator.ValidateUserExists(taskItem.AssignedUserId);
 
             // Add to context and save changes
-            _context.Tasks.Add(taskItem);
-            await _context.SaveChangesAsync();
+            await _repo.AddAsync(taskItem);
+            await _repo.SaveAsync();
             return taskItem.Id;
         }
 
         public async Task AssignUserToTaskItemAsync(int taskId, string userId, string currentUserId)
         {
-            // Check if the current user is assigned to the task or is an admin
-            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Find the task item
-            var taskItem = await GetTaskItemByIdAsync(taskId);
+            // Check if the current user is assigned or admin
+            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
-            // Check if the user exists
-            await ValidateAssignedUserExistsAsync(userId);
+            // Check if the assigned user exists
+            await _userValidator.ValidateUserExists(userId);
 
             // Assign the user to the task item
-            taskItem.AssignedUserId = userId;
-            await _context.SaveChangesAsync();
+            task.AssignedUserId = userId;
+            await _repo.SaveAsync();
         }
 
         public async Task UpdateTaskStatusAsync(int taskId, string newStatus, string currentUserId)
         {
-            // Check if the current user is assigned to the task or is an admin
-            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+
+            // Check if the current user is assigned or admin
+            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Validate the new status
-            var status = await ValidateStatus(newStatus);
-
-            // Find the task item
-            var taskItem = await GetTaskItemByIdAsync(taskId);
+            var status = await _taskItemValidator.ValidateStatus(newStatus);
 
             // Update the status
-            taskItem.Status = status;
-            await _context.SaveChangesAsync();
+            task.Status = status;
+            await _repo.SaveAsync();
         }
 
         public async Task UpdateTaskDueDateAsync(int taskId, DateTime dueDate, string currentUserId)
         {
-            // Check if the current user is assigned to the task or is an admin
-            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Find the task item
-            var taskItem = await GetTaskItemByIdAsync(taskId);
+            // Check if the current user is assigned or admin
+            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Validate the due date
-            ValidateDueDate(dueDate);
+            _taskItemValidator.ValidateDueDate(dueDate);
 
             // Update the due date
-            taskItem.DueDate = dueDate;
-            await _context.SaveChangesAsync();
+            task.DueDate = dueDate;
+            await _repo.SaveAsync();
         }
 
         public async Task UpdateTaskItemDescriptionAsync(int taskId, string description, string currentUserId)
         {
-            // Check if the current user is assigned to the task or is an admin
-            await IsCurrentUserAssignedOrAdmin(currentUserId, taskId);
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Find the task item
-            var taskItem = await GetTaskItemByIdAsync(taskId);
+            // Check if the current user is assigned or admin
+            _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Update the description
-            taskItem.Description = description;
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task<TaskItemStatus> ValidateStatus(string status)
-        {
-            if (!Enum.TryParse<TaskItemStatus>(status, out var taskStatus))
-            {
-                throw new ArgumentException("Invalid status value.");
-            }
-            return taskStatus;
-        }
-
-        private async Task ValidateTitle(TaskItem taskItem)
-        {
-            // Check if a task with the same title already exists
-            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Title == taskItem.Title);
-            if (existingTask != null)
-            {
-                throw new ArgumentException("A task with the same title already exists.");
-            }
-        }
-
-        private void ValidateDueDate(DateTime dueDate)
-        {
-            if (dueDate < DateTime.UtcNow)
-            {
-                throw new ArgumentException("Due date cannot be in the past.");
-            }
-        }
-
-        private async Task<TaskItem> GetTaskItemByIdAsync(int taskId)
-        {
-            var taskItem = await _context.Tasks.FindAsync(taskId);
-            if (taskItem == null)
-            {
-                throw new KeyNotFoundException("Task item does not exist.");
-            }
-            return taskItem;
-        }
-
-        private async Task ValidateAssignedUserExistsAsync(string? assignedUserId)
-        {
-            if (assignedUserId != null)
-            {
-                var user = await _context.Users.FindAsync(assignedUserId);
-                if (user == null)
-                {
-                    throw new ArgumentException("Assigned user does not exist.");
-                }
-            }
-        }
-
-        private async Task IsCurrentUserAssignedOrAdmin(string? currentUserId, int taskId)
-        {
-            var taskItem = await GetTaskItemByIdAsync(taskId);
-            var currentUser = await _context.Users.FindAsync(currentUserId);
-            if (currentUser == null)
-            {
-                throw new ArgumentException("Current user does not exist.");
-            }
-
-            if (currentUser.Role != UserRole.Parent || taskItem.AssignedUserId != currentUserId)
-            {
-                throw new UnauthorizedAccessException("Current user is not assigned to this task or is not an admin.");
-            }
+            task.Description = description;
+            await _repo.SaveAsync();
         }
     }
 }

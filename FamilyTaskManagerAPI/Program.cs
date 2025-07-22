@@ -3,6 +3,7 @@ using FamilyTaskManagerAPI.Data.Repositories;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
 using FamilyTaskManagerAPI.Utils;
+using FamilyTaskManagerAPI.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,9 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserHandler>();
 builder.Services.AddScoped<TaskItemService>();
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<TaskItemValidator>();
+builder.Services.AddScoped<UserValidator>();
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>

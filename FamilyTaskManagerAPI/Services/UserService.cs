@@ -1,5 +1,6 @@
-﻿using FamilyTaskManagerAPI.Data;
+﻿using FamilyTaskManagerAPI.Data.Repositories;
 using FamilyTaskManagerAPI.Entities;
+using FamilyTaskManagerAPI.Validators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -8,50 +9,39 @@ namespace FamilyTaskManagerAPI.Services
 {
     public class UserService
     {
-        private readonly TaskManagerDbContext _context;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly UserRepository _repo;
+        private readonly UserValidator _userValidator;
 
-        public UserService(TaskManagerDbContext context, IPasswordHasher<User> passwordHasher)
+        public UserService(UserRepository repo, UserValidator userValidator)
         {
-            _context = context;
-            _passwordHasher = passwordHasher;
+            _repo = repo;
+            
+            _userValidator = userValidator;
         }
 
         public async Task<string> RegisterUserAsync(User input, string password)
         {
             // Check if user already exists
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
-            if (existingUser != null)
-            {
-                throw new ValidationException("User e-mail is already registered.");
-            }
+            await _userValidator.ValidateEmailIsUnique(input.Email);
 
             // Hash the password
-            input.PasswordHash = _passwordHasher.HashPassword(input, password);
+            input.PasswordHash = _userValidator.HashPassword(input, password);
 
             // Add to context and save changes
-            _context.Users.Add(input);
-            await _context.SaveChangesAsync();
+            await _repo.AddAsync(input);
+            await _repo.SaveAsync();
             return input.Id;
         }
 
         internal async Task<User> LoginUserAsync(User input, string password)
         {
             // Check if the user exists
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == input.Email);
-            if (existingUser == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
+            var user = await _userValidator.ValidateAndGetUserByEmail(input.Email);
 
             // Verify the password
-            var result = _passwordHasher.VerifyHashedPassword(existingUser, existingUser.PasswordHash, password);
-            if (result == PasswordVerificationResult.Failed)
-            {
-                throw new ValidationException("Invalid password.");
-            }
+            await _userValidator.ValidateUserPassword(user, password);
 
-            return existingUser;
+            return user;
         }
     }
 }
