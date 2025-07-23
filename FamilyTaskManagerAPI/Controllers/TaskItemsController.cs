@@ -1,5 +1,6 @@
-﻿using FamilyTaskManagerAPI.DTOs;
-using FamilyTaskManagerAPI.DTOs.Mappers;
+﻿using FamilyTaskManagerAPI.DTOs.Mappers;
+using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.DTOs.Responses;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
 using FamilyTaskManagerAPI.Utils;
@@ -119,7 +120,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpPut("{taskId}/updateDueDate")]
-        public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateTime dueDate)
+        public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateOnly dueDate)
         {
             if (!ModelState.IsValid)
             {
@@ -182,6 +183,33 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while updating the task item description.");
             }
             return Ok("Task item description updated successfully.");
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetFilteredTaskItems([FromQuery] TaskItemStatus? status, [FromQuery] string? userId, [FromQuery] DateOnly? dueDate, [FromQuery] string? keywords)
+        {
+            try
+            {
+                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(status, userId, dueDate, keywords);
+                List<TaskItemResponseDTO> taskItemsDto = taskItems.Select(t => t.ToTaskItemResponse()).ToList();
+
+                return Ok(taskItemsDto);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while retrieving task items by status.");
+            }
         }
 
         private string? GetCurrentUserId()

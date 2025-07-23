@@ -1,4 +1,5 @@
-﻿using FamilyTaskManagerAPI.Entities;
+﻿using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.Entities;
 
 namespace FamilyTaskManagerAPI.DTOs.Mappers
 {

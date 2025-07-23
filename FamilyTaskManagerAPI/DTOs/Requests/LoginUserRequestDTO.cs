@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyTaskManagerAPI.DTOs
+namespace FamilyTaskManagerAPI.DTOs.Requests
 {
     public class LoginUserRequestDTO
     {

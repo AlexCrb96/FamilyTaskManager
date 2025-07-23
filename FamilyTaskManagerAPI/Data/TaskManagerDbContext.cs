@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FamilyTaskManagerAPI.Entities;
+﻿using FamilyTaskManagerAPI.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilyTaskManagerAPI.Data
 {
@@ -29,12 +30,28 @@ namespace FamilyTaskManagerAPI.Data
             modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.Child);
             modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.ToDo);
 
+            // Create a ValueConverter for DateOnly to DateTime
+            var nullableDateOnlyConverter = new ValueConverter<DateOnly?, DateTime?>(
+                                                                            d => d.HasValue ? d.Value.ToDateTime(TimeOnly.MinValue) : null,
+                                                                            d => d.HasValue ? DateOnly.FromDateTime(d.Value) : null);
+            // Convert DateOnly to DateTime for database storage
+            modelBuilder.Entity<TaskItem>()
+                .Property(t => t.DueDate)
+                .HasConversion(nullableDateOnlyConverter)
+                .HasColumnType("date"); // Use date type for DueDate
+
             // Relationships
             modelBuilder.Entity<User>()
                 .HasMany(u => u.AssignedTasks)
                 .WithOne(t => t.AssignedUser)
                 .HasForeignKey(t => t.AssignedUserId)
                 .OnDelete(DeleteBehavior.SetNull); // Set to null if user is deleted
+        }
+
+        // Add logging configuration for debugging purposes
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         }
 
     }

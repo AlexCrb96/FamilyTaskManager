@@ -1,4 +1,6 @@
-﻿using FamilyTaskManagerAPI.Entities;
+﻿using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.DTOs.Responses;
+using FamilyTaskManagerAPI.Entities;
 
 namespace FamilyTaskManagerAPI.DTOs.Mappers
 {
@@ -15,6 +17,20 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
                 AssignedUserId = dto.AssignedUserId
             };
             return task;
+        }
+
+        public static TaskItemResponseDTO ToTaskItemResponse(this TaskItem task)
+        {
+            TaskItemResponseDTO dto = new TaskItemResponseDTO
+            {
+                Title = task.Title,
+                Description = task.Description,
+                DueDate = task.DueDate,
+                Status = task.Status,
+                AssignedUserEmail = task.AssignedUser?.Email,
+            };
+            return dto;
+
         }
     }
 }

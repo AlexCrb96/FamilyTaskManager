@@ -2,17 +2,17 @@
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Validators;
 using Microsoft.EntityFrameworkCore;
-using static FamilyTaskManagerAPI.Data.Repositories.IRepository;
+using FamilyTaskManagerAPI.Data.Repositories;
 
 namespace FamilyTaskManagerAPI.Services
 {
     public class TaskItemService
     {
-        private readonly IRepository<TaskItem, int> _repo;
+        private readonly TaskItemRepository _repo;
         private readonly UserValidator _userValidator;
         private readonly TaskItemValidator _taskItemValidator;
 
-        public TaskItemService(IRepository<TaskItem, int> repository, UserValidator userValidator, TaskItemValidator taskItemValidator)
+        public TaskItemService(TaskItemRepository repository, UserValidator userValidator, TaskItemValidator taskItemValidator)
         {
             _repo = repository;
             _userValidator = userValidator;
@@ -59,7 +59,7 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
-        public async Task UpdateTaskDueDateAsync(int taskId, DateTime dueDate, string currentUserId)
+        public async Task UpdateTaskDueDateAsync(int taskId, DateOnly dueDate, string currentUserId)
         {
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
@@ -86,6 +86,47 @@ namespace FamilyTaskManagerAPI.Services
             // Update the description
             task.Description = description;
             await _repo.SaveAsync();
+        }
+
+        public async Task<List<TaskItem>> GetAllTaskItemsByStatusAsync(TaskItemStatus? status, string currentUserId)
+        {
+            // Fetch tasks by status
+            List<TaskItem> tasks = await _repo.GetTasksByStatusAsync(status);
+
+            // Check if the list is empty
+            _taskItemValidator.ValidateTasksNotEmpty(tasks);
+
+            return tasks;
+        }
+
+        public async Task<List<TaskItem>> GetAllTaskItemsByUserAsync(string? userId, string? v)
+        {
+            // Fetch tasks by assigned user
+            List<TaskItem> tasks = await _repo.GetTasksByAssignedUserIdAsync(userId);
+
+            // Check if the list is empty
+            _taskItemValidator.ValidateTasksNotEmpty(tasks);
+
+            return tasks;
+        }
+
+        public async Task<List<TaskItem>> GetFilteredTaskItems (TaskItemStatus? status, string? userId, DateOnly? dueDate, string? keywords)
+        {
+            List<TaskItem> tasks = new List<TaskItem>();
+            TaskItemsFilter filter = new TaskItemsFilter(status, userId, dueDate, keywords);
+
+            if (!string.IsNullOrEmpty(filter.UserId))
+            {
+                await _userValidator.ValidateUserExists(filter.UserId);
+            }
+
+            // Fetch tasks based on the provided filters
+            tasks = await _repo.GetFilteredTasksAsync(filter);
+
+            // Check if the list is empty
+            _taskItemValidator.ValidateTasksNotEmpty(tasks);
+
+            return tasks;
         }
     }
 }

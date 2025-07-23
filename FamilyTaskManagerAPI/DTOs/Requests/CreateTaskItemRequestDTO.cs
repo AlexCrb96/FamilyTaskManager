@@ -1,7 +1,7 @@
 ﻿using FamilyTaskManagerAPI.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace FamilyTaskManagerAPI.DTOs
+namespace FamilyTaskManagerAPI.DTOs.Requests
 {
     public class CreateTaskItemRequestDTO
     {
@@ -9,7 +9,7 @@ namespace FamilyTaskManagerAPI.DTOs
         [StringLength(50, ErrorMessage = "The title should not exceed 50 characters.")]
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public DateTime? DueDate { get; set; }
+        public DateOnly? DueDate { get; set; }
         public TaskItemStatus? Status { get; set; }
         public string? AssignedUserId { get; set; }
     }

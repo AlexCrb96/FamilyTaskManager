@@ -51,6 +51,7 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<TaskItemValidator>();
 builder.Services.AddScoped<UserValidator>();
+builder.Services.AddScoped<TaskItemRepository>();
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>

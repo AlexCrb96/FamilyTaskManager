@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Services;
-using FamilyTaskManagerAPI.DTOs;
 using FamilyTaskManagerAPI.Utils;
 using System.ComponentModel.DataAnnotations;
 using FamilyTaskManagerAPI.DTOs.Mappers;
+using FamilyTaskManagerAPI.DTOs.Requests;
 
 namespace FamilyTaskManagerAPI.Controllers
 {

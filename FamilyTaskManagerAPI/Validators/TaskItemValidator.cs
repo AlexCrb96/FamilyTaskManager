@@ -26,11 +26,20 @@ namespace FamilyTaskManagerAPI.Validators
             return taskStatus;
         }
 
-        public void ValidateDueDate(DateTime dueDate)
+        public void ValidateDueDate(DateOnly dueDate)
         {
-            if (dueDate < DateTime.UtcNow)
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+            if (dueDate < today)
             {
                 throw new ArgumentException("Due date cannot be in the past.");
+            }
+        }
+
+        public void ValidateTasksNotEmpty (List<TaskItem> tasks)
+        {
+            if (tasks == null || tasks.Count == 0)
+            {
+                throw new KeyNotFoundException("No tasks found.");
             }
         }
     }
