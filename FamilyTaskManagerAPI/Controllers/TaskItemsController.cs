@@ -186,11 +186,17 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetFilteredTaskItems([FromQuery] TaskItemStatus? status, [FromQuery] string? userId, [FromQuery] DateOnly? dueDate, [FromQuery] string? keywords)
+        public async Task<IActionResult> GetFilteredTaskItems(
+            [FromQuery] string? userId,
+            [FromQuery] DateOnly? dueDate,
+            [FromQuery] TaskItemStatus? status,
+            [FromQuery] string? keywords,
+            [FromQuery] bool unassignedOnly = false,
+            [FromQuery] bool noDueDateOnly = false)
         {
             try
             {
-                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(status, userId, dueDate, keywords);
+                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords);
                 List<TaskItemResponseDTO> taskItemsDto = taskItems.Select(t => t.ToTaskItemResponse()).ToList();
 
                 return Ok(taskItemsDto);

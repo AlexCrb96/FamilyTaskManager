@@ -24,20 +24,34 @@ namespace FamilyTaskManagerAPI.Data.Repositories
         {
             IQueryable<TaskItem> query = _dbSet.Include(t => t.AssignedUser);
 
-            if (filter.UserId != null)
-            {
-                query = query.Where(t => t.AssignedUserId == filter.UserId);
-            }
-
             if (filter.IsUserIdExplicitNull)
             {
                 query = query.Where(t => t.AssignedUserId == null);
             }
 
-            if (filter.Status != null) 
+            if (filter.UserId != null)
+            {
+                query = query.Where(t => t.AssignedUserId == filter.UserId);
+            }
+
+            if (filter.Status != null)
             {
                 query = query.Where(t => t.Status == filter.Status);
             }
+
+            if (filter.IsDueDateExplicitNull)
+            {
+                query = query.Where(t => t.DueDate == null);
+            }
+
+            if (filter.DueDate != null)
+            {
+                query = query.Where(t => t.DueDate == filter.DueDate);
+            }
+            
+
+
+
 
             foreach (string keyword in filter.Keywords)
             {

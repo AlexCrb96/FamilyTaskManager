@@ -110,14 +110,20 @@ namespace FamilyTaskManagerAPI.Services
             return tasks;
         }
 
-        public async Task<List<TaskItem>> GetFilteredTaskItems (TaskItemStatus? status, string? userId, DateOnly? dueDate, string? keywords)
+        public async Task<List<TaskItem>> GetFilteredTaskItems (
+            string? userId,
+            bool unassignedOnly,
+            DateOnly? dueDate,
+            bool noDueDateOnly,
+            TaskItemStatus? status,
+            string? keywords)
         {
             List<TaskItem> tasks = new List<TaskItem>();
-            TaskItemsFilter filter = new TaskItemsFilter(status, userId, dueDate, keywords);
+            TaskItemsFilter filter = new TaskItemsFilter(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords);
 
-            if (!string.IsNullOrEmpty(filter.UserId))
+            if (!string.IsNullOrEmpty(userId) && unassignedOnly == false)
             {
-                await _userValidator.ValidateUserExists(filter.UserId);
+                await _userValidator.ValidateUserExists(userId);
             }
 
             // Fetch tasks based on the provided filters
