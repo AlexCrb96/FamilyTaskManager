@@ -33,7 +33,7 @@ namespace FamilyTaskManagerAPI.Services
             return input.Id;
         }
 
-        internal async Task<User> LoginUserAsync(User input, string password)
+        public async Task<User> LoginUserAsync(User input, string password)
         {
             // Check if the user exists
             var user = await _userValidator.ValidateAndGetUserByEmail(input.Email);
@@ -42,6 +42,11 @@ namespace FamilyTaskManagerAPI.Services
             await _userValidator.ValidateUserPassword(user, password);
 
             return user;
+        }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _repo.GetAllAsync();
         }
     }
 }

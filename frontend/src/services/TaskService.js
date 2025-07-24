@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/api/tasks';
+const baseURL = 'https://localhost:7003/api/tasks';
 
 const TaskService = {
     getAllTasks: async () => {

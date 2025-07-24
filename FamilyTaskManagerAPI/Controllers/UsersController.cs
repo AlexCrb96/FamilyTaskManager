@@ -5,6 +5,8 @@ using FamilyTaskManagerAPI.Utils;
 using System.ComponentModel.DataAnnotations;
 using FamilyTaskManagerAPI.DTOs.Mappers;
 using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.DTOs.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FamilyTaskManagerAPI.Controllers
 {
@@ -80,6 +82,25 @@ namespace FamilyTaskManagerAPI.Controllers
 
             var token = _jwtProvider.GenerateAuthToken(input);
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet()]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                List<User> users = await _userService.GetAllUsersAsync();
+                List<UserResponseDTO> usersDto = users.Select(u => u.ToUserResponse()).ToList();
+                return Ok(usersDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while retrieving users.");
+            }
         }
     }
 }

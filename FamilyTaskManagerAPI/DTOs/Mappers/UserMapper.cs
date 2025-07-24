@@ -1,4 +1,5 @@
 ﻿using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.DTOs.Responses;
 using FamilyTaskManagerAPI.Entities;
 
 namespace FamilyTaskManagerAPI.DTOs.Mappers
@@ -23,6 +24,15 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
                 Email = dto.Email
             };
             return user;
+        }
+
+        public static UserResponseDTO ToUserResponse(this User user)
+        {
+            UserResponseDTO dto = new UserResponseDTO()
+            {
+                Email = user.Email,
+            };
+            return dto;
         }
     }
 }

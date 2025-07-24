@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import TaskService from '../services/TaskService';
 import TaskItemStatus from '../enums/TaskItemStatus';
 
-const TaskListItem = ({ task, onDelete, onEdit }) => {
+const TaskListItem = ({ task, onDelete, onEdit, users }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(task.title);
     const [editedDescription, setEditedDescription] = useState(task.description);
     const [editedDueDate, setEditedDueDate] = useState(task.dueDate);
-    const [editedStatus, setEditedStatus] = useState(task.status);]
-    const [editedAssignedUser, setEditedAssignedUser] = useState(task.assignedUser || " ");]
+    const [editedStatus, setEditedStatus] = useState(task.status);
+    const [editedAssignedUser, setEditedAssignedUser] = useState(task.assignedUser || " ");
     const handleEdit = async () => {
         setIsEditing(true);
     };
@@ -26,7 +26,7 @@ const TaskListItem = ({ task, onDelete, onEdit }) => {
             setIsEditing(false);
             onEdit(); // Refresh the task list after editing
         } catch (error) {
-            console.erro('Error updating task:', error);)
+            console.erro('Error updating task:', error);
         }
     };
     const handleCancel = () => {
