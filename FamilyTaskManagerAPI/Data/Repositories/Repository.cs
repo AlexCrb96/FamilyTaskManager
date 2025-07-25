@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using static FamilyTaskManagerAPI.Data.Repositories.IRepository;
 
 namespace FamilyTaskManagerAPI.Data.Repositories
 {

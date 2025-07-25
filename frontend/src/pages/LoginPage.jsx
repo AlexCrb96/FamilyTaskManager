@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:7003/api/users/login', {
+            const response = await axios.post("users/login", {
                 email,
                 password
             });
-
             const token = response.data;
             localStorage.setItem('token', token);
             onLogin(token); // Call the onLogin prop to update the app state
+            navigate("/taskitems");
         } catch (error) {
             setError('Invalid credentials.');
             console.error('Login error:', error);

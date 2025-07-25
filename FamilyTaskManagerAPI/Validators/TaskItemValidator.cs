@@ -1,5 +1,5 @@
 ﻿using FamilyTaskManagerAPI.Entities;
-using static FamilyTaskManagerAPI.Data.Repositories.IRepository;
+using FamilyTaskManagerAPI.Data.Repositories;
 
 
 namespace FamilyTaskManagerAPI.Validators

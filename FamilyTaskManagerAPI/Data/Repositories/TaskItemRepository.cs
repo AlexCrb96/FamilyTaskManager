@@ -1,5 +1,4 @@
 ﻿using FamilyTaskManagerAPI.Entities;
-using FamilyTaskManagerAPI.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FamilyTaskManagerAPI.Data.Repositories

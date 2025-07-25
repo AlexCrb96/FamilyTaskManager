@@ -1,32 +1,16 @@
-import axios from 'axios';
-
-const baseURL = 'https://localhost:7003/api/tasks';
+import axios from "../utils/axiosInstance";
 
 const TaskService = {
     getAllTasks: async () => {
-        try {
-            const response = await axios.get(baseURL,
-                {
-                    timeout: 3000, // 3 seconds timeout
-                    headers: {
-                        Accept: 'application/json',
-                    },
-                },
-            );
-        } catch (err) {
-            if (err.code === 'ECONNABORTED') {
-                console.log('The request timed out.');
-            } else {
-                console.log(err);
-            }
-        }
-    },
-    addTask: async (task) => {
-        const response = await axios.post(baseURL, task);
+        const response = await axios.get("/tasks");
         return response.data;
     },
-    updateTask: async (id, product) => {
-        const response = await axios.put('${baseURL}/${id}', product);
+    addTask: async (task) => {
+        const response = await axios.post("/tasks", task);
+        return response.data;
+    },
+    updateTask: async (id, task) => {
+        const response = await axios.put(`/tasks/${id}`, task);
         return response.data;
     }
 };
