@@ -23,6 +23,7 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
         {
             TaskItemResponseDTO dto = new TaskItemResponseDTO
             {
+                Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
                 DueDate = task.DueDate,

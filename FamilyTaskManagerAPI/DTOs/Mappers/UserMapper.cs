@@ -30,6 +30,7 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
         {
             UserResponseDTO dto = new UserResponseDTO()
             {
+                Id = user.Id,
                 Email = user.Email,
             };
             return dto;

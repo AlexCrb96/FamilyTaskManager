@@ -8,11 +8,32 @@ const TaskItem = ({ task, onEdit, users }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedTask(prev => ({ ...prev, [name]: value }));
+        setEditedTask(prev => ({
+            ...prev,
+            [name]: value === "" && name === "assignedUserId" ? null : value
+        }));
+    };
+
+    const handleStatusChange = (newStatus) => {
+        setEditedTask(prev => ({
+            ...prev,
+            status: newStatus
+        }));
     };
 
     const handleSave = async () => {
-        await TaskService.updateTask(task.id, editedTask);
+        const changedFields = {};
+
+        Object.keys(editedTask).forEach(key => {
+            if (editedTask[key] !== task[key]) {
+                changedFields[key] = editedTask[key];
+            }
+        });
+
+        if (Object.keys(changedFields).length > 0) {
+            await TaskService.updateTask(task.id, changedFields);
+        }
+
         setIsEditing(false);
         onEdit();
     };
@@ -29,7 +50,7 @@ const TaskItem = ({ task, onEdit, users }) => {
                     <div className="col">
                         <input
                             name="title"
-                            vlaue={editedTask.title}
+                            value={editedTask.title}
                             onChange={handleChange}
                             className="form-control"
                         />
@@ -55,7 +76,7 @@ const TaskItem = ({ task, onEdit, users }) => {
                         <select
                             name="status"
                             value={editedTask.status}
-                            onChange={handleChange}
+                            onChange={(e) => handleStatusChange(e.target.value)}
                             className="form-select"
                         >
                             {Object.entries(TaskItemStatus).map(([key, value]) => (
@@ -67,8 +88,8 @@ const TaskItem = ({ task, onEdit, users }) => {
                     </div>
                     <div className="col">
                         <select
-                            name="assignedUser"
-                            value={editedTask.assignedUser || ""}
+                            name="assignedUserId"
+                            value={editedTask.assignedUserId || ""}
                             onChange={handleChange}
                             className="form-select"
                         >
@@ -87,10 +108,10 @@ const TaskItem = ({ task, onEdit, users }) => {
                 </div>
             ) : (
                 <div className="d-flex justify-content-between align-items-center">
-                    <span>{task.Title} - {task.description} - {task.status} - {task.dueDate} - {task.assignedUser}</span>
+                    <span>{task.title} - {task.description} - {task.status} - {task.dueDate} - {task.assignedUserEmail}</span>
                     <div>
                        {/* <button className="btn btn-danger me-2" onClick={onDelete}>Delete</button>*/}
-                        <button className="btn btn-primary" onClick={handleChange}>Edit</button>
+                            <button className="btn btn-primary" onClick={() => setIsEditing(true)}>Edit</button>
                     </div>
                 </div>
             )
