@@ -14,6 +14,11 @@ const UserService = {
             console.error("Login failed: ", error);
             return null;
         }
+    },
+
+    register: async (email, password) => {
+        const response = await axios.post("/users/register", { email, password });
+        return response.data;
     }
 };
 

@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import RegisterPage from "./pages/RegisterPage";
 
 function ProtectedRoute({ children }) {
     const { token } = useContext(AuthContext);
@@ -15,8 +16,11 @@ export default function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<LoginPage />} />
-                    <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute> } />
+                    <Route path="/login" element={<LoginPage />}/>
+                    <Route path="/register" element={<RegisterPage/>}/>
+                    <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+                    {/* Redirect root "/" to "/login": */}
+                    <Route path="/" element={<Navigate to="/login" replace/>}/>
                 </Routes>
             </Router>
         </AuthProvider>

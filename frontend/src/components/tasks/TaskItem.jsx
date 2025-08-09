@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TaskService from "../../services/TaskService";
 import TaskItemStatus from "../../enums/TaskItemStatus";
+import { InputField, SelectField } from "../forms/FormFields";
 
 const TaskItem = ({ task, onEdit, users }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -42,18 +43,6 @@ const TaskItem = ({ task, onEdit, users }) => {
         setIsEditing(false);
         setEditedTask({ ...task });
     }
-
-    const InputField = ({ name, value, onChange, type = "text" }) => (
-        <input name={name} value={value} onChange={onChange} className="form-control" type={type} />
-    );
-
-    const SelectField = ({ name, value, onChange, options }) => (
-        <select name={name} value={value} onChange={onChange} className="form-select" >
-            {options.map(({ key, label, value }) => (
-                <option key={key} value={value}>{label}</option>            
-            ))}
-        </select>
-    );
 
     return (
         <li className="list-group-item">

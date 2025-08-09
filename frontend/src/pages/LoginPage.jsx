@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import UserService from "../services/UserService";
 
@@ -26,6 +26,7 @@ const LoginPage = ({ onLogin }) => {
             <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
             <button type="submit">Login</button>
+            <p>Don't have an account?<Link to="/register">Register here</Link></p>
         </form>
     );
 };
