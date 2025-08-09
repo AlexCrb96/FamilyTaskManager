@@ -38,11 +38,20 @@ namespace FamilyTaskManagerAPI.Services
             // Check if the current user is assigned or admin
             await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
-            // Check if the assigned user exists
-            await _userValidator.ValidateUserExists(userId);
+            bool isUnassigned = userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
+            if (isUnassigned)
+            {
+                task.AssignedUserId = null;
+                task.AssignedUser = null;
+            }else
+            {
+                // Check if the assigned user exists
+                await _userValidator.ValidateUserExists(userId);
 
-            // Assign the user to the task item
-            task.AssignedUserId = userId;
+                // Assign the user to the task item
+                task.AssignedUserId = userId;
+            }
+                            
             await _repo.SaveAsync();
         }
 

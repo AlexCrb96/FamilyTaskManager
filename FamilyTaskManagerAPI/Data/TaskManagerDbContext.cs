@@ -26,9 +26,9 @@ namespace FamilyTaskManagerAPI.Data
             // Index for unique email
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
-            // Default values for properties
-            modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.Child);
-            modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.ToDo);
+/*            // Default values for properties
+            modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.Child);cd 
+            modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.ToDo);*/
 
             // Create a ValueConverter for DateOnly to DateTime
             var nullableDateOnlyConverter = new ValueConverter<DateOnly?, DateTime?>(

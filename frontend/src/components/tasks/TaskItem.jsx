@@ -81,7 +81,7 @@ const TaskItem = ({ task, onEdit, users }) => {
                         value={editedTask.assignedUserId || ""}
                         onChange={handleChange}
                         options={[
-                            { key: "none", label: "Unassigned", value: "" },
+                            { key: "none", label: "Unassigned", value: "unassigned" },
                             ...users.map((user) => ({ key: user.id, label: user.email, value: user.id })),
                         ]}
                     />

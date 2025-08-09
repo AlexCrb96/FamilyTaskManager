@@ -26,6 +26,11 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
+        public async Task<User> ValidateAndGetUserById(string userId)
+        {
+            return await _repo.GetByIdAsync(userId) ?? throw new KeyNotFoundException($"User with ID {userId} does not exist");
+        }
+
         public async Task<User> ValidateAndGetUserByEmail(string userEmail)
         {
             return await _repo.GetByEmailAsync(userEmail) ?? throw new KeyNotFoundException(WrongLoginCredentialsMessage);
@@ -56,8 +61,7 @@ namespace FamilyTaskManagerAPI.Validators
 
         public async Task ValidateUserIsAdmin(string userId)
         {
-            await ValidateUserExists(userId);
-            var user = await _repo.GetByIdAsync(userId);
+            var user = await ValidateAndGetUserById(userId);
             if (user.Role != UserRole.Parent)
             {
                 throw new UnauthorizedAccessException("User is not an admin.");
@@ -74,7 +78,12 @@ namespace FamilyTaskManagerAPI.Validators
 
         public async Task ValidateUserHasAccessToTask(string userId, TaskItem task)
         {
-            await ValidateUserExists(userId);
+            var user = await ValidateAndGetUserById(userId);
+            // If user is Admin -> exit method because it has access
+            if (user.Role == UserRole.Parent)
+            {
+                return;
+            }
             ValidateUserIsAssignedToTask(userId, task);
         }
     }
