@@ -43,79 +43,59 @@ const TaskItem = ({ task, onEdit, users }) => {
         setEditedTask({ ...task });
     }
 
+    const InputField = ({ name, value, onChange, type = "text" }) => (
+        <input name={name} value={value} onChange={onChange} className="form-control" type={type} />
+    );
+
+    const SelectField = ({ name, value, onChange, options }) => (
+        <select name={name} value={value} onChange={onChange} className="form-select" >
+            {options.map(({ key, label, value }) => (
+                <option key={key} value={value}>{label}</option>            
+            ))}
+        </select>
+    );
+
     return (
         <li className="list-group-item">
             {isEditing ? (
                 <div className="row">
                     <div className="col">
-                        <input
-                            name="title"
-                            value={editedTask.title}
-                            onChange={handleChange}
-                            className="form-control"
-                        />
+                        <InputField name="title" value={editedTask.title} onChange={handleChange} />
                     </div>
                     <div className="col">
-                        <input
-                            name="description"
-                            value={editedTask.description}
-                            onChange={handleChange}
-                            className="form-control"
-                        />
+                        <InputField name="description" value={editedTask.description} onChange={handleChange} />
                     </div>
                     <div className="col">
-                        <input
-                            type="date"
-                            name="dueDate"
-                            value={editedTask.dueDate}
-                            onChange={handleChange}
-                            className="form-control"
-                        />
+                        <InputField name="dueDate" value={editedTask.dueDate} onChange={handleChange} type="date" />
                     </div>
                     <div className="col">
-                        <select
+                        <SelectField
                             name="status"
                             value={editedTask.status}
                             onChange={(e) => handleStatusChange(e.target.value)}
-                            className="form-select"
-                        >
-                            {Object.entries(TaskItemStatus).map(([key, value]) => (
-                                <option key={key} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>
+                            options={Object.entries(TaskItemStatus).map(([key, value]) => ({ key, label: value, value }))}
+                        />
                     </div>
-                    <div className="col">
-                        <select
-                            name="assignedUserId"
-                            value={editedTask.assignedUserId || ""}
-                            onChange={handleChange}
-                            className="form-select"
-                        >
-                            <option value="">Unassigned</option>
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.email}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <SelectField
+                        name="assignedUserId"
+                        value={editedTask.assignedUserId || ""}
+                        onChange={handleChange}
+                        options={[
+                            { key: "none", label: "Unassigned", value: "" },
+                            ...users.map((user) => ({ key: user.id, label: user.email, value: user.id })),
+                        ]}
+                    />
                     <div className="col-auto">
                         <button className="btn btn-success me-1" onClick={handleSave}>Save</button>
                         <button className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
                     </div>
                 </div>
             ) : (
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between align-items-centr">
                     <span>{task.title} - {task.description} - {task.status} - {task.dueDate} - {task.assignedUserEmail}</span>
-                    <div>
-                       {/* <button className="btn btn-danger me-2" onClick={onDelete}>Delete</button>*/}
-                            <button className="btn btn-primary" onClick={() => setIsEditing(true)}>Edit</button>
-                    </div>
+                    <button className="btn btn-primary" onClick={() => setIsEditing(true)}>Edit</button>
                 </div>
-            )
-            }
+            )}
         </li>
     );
 };

@@ -1,54 +1,32 @@
-import React, { useState } from "react";
-import axios from "../utils/axiosInstance";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import UserService from "../services/UserService";
 
 const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post("users/login", {
-                email,
-                password
-            });
-            const token = response.data;
-            localStorage.setItem('token', token);
-            onLogin(token); // Call the onLogin prop to update the app state
-            navigate("/taskitems");
-        } catch (error) {
-            setError('Invalid credentials.');
-            console.error('Login error:', error);
+        const token = await UserService.login(email, password);
+        if (token) {
+            login(token);
+            navigate("/home");
+        } else {
+            alert("Login failed.");
         }
     };
 
     return (
-        <div className="container mt-5">
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div className="form-group">
-                    <label>Email</label>
-                    <input type="email"
-                        className="form-control"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required/>
-                </div>
-                <div className="form-group mt-2">
-                    <label>Password</label>
-                    <input type="password"
-                        className="form-control"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required />
-                </div>
-                {error && <div className="alert alert-danger mt-2">{error}</div>}
-                <button type="submit" className="btn btn-primary mt-3">Login</button>
-            </form>
-        </div>
+        <form onSubmit={handleLogin}>
+            <h1>Login</h1>
+            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
+            <button type="submit">Login</button>
+        </form>
     );
 };
 
