@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import UserService from '../services/UserService';
-import { useNavigate, Link } from 'react-router-dom';
-import { InputField } from '../components/forms/FormFields';
+import { useNavigate } from 'react-router-dom';
+import AuthForm from '../components/forms/AuthForm';
 
 export default function RegisterPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        setError(null);
+        setError("");
 
         try {
             await UserService.register(email, password);
@@ -22,13 +22,18 @@ export default function RegisterPage() {
     }; 
 
     return (
-        <form onSubmit={handleRegister}>
-            <h1>Register</h1>
-            <InputField name="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
-            <InputField name="password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required minLength={6} />
-            <button type="submit">Register</button>
-            {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-            <p>Already have an account?<Link to="/login">Login here</Link></p>
-        </form>
+        <AuthForm
+            header="Register"
+            buttonText="Register"
+            hintText="Already have an account?"
+            hintLinkText="Login here"
+            hintLinkTo="/login"
+            email={email}
+            password={password}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            onSubmit={handleRegister}
+            error={error}
+        />
     );
 }
