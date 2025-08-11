@@ -143,5 +143,25 @@ namespace FamilyTaskManagerAPI.Services
 
             return tasks;
         }
+
+        public async Task DeleteTaskItemAsync(int taskId, string? currentUserId)
+        {
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+
+            // Check if the current user is assigned or admin
+            await _userValidator.ValidateUserIsAdmin(currentUserId);
+
+            // Remove the task item
+            _repo.Delete(task);
+            try
+            {
+                await _repo.SaveAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new KeyNotFoundException($"Task with ID {taskId} does not exist or has already been deleted.");
+            }
+        }
     }
 }

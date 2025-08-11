@@ -1,6 +1,6 @@
 import React from "react";
 
-const ShowTasksForm = ({ tasks, users, onEdit }) => {
+const ShowTasksForm = ({ tasks, users, onEdit, onDelete }) => {
 
     return (
         <table>
@@ -24,6 +24,7 @@ const ShowTasksForm = ({ tasks, users, onEdit }) => {
                         <td>{task.assignedUserEmail || "Unassigned"}</td>
                         <td>
                             <button onClick={() => onEdit(task)}>Edit</button>
+                            <button onClick={() => onDelete(task.id)}>Delete</button>
                         </td>
                     </tr>
                 )) }

@@ -48,6 +48,9 @@ const TaskService = {
         }
 
         await Promise.all(promises);
+    },
+    deleteTask: async (taskId) => {
+        await axios.delete(`/TaskItems/${taskId}`);
     }
 };
 

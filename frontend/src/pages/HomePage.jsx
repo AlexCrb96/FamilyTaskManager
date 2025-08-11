@@ -52,7 +52,14 @@ export default function HomePage() {
             assignedUserId: "unassigned"
         });
         setIsCreating(true);
-    }
+    };
+
+    const handleDelete = async (taskId) => {
+        if (window.confirm("Are you sure you want to delete this task?")) {
+            await TaskService.deleteTask(taskId);
+            await fetchTasks();
+        }
+    };
 
     const handleSave = async (taskToSave) => {
         if (isCreating) {
@@ -87,7 +94,7 @@ export default function HomePage() {
             <button onClick={handleLogout}>Logout</button>
             <button onClick={handleCreateClick}>Create a task</button>
 
-            <ShowTasksForm tasks={tasks} users={users} onEdit={handleEditClick} />
+            <ShowTasksForm tasks={tasks} users={users} onEdit={handleEditClick} onDelete={handleDelete} />
 
             <Modal show={!!editingTask} onHide={handleCancel}>
                 <Modal.Header closeButton>

@@ -218,6 +218,31 @@ namespace FamilyTaskManagerAPI.Controllers
             }
         }
 
+        [HttpDelete("{taskId}")]
+        public async Task<IActionResult> DeleteTaskItem(int taskId)
+        {
+            try
+            {
+                await _taskItemService.DeleteTaskItemAsync(taskId, GetCurrentUserId());
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while deleting the task item.");
+            }
+            return Ok("Task item deleted successfully.");
+        }
+
         private string? GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
