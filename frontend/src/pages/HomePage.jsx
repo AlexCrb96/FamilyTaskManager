@@ -7,6 +7,7 @@ import UserService from "../services/UserService";
 import TaskService from "../services/TaskService";
 import ShowTasksForm from "../components/forms/ShowTasksForm";
 import EditTaskForm from "../components/forms/EditTaskForm";
+import TopBarForm from "../components/forms/TopBarForm";
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -16,14 +17,15 @@ export default function HomePage() {
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         fetchTasks();
         fetchUsers();
     }, []);
 
-    const fetchTasks = async () => {
-        const data = await TaskService.getAllTasks();
+    const fetchTasks = async (keywords = "") => {
+        const data = await TaskService.getFilteredTasks({ keywords });
         setTasks(data);
     };
 
@@ -61,6 +63,15 @@ export default function HomePage() {
         }
     };
 
+    const handleSearchChange = (value) => {
+        setSearchTerm(value);
+        //fetchTasks(value); // refresh the list as user types
+    };
+
+    const handleSearchSubmit = () => {
+        fetchTasks(searchTerm);
+    };
+
     const handleSave = async (taskToSave) => {
         if (isCreating) {
             await TaskService.addTask(taskToSave)
@@ -91,10 +102,18 @@ export default function HomePage() {
 
     return (
         <div>
-            <button onClick={handleLogout}>Logout</button>
-            <button onClick={handleCreateClick}>Create a task</button>
+            <TopBarForm onLogout={handleLogout}/>
 
-            <ShowTasksForm tasks={tasks} users={users} onEdit={handleEditClick} onDelete={handleDelete} />
+            <ShowTasksForm
+                tasks={tasks}
+                users={users}
+                onEdit={handleEditClick}
+                onDelete={handleDelete}
+                onCreate={handleCreateClick}
+                searchTerm={searchTerm}
+                onSearchChange={handleSearchChange}
+                onSearchSubmit={handleSearchSubmit}
+            />
 
             <Modal show={!!editingTask} onHide={handleCancel}>
                 <Modal.Header closeButton>

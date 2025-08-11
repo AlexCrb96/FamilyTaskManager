@@ -51,6 +51,23 @@ const TaskService = {
     },
     deleteTask: async (taskId) => {
         await axios.delete(`/TaskItems/${taskId}`);
+    },
+    getFilteredTasks: async (filters = {}) => {
+        // clone the filters so we don't alter user's input
+        const params = { ...filters };
+
+        Object.keys(params).forEach((k) => {
+            if (params[k] === "" || params[k] === null || params[k] === undefined) {
+                delete params[k];
+            }
+        });
+
+        if (params.dueDate instanceof Date) {
+            params.dueDate = params.dueDate.toISOString().split("T")[0];
+        }
+
+        const response = await axios.get("/TaskItems", { params });
+        return response.data;
     }
 };
 
