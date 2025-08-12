@@ -39,12 +39,10 @@ export default function HomePage() {
 
     const handleEditClick = (task) => {
         const assignedUser = users.find(u => u.email === task.assignedUserEmail);
-        const normalizedDueDate = (!task.dueDate || task.dueDate === "") ? null : task.dueDate;
         const normalizedAssignedUserId = assignedUser ? assignedUser.id : "unassigned";
 
         const taskWithNormalizedInput = {
             ...task,
-            dueDate: normalizedDueDate,
             assignedUserId: normalizedAssignedUserId
         };
         setEditingTask(taskWithNormalizedInput);
