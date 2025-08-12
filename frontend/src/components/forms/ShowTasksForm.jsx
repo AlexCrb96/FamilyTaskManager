@@ -3,22 +3,17 @@ import FilterBarForm from "./FilterBarForm";
 
 const ShowTasksForm = ({
     tasks,
-    users,
     onEdit,
     onDelete,
     onCreate,
-    searchTerm,
-    onSearchChange,
-    onSearchSubmit,
+    onSearch,
  }) => {
 
     return (
         <>
             <FilterBarForm
                 onCreate={onCreate}
-                searchTerm={searchTerm}
-                onSearchChange={onSearchChange}
-                onSearchSubmit={onSearchSubmit}
+                onSearch={onSearch}
             />
             <table>
                 <thead>

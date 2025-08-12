@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 
-import { AuthContext } from "../context/AuthContext";
 import UserService from "../services/UserService";
 import TaskService from "../services/TaskService";
 import ShowTasksForm from "../components/forms/ShowTasksForm";
@@ -10,14 +8,11 @@ import EditTaskForm from "../components/forms/EditTaskForm";
 import TopBarForm from "../components/forms/TopBarForm";
 
 export default function HomePage() {
-    const navigate = useNavigate();
-    const { logout } = useContext(AuthContext);
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         fetchTasks();
@@ -32,11 +27,6 @@ export default function HomePage() {
     const fetchUsers = async() => {
         const data = await UserService.getAllUsers();
         setUsers(data);
-    };
-
-    const handleLogout = () => {
-        logout();
-        navigate("/");
     };
 
     const handleEditClick = (task) => {
@@ -62,16 +52,7 @@ export default function HomePage() {
             await fetchTasks();
         }
     };
-
-    const handleSearchChange = (value) => {
-        setSearchTerm(value);
-        //fetchTasks(value); // refresh the list as user types
-    };
-
-    const handleSearchSubmit = () => {
-        fetchTasks(searchTerm);
-    };
-
+      
     const handleSave = async (taskToSave) => {
         if (isCreating) {
             await TaskService.addTask(taskToSave)
@@ -102,17 +83,14 @@ export default function HomePage() {
 
     return (
         <div>
-            <TopBarForm onLogout={handleLogout}/>
+            <TopBarForm/>
 
             <ShowTasksForm
                 tasks={tasks}
-                users={users}
                 onEdit={handleEditClick}
                 onDelete={handleDelete}
                 onCreate={handleCreateClick}
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
-                onSearchSubmit={handleSearchSubmit}
+                onSearch={fetchTasks}
             />
 
             <Modal show={!!editingTask} onHide={handleCancel}>
