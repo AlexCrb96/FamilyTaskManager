@@ -26,7 +26,7 @@ namespace FamilyTaskManagerAPI.Validators
             return taskStatus;
         }
 
-        public void ValidateDueDate(DateOnly dueDate)
+        public void ValidateDueDate(DateOnly? dueDate)
         {
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
             if (dueDate < today)

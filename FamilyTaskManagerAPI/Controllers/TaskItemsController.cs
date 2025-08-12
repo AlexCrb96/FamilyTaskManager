@@ -124,7 +124,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpPut("{taskId}/updateDueDate")]
-        public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateOnly dueDate)
+        public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateOnly? dueDate)
         {
             if (!ModelState.IsValid)
             {

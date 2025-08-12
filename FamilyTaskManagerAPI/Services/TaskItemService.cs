@@ -60,7 +60,7 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
-        public async Task UpdateTaskDueDateAsync(int taskId, DateOnly dueDate, string currentUserId)
+        public async Task UpdateTaskDueDateAsync(int taskId, DateOnly? dueDate, string currentUserId)
         {
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
