@@ -17,9 +17,10 @@ const TaskService = {
         return response.data;
     },
     updateDueDate: async (taskId, dueDate) => {
+        const payload = dueDate === null ? null : dueDate;
         const response = await axios.put(
             `/TaskItems/${taskId}/updateDueDate`,
-            JSON.stringify(dueDate),
+            JSON.stringify(payload),
             { headers: { "Content-type": "application/json" } });
         return response.data;
     },

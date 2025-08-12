@@ -1,20 +1,9 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import React from "react";
 
-
-export default function TopBarForm() {
-    const navigate = useNavigate();
-    const { logout } = useContext(AuthContext);
-
-    const handleLogout = () => {
-        logout();
-        navigate("/");
-    };
-
+export default function TopBarForm({ onLogout }) {
     return (
         <div>
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={onLogout}>Logout</button>
         </div>
     );
 }

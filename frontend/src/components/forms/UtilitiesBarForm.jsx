@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-export default function FilterBarForm({ onCreate, onSearch }) {
+export default function UtilitiesBarForm({ onCreate, onSearch }) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-        //onSearch(searchTerm) // refresh the list as user types -> doesn't really work well enough
+        const value = e.target.value;
+        setSearchTerm(value);
+        //onSearch(searchTerm) // refresh the list as user types -> doesn't really work well enough -> needs handling of 404 error
     };
 
     const handleSearchSubmit = (e) => {
