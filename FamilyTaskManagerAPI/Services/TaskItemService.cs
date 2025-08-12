@@ -1,8 +1,9 @@
 ﻿using FamilyTaskManagerAPI.Data;
+using FamilyTaskManagerAPI.Data.Repositories;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Validators;
 using Microsoft.EntityFrameworkCore;
-using FamilyTaskManagerAPI.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace FamilyTaskManagerAPI.Services
 {
@@ -21,8 +22,8 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
         {
-            // Check if the user exists if provided
-            await _userValidator.ValidateUserExists(taskItem.AssignedUserId);
+            // Validate AssignedUser input
+            await _userValidator.ValidateUserUnassignedOrExists(taskItem, taskItem.AssignedUserId);            
 
             // Add to context and save changes
             await _repo.AddAsync(taskItem);
@@ -38,20 +39,11 @@ namespace FamilyTaskManagerAPI.Services
             // Check if the current user is assigned or admin
             await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
-            bool isUnassigned = userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
-            if (isUnassigned)
-            {
-                task.AssignedUserId = null;
-                task.AssignedUser = null;
-            }else
-            {
-                // Check if the assigned user exists
-                await _userValidator.ValidateUserExists(userId);
+            // Validate AssignedUser input
+            await _userValidator.ValidateUserUnassignedOrExists(task, userId);
 
-                // Assign the user to the task item
-                task.AssignedUserId = userId;
-            }
-                            
+            // Assign the user to the task item
+            task.AssignedUserId = userId;
             await _repo.SaveAsync();
         }
 

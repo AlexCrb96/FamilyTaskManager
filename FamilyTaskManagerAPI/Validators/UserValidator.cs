@@ -86,5 +86,20 @@ namespace FamilyTaskManagerAPI.Validators
             }
             ValidateUserIsAssignedToTask(userId, task);
         }
+
+        public async Task ValidateUserUnassignedOrExists(TaskItem task, string userId)
+        {
+            bool isUnassigned = userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
+            if (isUnassigned)
+            {
+                task.AssignedUserId = null;
+                task.AssignedUser = null;
+            }
+            else
+            {
+                // Check if the assigned user exists
+                await ValidateUserExists(userId);
+            }
+        }
     }
 }

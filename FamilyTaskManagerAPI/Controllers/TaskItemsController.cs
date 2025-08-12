@@ -41,6 +41,10 @@ namespace FamilyTaskManagerAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
                 return Problem(
