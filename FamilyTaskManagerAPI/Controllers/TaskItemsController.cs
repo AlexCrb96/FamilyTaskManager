@@ -189,6 +189,41 @@ namespace FamilyTaskManagerAPI.Controllers
             return Ok("Task item description updated successfully.");
         }
 
+        [HttpPut("{taskId}/updateTitle")]
+        public async Task<IActionResult> UpdateTaskItemTitle(int taskId, [FromBody] string title)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _taskItemService.UpdateTaskItemTitleAsync(taskId, title, GetCurrentUserId());
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while updating the task item description.");
+            }
+
+            return Ok("Task item title updated successfully.");
+        }
+
         [HttpGet()]
         public async Task<IActionResult> GetFilteredTaskItems(
             [FromQuery] string? userId,

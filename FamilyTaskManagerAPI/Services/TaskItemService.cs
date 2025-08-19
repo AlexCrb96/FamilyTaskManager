@@ -89,6 +89,18 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
+        public async Task UpdateTaskItemTitleAsync(int taskId, string title, string currentUserId)
+        {
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+
+            // Check if the current user is assigned or admin
+            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+
+            task.Title = title;
+            await _repo.SaveAsync();
+        }
+
         public async Task<List<TaskItem>> GetAllTaskItemsByStatusAsync(TaskItemStatus? status, string currentUserId)
         {
             // Fetch tasks by status

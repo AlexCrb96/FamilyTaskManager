@@ -16,6 +16,13 @@ const TaskService = {
             { headers: { "Content-type": "application/json" } });
         return response.data;
     },
+    updateTitle: async (taskId, title) => {
+        const response = await axios.put(
+            `/TaskItems/${taskId}/updateTitle`,
+            JSON.stringify(title),
+            { headers: { "Content-type": "application/json" } });
+        return response.data;
+    },
     updateDueDate: async (taskId, dueDate) => {
         const payload = dueDate === null || dueDate === "" ? null : dueDate;
         const response = await axios.put(
@@ -37,6 +44,9 @@ const TaskService = {
 
         if ("description" in changedFields) {
             promises.push(TaskService.updateDescription(taskId, changedFields.description));
+        }
+        if ("title" in changedFields) {
+            promises.push(TaskService.updateTitle(taskId, changedFields.title));
         }
         if ("dueDate" in changedFields) {
             promises.push(TaskService.updateDueDate(taskId, changedFields.dueDate));
