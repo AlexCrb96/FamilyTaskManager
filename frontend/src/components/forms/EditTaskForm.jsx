@@ -4,7 +4,7 @@ import TaskItemStatus from "../../enums/TaskItemStatus";
 
 const inputClasses =
     "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
-
+const labelClasses = "text-sm font-medium text-gray-700";
 
 const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     const [task, setTask] = useState(initialTask || { title: "", description: "", dueDate: "", status: "ToDo", assignedUserId: "unassigned" });
@@ -22,16 +22,16 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             
-            <label className="text-sm font-medium text-gray-700">Title</label>
+            <label className={labelClasses}>Title</label>
             <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
 
-            <label className="text-sm font-medium text-gray-700">Description</label>
+            <label className={labelClasses}>Description</label>
             <InputField className={inputClasses} name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
 
-            <label className="text-sm font-medium text-gray-700">Due Date</label>
+            <label className={labelClasses}>Due Date</label>
             <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
 
-            <label className="text-sm font-medium text-gray-700">Status</label>
+            <label className={labelClasses}>Status</label>
             <SelectField
                 className={inputClasses}
                 name="status"
@@ -40,7 +40,7 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
                 options={Object.entries(TaskItemStatus).map(([key, value]) => ({ key, label: value, value }))}
             />
 
-            <label className="text-sm font-medium text-gray-700">Assigned User</label>
+            <label className={labelClasses}>Assigned User</label>
             <SelectField
                 className={inputClasses}
                 name="assignedUserId"

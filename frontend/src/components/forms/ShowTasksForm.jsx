@@ -12,13 +12,13 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
     };
 
     return (
-        <div className="w-full max-w-4xl overflow-x-auto bg-white rounded-2xl shadow-md p-4">
-            <table className="min-w-full divide-y divide-gray-200">
+        <div className="w-full overflow-x-auto bg-white rounded-2xl shadow-md p-4">
+            <table className="min-w-full table-auto divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
                         {["ID", "Title", "Description", "Due Date", "Status", "Assigned User", "Actions"].map((col, idx) => (
                             <th
-                                className="px-4 py2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none"
+                                className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none"
                                 key={idx}
                                 onClick={col === "Due Date" || col === "Status" || col === "Assigned User" ? () => onSort(col.toLowerCase().replace(" ","")) : null}
                             >
@@ -36,19 +36,21 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
                             <td className="px-4 py-2">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No due date"}</td>
                             <td className="px-4 py-2">{task.status}</td>
                             <td className="px-4 py-2">{task.assignedUserEmail || "Unassigned"}</td>
-                            <td className="px-4 py-2 space-x-2">
-                                <button
-                                    className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
-                                    onClick={() => onEdit(task)}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                    onClick={() => onDelete(task.id)}
-                                >
-                                    Delete
-                                </button>
+                            <td className="px-4 py-2">
+                                <div className="flex space-x-2 justify-start">
+                                    <button
+                                        className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
+                                        onClick={() => onEdit(task)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                        onClick={() => onDelete(task.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>                                
                             </td>
                         </tr>
                     ))}
