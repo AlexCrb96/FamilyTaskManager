@@ -17,6 +17,7 @@ export default function HomePage() {
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
     const [showDone, setShowDone] = useState(false);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
     useEffect(() => {
         fetchTasks();
@@ -91,13 +92,45 @@ export default function HomePage() {
         setEditingTask(null);
     };
 
+    const handleSort = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    };
+
     const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
+
+    const sortedTasks = React.useMemo(() => {
+        let sortable = [...visibleTasks];
+        if (sortConfig.key) {
+            sortable.sort((a, b) => {
+                let aVal = a[sortConfig.key];
+                let bVal = b[sortConfig.key];
+
+                if (!aVal) aVal = "";
+                if (!bVal) bVal = "";
+
+                if (sortConfig.key === "dueDate") {
+                    aVal = aVal ? new Date(aVal) : new Date(0);
+                    bVal = bVal ? new Date(bVal) : new Date(0);
+                }
+
+                if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+                if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
+
+                return 0;
+            });
+        }
+        return sortable;
+    }, [visibleTasks, sortConfig]);
 
     return (
         <div>
             <TopBarForm onLogout={handleLogout} />
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} />
-            <ShowTasksForm tasks={visibleTasks} onEdit={handleEditClick} onDelete={handleDelete} />
+            <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
         </div>
     );

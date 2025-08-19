@@ -1,10 +1,15 @@
-import React from "react";
+﻿import React from "react";
+import { FaSortUp, FaSortDown } from "react-icons/fa";
 
-const ShowTasksForm = ({
-    tasks,
-    onEdit,
-    onDelete,
- }) => {
+const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
+
+    const renderSortArrow = (column) => {
+        if (sortConfig.key !== column) {
+            return null;
+        }
+
+        return sortConfig.direction === "asc" ? <FaSortUp/> : <FaSortDown/>;
+    };
 
     return (
         <table>
@@ -13,9 +18,9 @@ const ShowTasksForm = ({
                     <th>ID</th>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Assigned User</th>
+                    <th onClick={() => onSort("dueDate")} style={{ cursor: "pointer" }}>Due Date {renderSortArrow("dueDate")}</th>
+                    <th onClick={() => onSort("status")} style={{ cursor: "pointer" }}>Status {renderSortArrow("status")}</th>
+                    <th onClick={() => onSort("assignedUserEmail")} style={{ cursor: "pointer" }}>Assigned User {renderSortArrow("assignedUserEmail")}</th>
                     <th>Actions</th>
                 </tr>
             </thead>
