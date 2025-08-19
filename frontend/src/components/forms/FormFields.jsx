@@ -1,11 +1,26 @@
 import React, { useState } from "react";
 
+const inputClasses =
+    "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
+
 export const InputField = ({ name, value, onChange, type = "text", placeholder, ...rest }) => (
-    <input name={name} value={value} onChange={onChange} className="form-control" type={type} placeholder={placeholder} {...rest} />
+    <input
+        className={inputClasses}
+        name={name}
+        value={value}
+        onChange={onChange}
+        type={type}
+        placeholder={placeholder}
+        {...rest} />
 );
 
 export const SelectField = ({ name, value, onChange, options }) => (
-    <select name={name} value={value} onChange={onChange} className="form-select" >
+    <select
+        className={inputClasses}
+        name={name}
+        value={value}
+        onChange={onChange}
+    >
         {options.map(({ key, label, value }) => (
             <option key={key} value={value}>{label}</option>
         ))}
@@ -37,7 +52,7 @@ export const PasswordField = ({ value, onChange }) => {
                 placeholder="Password"
                 required
             />
-            {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+            {error && (<p className="mt-1 text-xs text-red-500" >{error}</p>)}
         </>
     )
 };
