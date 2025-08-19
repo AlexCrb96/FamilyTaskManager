@@ -16,6 +16,7 @@ export default function HomePage() {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
+    const [showDone, setShowDone] = useState(false);
 
     useEffect(() => {
         fetchTasks();
@@ -90,11 +91,13 @@ export default function HomePage() {
         setEditingTask(null);
     };
 
+    const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
+
     return (
         <div>
             <TopBarForm onLogout={handleLogout} />
-            <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} />
-            <ShowTasksForm tasks={tasks} onEdit={handleEditClick} onDelete={handleDelete} />
+            <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} />
+            <ShowTasksForm tasks={visibleTasks} onEdit={handleEditClick} onDelete={handleDelete} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
         </div>
     );

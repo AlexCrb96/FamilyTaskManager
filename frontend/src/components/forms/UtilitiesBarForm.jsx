@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function UtilitiesBarForm({ onCreate, onSearch }) {
+export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone }) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearchChange = (e) => {
@@ -17,8 +17,11 @@ export default function UtilitiesBarForm({ onCreate, onSearch }) {
     return (
         <form onSubmit={handleSearchSubmit}>
             <button type="button" onClick={onCreate}>Create a task</button>
+
             <input type="text" placeholder="Search tasks..." value={searchTerm} onChange={handleSearchChange} />
             <button type="submit">Search</button>
+
+            <label><input type="checkbox" onChange={(e) => onToggleShowDone(e.target.checked)} />Show done tasks</label>
         </form>
     );
 }
