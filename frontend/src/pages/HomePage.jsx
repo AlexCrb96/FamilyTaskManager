@@ -127,7 +127,7 @@ export default function HomePage() {
     }, [visibleTasks, sortConfig]);
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-6 space-y-6">
             <TopBarForm onLogout={handleLogout} />
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} />
             <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
