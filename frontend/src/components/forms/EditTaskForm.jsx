@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { InputField, SelectField } from "./FormFields";
 import TaskItemStatus from "../../enums/TaskItemStatus";
 
+const inputClasses =
+    "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
+
+
 const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     const [task, setTask] = useState(initialTask || { title: "", description: "", dueDate: "", status: "ToDo", assignedUserId: "unassigned" });
 
@@ -16,22 +20,29 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="task-form">
+        <form onSubmit={handleSubmit} className="space-y-4">
+            
+            <label className="text-sm font-medium text-gray-700">Title</label>
+            <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
 
-            <InputField name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
+            <label className="text-sm font-medium text-gray-700">Description</label>
+            <InputField className={inputClasses} name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
 
-            <InputField name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
+            <label className="text-sm font-medium text-gray-700">Due Date</label>
+            <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
 
-            <InputField name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
-
+            <label className="text-sm font-medium text-gray-700">Status</label>
             <SelectField
+                className={inputClasses}
                 name="status"
                 value={task.status}
                 onChange={handleChange}
                 options={Object.entries(TaskItemStatus).map(([key, value]) => ({ key, label: value, value }))}
             />
 
+            <label className="text-sm font-medium text-gray-700">Assigned User</label>
             <SelectField
+                className={inputClasses}
                 name="assignedUserId"
                 value={task.assignedUserId || "unassigned"}
                 onChange={handleChange}
@@ -42,9 +53,20 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
                 ]}
             />
 
-            <div>
-                <button type="submit">Save</button>
-                <button type="button" onClick={onCancel}>Cancel</button>
+            <div className="flex justify-end space-x-2 mt-2">
+                <button
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                    type="submit"
+                >
+                    Save
+                </button>
+                <button
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                    type="button"
+                    onClick={onCancel}
+                >
+                    Cancel
+                </button>
             </div>
         </form>
     )
