@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 
+import "./App.css";
+
 function ProtectedRoute({ children }) {
     const { token } = useContext(AuthContext);
     return token ? children : <Navigate to="/" replace />;
