@@ -26,7 +26,7 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
             <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
 
             <label className={labelClasses}>Description</label>
-            <InputField className={inputClasses} name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
+            <InputField className={`${inputClasses} h-32 resize-y`} type="textarea" name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
 
             <label className={labelClasses}>Due Date</label>
             <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />

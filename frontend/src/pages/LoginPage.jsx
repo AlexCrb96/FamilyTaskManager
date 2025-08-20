@@ -14,18 +14,7 @@ const LoginPage = ({ onLogin }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError("");
-        try {
-            const token = await UserService.login(email, password);
-            if (token) {
-                login(token);
-                navigate("/home");
-            } else {
-                setError("Login failed.");
-            }
-        } catch {
-            setError("Login failed.");
-        }
+        UserService.login(email, password, login, setError, () => navigate("/home"))
         
     };
 
@@ -42,6 +31,7 @@ const LoginPage = ({ onLogin }) => {
             setPassword={setPassword}
             onSubmit={handleLogin}
             error={error}
+            fullScreen={true}
         />
     );
 };

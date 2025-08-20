@@ -32,7 +32,7 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
                         <tr key={task.id}>
                             <td className="px-4 py-2">{task.id}</td>
                             <td className="px-4 py-2">{task.title}</td>
-                            <td className="px-4 py-2">{task.description}</td>
+                            <td className="px-4 py-2 whitespace-pre-line">{task.description}</td>
                             <td className="px-4 py-2">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No due date"}</td>
                             <td className="px-4 py-2">{task.status}</td>
                             <td className="px-4 py-2">{task.assignedUserEmail || "Unassigned"}</td>

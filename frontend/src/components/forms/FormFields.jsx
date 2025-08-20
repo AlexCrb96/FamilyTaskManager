@@ -3,16 +3,32 @@ import React, { useState } from "react";
 const inputClasses =
     "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
-export const InputField = ({ name, value, onChange, type = "text", placeholder, ...rest }) => (
-    <input
-        className={inputClasses}
-        name={name}
-        value={value}
-        onChange={onChange}
-        type={type}
-        placeholder={placeholder}
-        {...rest} />
-);
+export const InputField = ({ name, value, onChange, type = "text", placeholder, ...rest }) => {
+    if (type === "textarea") {
+        return (
+            <textarea
+                className={inputClasses}
+                name={name}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                {...rest}
+            />
+        );
+    }
+
+    return (
+        <input
+            className={inputClasses}
+            name={name}
+            value={value}
+            onChange={onChange}
+            type={type}
+            placeholder={placeholder}
+            {...rest} />
+    );
+}
+
 
 export const SelectField = ({ name, value, onChange, options }) => (
     <select

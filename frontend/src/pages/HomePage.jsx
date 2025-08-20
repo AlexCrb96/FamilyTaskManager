@@ -8,21 +8,43 @@ import ShowTasksForm from "../components/forms/ShowTasksForm";
 import TopBarForm from "../components/forms/TopBarForm";
 import UtilitiesBarForm from "../components/forms/UtilitiesBarForm";
 import EditTaskModal from "../components/modals/EditTaskModal";
+import SessionExpiredModal from "../components/modals/SessionExpiredModal";
 
 export default function HomePage() {
     const navigate = useNavigate();
     const { logout } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
     const [showDone, setShowDone] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [sessionExpired, setSessionExpired] = useState(false);
 
     useEffect(() => {
         fetchTasks();
         fetchUsers();
-    }, []);
+
+        if (!token) return;
+
+        const expTime = UserService.getTokenExpiration(token);
+        if (!expTime) return;
+
+        const now = Date.now();
+        const msBeforeExpiry = expTime - now;
+        const warningTime = msBeforeExpiry - 5 * 60 * 1000; // 5mins 60s 1000ms
+
+        if (warningTime > 0) {
+            const timer = setTimeout(() => {
+                setSessionExpired(true);
+            }, warningTime);
+
+            return () => clearTimeout(timer);
+        } else {
+            setSessionExpired(true);
+        }
+    }, [token]);
 
     const fetchTasks = async (keywords = "") => {
         const data = await TaskService.getFilteredTasks({ keywords });
@@ -132,6 +154,7 @@ export default function HomePage() {
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} />
             <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
+            <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
         </div>
     );
 }
