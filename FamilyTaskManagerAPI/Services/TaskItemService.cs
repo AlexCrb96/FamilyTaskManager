@@ -23,7 +23,11 @@ namespace FamilyTaskManagerAPI.Services
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
         {
             // Validate AssignedUser input
-            await _userValidator.ValidateUserUnassignedOrExists(taskItem, taskItem.AssignedUserId);            
+            await _userValidator.ValidateUserUnassignedOrExists(taskItem, taskItem.AssignedUserId);
+
+            // Trim whitespace at the end of title and description
+            taskItem.Title = taskItem.Title.Trim();
+            taskItem.Description = taskItem.Description?.Trim();
 
             // Add to context and save changes
             await _repo.AddAsync(taskItem);
@@ -84,6 +88,9 @@ namespace FamilyTaskManagerAPI.Services
             // Check if the current user is assigned or admin
             await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
+            // Trim description before assigning
+            description = description.Trim();
+
             // Update the description
             task.Description = description;
             await _repo.SaveAsync();
@@ -97,6 +104,10 @@ namespace FamilyTaskManagerAPI.Services
             // Check if the current user is assigned or admin
             await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
+            // Trim title before assigning
+            title = title.Trim();
+
+            // Update Title
             task.Title = title;
             await _repo.SaveAsync();
         }
