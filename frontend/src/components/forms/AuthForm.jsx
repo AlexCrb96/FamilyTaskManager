@@ -14,7 +14,9 @@ const AuthForm = ({
     setPassword,
     onSubmit,
     error,
-    fullScreen = false
+    fullScreen = false,
+    showForgotPassword = false,
+    onForgotPasswordClick
 }) => {
     return (
         <div className={`${fullScreen ? "min-h-screen flex items-center justify-center bg-gray-50 px-4" : "w-full"}`}>
@@ -46,6 +48,16 @@ const AuthForm = ({
                     {buttonText}
                 </button>
             </form>
+
+                {showForgotPassword && onForgotPasswordClick && (
+                    <button
+                        className="w-full text-sm text-blue-500 underline -mt-2"
+                        type="button"
+                        onClick={onForgotPasswordClick}
+                    >
+                        Forgot your password?
+                    </button>
+                ) }
 
             <p className="text-sm text-gray-600 text-center">
                 {hintText}{" "}

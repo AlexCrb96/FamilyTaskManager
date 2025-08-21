@@ -5,6 +5,7 @@ import { useContext } from "react";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ export default function App() {
                     <Route path="/login" element={<LoginPage />}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+                    <Route path="/reset-password" element={<ResetPasswordPage/>} />
                     {/* Redirect root "/" to "/login": */}
                     <Route path="/" element={<Navigate to="/login" replace/>}/>
                 </Routes>

@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AuthForm from "../components/forms/AuthForm";
 import UserService from "../services/UserService";
+import ForgotPasswordModal from "../components/modals/ForgotYourPasswordModal";
 
 const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
@@ -19,20 +21,29 @@ const LoginPage = ({ onLogin }) => {
     };
 
     return (
-        <AuthForm
-            header="Login"
-            buttonText="Login"
-            hintText="Don't have an account?"
-            hintLinkText="Register here"
-            hintLinkTo="/register"
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            onSubmit={handleLogin}
-            error={error}
-            fullScreen={true}
-        />
+        <>
+            <AuthForm
+                header="Login"
+                buttonText="Login"
+                hintText="Don't have an account?"
+                hintLinkText="Register here"
+                hintLinkTo="/register"
+                email={email}
+                password={password}
+                setEmail={setEmail}
+                setPassword={setPassword}
+                onSubmit={handleLogin}
+                error={error}
+                fullScreen={true}
+                showForgotPassword={true}
+                onForgotPasswordClick={() => setShowForgotPasswordModal(true)}
+            />
+
+            <ForgotPasswordModal
+                show={showForgotPasswordModal}
+                onClose={() => setShowForgotPasswordModal(false)}
+            />
+        </>
     );
 };
 

@@ -68,7 +68,7 @@ namespace FamilyTaskManagerAPI.Services
             _repo.Update(user);
             await _repo.SaveAsync();
 
-            string resetLink = $"https://localhost:7003/api/users/reset-password?token={user.PasswordResetToken}";
+            string resetLink = $"http://localhost:3000/reset-password?token={user.PasswordResetToken}";
 
             _mailService.SendEmail(
                 toEmail,

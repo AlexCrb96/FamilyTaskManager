@@ -44,7 +44,17 @@ const UserService = {
         } catch {
             setError("Login Failed.");
         }
-    } 
+    },
+
+    forgotPassword: async (email) => {
+        const response = await axios.post("/users/forgot-password", { email });
+        return response.data;
+    },
+
+    resetPassword: async (token, newPassword) => {
+        const response = await axios.post("/users/reset-password", { token, newPassword });
+        return response.data;
+    }
 };
 
 export default UserService;
