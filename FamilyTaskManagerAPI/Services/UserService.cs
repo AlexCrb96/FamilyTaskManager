@@ -73,7 +73,7 @@ namespace FamilyTaskManagerAPI.Services
             _mailService.SendEmail(
                 toEmail,
                 "Password Reset Request",
-                $"Click here to reset your password: {resetLink}"
+                $"<a href={resetLink}>Click here to reset your password.</a>"
             );
         }
 
