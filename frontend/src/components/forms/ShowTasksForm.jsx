@@ -3,6 +3,12 @@ import { FaSortUp, FaSortDown } from "react-icons/fa";
 
 const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
 
+    const columnSortKeys = {
+        "Due Date": "dueDate",
+        "Status": "status",
+        "Assigned User": "assignedUserEmail"
+    };
+
     const renderSortArrow = (column) => {
         if (sortConfig.key !== column) {
             return null;
@@ -20,9 +26,9 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
                             <th
                                 className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none"
                                 key={idx}
-                                onClick={col === "Due Date" || col === "Status" || col === "Assigned User" ? () => onSort(col.toLowerCase().replace(" ","")) : null}
+                                onClick={columnSortKeys[col] ? () => onSort(columnSortKeys[col]) : null}
                             >
-                                {col} {renderSortArrow(col.toLowerCase().replace(" ",""))}
+                                {col} {renderSortArrow(columnSortKeys[col])}
                             </th>
                         ))}
                     </tr>

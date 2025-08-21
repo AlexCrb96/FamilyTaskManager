@@ -124,20 +124,19 @@ export default function HomePage() {
 
     const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
 
+    const getSortableValue = (task, key) => {
+        if (key === "dueDate") return task.dueDate ? new Date(task.dueDate) : new Date(0);
+        if (key === "status") return task.status;
+        if (key === "assignedUserEmail") return task.assignedUserEmail?.toLowerCase() || "Unassigned";
+        return task[key];
+    };
+
     const sortedTasks = React.useMemo(() => {
         let sortable = [...visibleTasks];
         if (sortConfig.key) {
             sortable.sort((a, b) => {
-                let aVal = a[sortConfig.key];
-                let bVal = b[sortConfig.key];
-
-                if (!aVal) aVal = "";
-                if (!bVal) bVal = "";
-
-                if (sortConfig.key === "dueDate") {
-                    aVal = aVal ? new Date(aVal) : new Date(0);
-                    bVal = bVal ? new Date(bVal) : new Date(0);
-                }
+                let aVal = getSortableValue(a, sortConfig.key);
+                let bVal = getSortableValue(b, sortConfig.key);
 
                 if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
                 if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
