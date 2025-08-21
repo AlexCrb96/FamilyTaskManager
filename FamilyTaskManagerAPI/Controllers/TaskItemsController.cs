@@ -16,12 +16,10 @@ namespace FamilyTaskManagerAPI.Controllers
     public class TaskItemsController : Controller
     {
         private readonly TaskItemService _taskItemService;
-        private readonly UserHandler _userHandler;
 
-        public TaskItemsController(TaskItemService taskItemService, UserHandler userHandler)
+        public TaskItemsController(TaskItemService taskItemService)
         {
             _taskItemService = taskItemService;
-            _userHandler = userHandler;
         }
 
         [HttpPost("create")]

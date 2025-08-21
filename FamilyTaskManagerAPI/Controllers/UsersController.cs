@@ -15,12 +15,10 @@ namespace FamilyTaskManagerAPI.Controllers
     public class UsersController : Controller
     {
         private readonly UserService _userService;
-        private readonly JwtProvider _jwtProvider;
 
-        public UsersController(UserService userService, JwtProvider jwtProvider)
+        public UsersController(UserService userService)
         {
             _userService = userService;
-            _jwtProvider = jwtProvider;
         }
 
         [HttpPost("register")]
@@ -80,7 +78,7 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while logging in the user.");
             }
 
-            var token = _jwtProvider.GenerateAuthToken(input);
+            var token = _userService.GenerateLoginToken(input);
             return Ok(token);
         }
 
@@ -101,6 +99,62 @@ namespace FamilyTaskManagerAPI.Controllers
                     statusCode: StatusCodes.Status500InternalServerError,
                     title: "An error occurred while retrieving users.");
             }
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _userService.SendPasswordResetEmail(dto.Email);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while sending the password reset email.");
+            }
+
+            return Ok("Password reset email sent successfully.");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _userService.ResetUserPasswordAsync(dto.Token, dto.NewPassword);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while resetting the password.");
+            }
+
+            return Ok("Password reset successfully.");
         }
     }
 }

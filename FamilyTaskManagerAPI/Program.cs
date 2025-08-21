@@ -44,13 +44,14 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<JwtProvider>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<UserHandler>();
+//builder.Services.AddScoped<UserHandler>();
 builder.Services.AddScoped<TaskItemService>();
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<TaskItemValidator>();
 builder.Services.AddScoped<UserValidator>();
 builder.Services.AddScoped<TaskItemRepository>();
+builder.Services.AddSingleton<MailService>();
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>

@@ -36,6 +36,17 @@ namespace FamilyTaskManagerAPI.Validators
             return await _repo.GetByEmailAsync(userEmail) ?? throw new KeyNotFoundException(WrongLoginCredentialsMessage);
         }
 
+        public async Task<User> ValidateAndGetUserByToken(string token)
+        {
+            var user = await _repo.GetByTokenAsync(token);
+            if (user == null || user.PasswordResetTokenExpiration < DateTime.UtcNow)
+            {
+                throw new ValidationException("Invalid or expired password reset token.");
+            }
+
+            return user;
+        }
+
         public async Task ValidateUserPassword(User user, string password)
         {
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);

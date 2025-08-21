@@ -17,5 +17,7 @@ namespace FamilyTaskManagerAPI.Entities
 
         // User relationships
         public ICollection<TaskItem> AssignedTasks { get; set; } = new List<TaskItem>();
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiration { get; set; }
     }
 }
