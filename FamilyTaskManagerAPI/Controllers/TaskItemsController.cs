@@ -67,7 +67,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -101,7 +101,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -134,7 +134,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -167,7 +167,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -201,7 +201,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {
@@ -242,10 +242,6 @@ namespace FamilyTaskManagerAPI.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
             catch (Exception ex)
             {
                 return Problem(
@@ -264,7 +260,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Forbid(ex.Message);
             }
             catch (KeyNotFoundException ex)
             {

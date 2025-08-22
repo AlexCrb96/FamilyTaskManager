@@ -37,11 +37,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task AssignUserToTaskItemAsync(int taskId, string userId, string currentUserId)
         {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
+            // Check if the current user can assign the task
+            _userValidator.ValidateCanAssignTask(currentUser);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
 
             // Validate AssignedUser input
             await _userValidator.ValidateUserUnassignedOrExists(task, userId);
@@ -53,11 +56,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task UpdateTaskStatusAsync(int taskId, TaskItemStatus newStatus, string currentUserId)
         {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            // Check if the current user can edit the task
+            _userValidator.ValidateCanEditTask(currentUser, task);
 
             // Update the status
             task.Status = newStatus;
@@ -66,11 +72,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task UpdateTaskDueDateAsync(int taskId, DateOnly? dueDate, string currentUserId)
         {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            // Check if the current user can edit the task
+            _userValidator.ValidateCanEditTask(currentUser, task);
 
             // Validate the due date
             _taskItemValidator.ValidateDueDate(dueDate);
@@ -82,11 +91,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task UpdateTaskItemDescriptionAsync(int taskId, string description, string currentUserId)
         {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            // Check if the current user can edit the task
+            _userValidator.ValidateCanEditTask(currentUser, task);
 
             // Trim description before assigning
             description = description.Trim();
@@ -98,11 +110,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task UpdateTaskItemTitleAsync(int taskId, string title, string currentUserId)
         {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserHasAccessToTask(currentUserId, task);
+            // Check if the current user can edit the task
+            _userValidator.ValidateCanEditTask(currentUser, task);
 
             // Trim title before assigning
             title = title.Trim();
@@ -161,11 +176,14 @@ namespace FamilyTaskManagerAPI.Services
 
         public async Task DeleteTaskItemAsync(int taskId, string? currentUserId)
         {
+            // Read the current user information from the database
+            User user = await _userValidator.ValidateAndGetUserById(currentUserId);
+
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
             // Check if the current user is assigned or admin
-            await _userValidator.ValidateUserIsAdmin(currentUserId);
+            _userValidator.ValidateCanDeleteTask(user);
 
             // Remove the task item
             _repo.Delete(task);

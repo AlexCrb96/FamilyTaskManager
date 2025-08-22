@@ -17,6 +17,9 @@ namespace FamilyTaskManagerAPI.Validators
             _passwordHasher = passwordHasher;
         }
 
+        // ----------------------
+        // General helpers
+        // ----------------------
         public async Task ValidateUserExists(string userId)
         {
             var exists = await _repo.ExistsAsync(u => u.Id == userId);
@@ -70,34 +73,6 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public async Task ValidateUserIsAdmin(string userId)
-        {
-            var user = await ValidateAndGetUserById(userId);
-            if (user.Role != UserRole.Parent)
-            {
-                throw new UnauthorizedAccessException("User is not an admin.");
-            }
-        }
-
-        public void ValidateUserIsAssignedToTask(string userId, TaskItem task)
-        {
-            if (task.AssignedUserId != userId)
-            {
-                throw new UnauthorizedAccessException("Current user is not assigned to this task.");
-            }
-        }
-
-        public async Task ValidateUserHasAccessToTask(string userId, TaskItem task)
-        {
-            var user = await ValidateAndGetUserById(userId);
-            // If user is Admin -> exit method because it has access
-            if (user.Role == UserRole.Parent)
-            {
-                return;
-            }
-            ValidateUserIsAssignedToTask(userId, task);
-        }
-
         public async Task ValidateUserUnassignedOrExists(TaskItem task, string userId)
         {
             bool isUnassigned = userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
@@ -110,6 +85,45 @@ namespace FamilyTaskManagerAPI.Validators
             {
                 // Check if the assigned user exists
                 await ValidateUserExists(userId);
+            }
+        }
+
+
+        // ----------------------
+        // Permission checks
+        // ----------------------
+        public void ValidateCanCreateTask(User user)
+        {
+            if (!RolePermissions.HasPermission(user.Role, Permission.CreateTask))
+            {
+                throw new UnauthorizedAccessException("User does not have permission to create tasks.");
+            }
+        }
+
+        public void ValidateCanEditTask(User user, TaskItem task)
+        {    
+            bool canEdit = RolePermissions.HasPermission(user.Role, Permission.EditAnyTask) ||
+                           (RolePermissions.HasPermission(user.Role, Permission.EditOwnTask) && task.AssignedUserId == user.Id);
+
+            if (!canEdit)
+            {
+                throw new UnauthorizedAccessException("User does not have permission to edit this task.");
+            }
+        }
+
+        public void ValidateCanAssignTask(User user)
+        {
+            if (!RolePermissions.HasPermission(user.Role, Permission.AssignTask))
+            {
+                throw new UnauthorizedAccessException("User cannot assign task to others.");
+            }
+        }
+
+        public void ValidateCanDeleteTask(User user)
+        {
+            if (!RolePermissions.HasPermission(user.Role, Permission.DeleteTask))
+            {
+                throw new UnauthorizedAccessException("User does not have permission to delete tasks.");
             }
         }
     }

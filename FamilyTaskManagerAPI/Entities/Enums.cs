@@ -13,4 +13,13 @@
         Done,
         Overdue
     }
+
+    public enum Permission
+    {
+        CreateTask,
+        EditOwnTask,
+        EditAnyTask,
+        AssignTask,
+        DeleteTask
+    }
 }
