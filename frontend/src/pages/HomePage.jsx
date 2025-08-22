@@ -14,11 +14,13 @@ export default function HomePage() {
     const navigate = useNavigate();
     const { logout } = useContext(AuthContext);
     const { token } = useContext(AuthContext);
+    const { currentUserEmail } = useContext(AuthContext);
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [editingTask, setEditingTask] = useState(null);
     const [showDone, setShowDone] = useState(false);
+    const [showMine, setShowMine] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
     const [sessionExpired, setSessionExpired] = useState(false);
 
@@ -109,9 +111,9 @@ export default function HomePage() {
             return;
         }
 
-        const { status } = error.response;
+        const { status, data } = error.response;
         if (status === 403) {
-            alert("You don't have permission to perform this action."); 
+            alert(data || "You don't have permission to perform this action."); 
             return
         }
 
@@ -144,7 +146,14 @@ export default function HomePage() {
         setSortConfig({ key, direction });
     };
 
-    const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
+    //const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
+    const visibleTasks = tasks.filter(task => {
+        if (!showDone && task.status === "Done") return false;
+
+        if (showMine && task.assignedUserEmail !== currentUserEmail) return false;
+
+        return true;
+    });
 
     const getSortableValue = (task, key) => {
         if (key === "dueDate") return task.dueDate ? new Date(task.dueDate) : new Date(0);
@@ -172,7 +181,7 @@ export default function HomePage() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-6 space-y-6">
             <TopBarForm onLogout={handleLogout} />
-            <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} />
+            <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
             <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
             <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />

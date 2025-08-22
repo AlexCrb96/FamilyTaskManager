@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone }) {
-    const [searchTerm, setSearchTerm] = useState("");
+export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone, onToggleShowMine }) {
+    const [searchTerm, setSearchTerm] = useState("");    
 
     const handleSearchChange = (e) => {
         const value = e.target.value;
@@ -45,6 +45,12 @@ export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone 
                 <input className="form-checkbox" type="checkbox" onChange={(e) => onToggleShowDone(e.target.checked)} />
                 <span>Show done tasks</span>
             </label>
+
+            <label>
+                <input className="form-checkbox" type="checkbox" onChange={(e) => onToggleShowMine(e.target.checked)} />
+                <span>Show my tasks only</span>
+            </label>
+
         </form>
     );
 }
