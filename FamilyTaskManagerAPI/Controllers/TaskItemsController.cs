@@ -67,7 +67,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {
@@ -101,7 +101,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {
@@ -134,7 +134,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {
@@ -167,7 +167,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {
@@ -201,7 +201,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {
@@ -260,7 +260,7 @@ namespace FamilyTaskManagerAPI.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
             catch (KeyNotFoundException ex)
             {

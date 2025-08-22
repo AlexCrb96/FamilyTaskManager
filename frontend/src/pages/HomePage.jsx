@@ -104,6 +104,17 @@ export default function HomePage() {
     }
 
     const handleError = (error) => {
+        if (!error.response) {
+            alert("Network error or server not responding. Please try again.");
+            return;
+        }
+
+        const { status } = error.response;
+        if (status === 403) {
+            alert("You don't have permission to perform this action."); 
+            return
+        }
+
         if (error.response?.data?.errors) {
             const errors = error.response.data.errors;
             const firstKey = Object.keys(errors)[0];
