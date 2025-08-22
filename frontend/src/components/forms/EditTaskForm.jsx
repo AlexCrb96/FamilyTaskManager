@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { InputField, SelectField } from "./FormFields";
 import TaskItemStatus from "../../enums/TaskItemStatus";
+import TaskDescriptionEditor from "../editors/TaskDescriptionEditor";
 
 const inputClasses =
     "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
@@ -12,6 +13,10 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     const handleChange = async (e) => {
         const { name, value } = e.target;
         setTask((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleDescriptionChange = (value) => {
+        setTask((prev) => ({ ...prev, description: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -26,7 +31,7 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
             <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
 
             <label className={labelClasses}>Description</label>
-            <InputField className={`${inputClasses} h-32 resize-y`} type="textarea" name="description" placeholder="Task description" value={task.description} onChange={handleChange} />
+            <TaskDescriptionEditor value={task.description} onChange={handleDescriptionChange} />
 
             <label className={labelClasses}>Due Date</label>
             <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
