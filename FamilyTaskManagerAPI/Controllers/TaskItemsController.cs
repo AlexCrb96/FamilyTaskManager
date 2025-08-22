@@ -188,7 +188,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [HttpPut("{taskId}/updateTitle")]
-        public async Task<IActionResult> UpdateTaskItemTitle(int taskId, [FromBody] string title)
+        public async Task<IActionResult> UpdateTaskItemTitle(int taskId, [FromBody] UpdateTaskTitleRequestDTO dto)
         {
             if (!ModelState.IsValid)
             {
@@ -197,7 +197,7 @@ namespace FamilyTaskManagerAPI.Controllers
 
             try
             {
-                await _taskItemService.UpdateTaskItemTitleAsync(taskId, title, GetCurrentUserId());
+                await _taskItemService.UpdateTaskItemTitleAsync(taskId, dto.Title, GetCurrentUserId());
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -216,7 +216,7 @@ namespace FamilyTaskManagerAPI.Controllers
                 return Problem(
                     detail: ex.Message,
                     statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item description.");
+                    title: "An error occurred while updating the task item title.");
             }
 
             return Ok("Task item title updated successfully.");

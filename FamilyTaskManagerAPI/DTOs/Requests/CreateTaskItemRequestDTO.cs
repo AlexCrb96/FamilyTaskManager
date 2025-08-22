@@ -6,7 +6,7 @@ namespace FamilyTaskManagerAPI.DTOs.Requests
     public class CreateTaskItemRequestDTO
     {
         [Required(ErrorMessage = "A task should have a title.")]
-        [StringLength(50, ErrorMessage = "The title should not exceed 50 characters.")]
+        [StringLength(100, ErrorMessage = "The title should not exceed 100 characters.")]
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DateOnly? DueDate { get; set; }
