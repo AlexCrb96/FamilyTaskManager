@@ -111,9 +111,16 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public void ValidateCanAssignTask(User user)
+        public void ValidateCanAssignTask(User user, TaskItem task, string targetUserId)
         {
-            if (!RolePermissions.HasPermission(user.Role, Permission.AssignTask))
+            if (user.Role == UserRole.Child)
+            {
+                if (task.AssignedUserId != null || targetUserId != user.Id)
+                {
+                    throw new UnauthorizedAccessException("Non-admin users can only assign unassigned tasks to themselves.");
+                }
+            }
+            else if (!RolePermissions.HasPermission(user.Role, Permission.AssignTask))
             {
                 throw new UnauthorizedAccessException("User cannot assign task to others.");
             }

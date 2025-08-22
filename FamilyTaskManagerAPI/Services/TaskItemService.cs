@@ -40,11 +40,11 @@ namespace FamilyTaskManagerAPI.Services
             // Read the current user information from the database
             User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
 
-            // Check if the current user can assign the task
-            _userValidator.ValidateCanAssignTask(currentUser);
-
             // Validate the task item exists
             TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+
+            // Check if the current user can assign the task
+            _userValidator.ValidateCanAssignTask(currentUser, task, userId);
 
             // Validate AssignedUser input
             await _userValidator.ValidateUserUnassignedOrExists(task, userId);
