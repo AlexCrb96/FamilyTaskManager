@@ -84,24 +84,35 @@ export default function HomePage() {
 
     const handleSave = async (task) => {
 
-        if (!task.id) {
-            await TaskService.addTask(task);
-        } else {
-            const changedFields = {};
+            if (!task.id) {
+                await TaskService.addTask(task).catch(handleError);
+            } else {
+                const changedFields = {};
 
-            Object.keys(task).forEach((key) => {
-                if (task[key] !== editingTask[key]) {
-                    changedFields[key] = task[key];
+                Object.keys(task).forEach((key) => {
+                    if (task[key] !== editingTask[key]) {
+                        changedFields[key] = task[key];
+                    }
+                });
+
+                if (Object.keys(changedFields).length > 0) {
+                    await TaskService.updateTask(editingTask.id, changedFields).catch(handleError);
                 }
-            });
-
-            if (Object.keys(changedFields).length > 0) {
-                await TaskService.updateTask(editingTask.id, changedFields);
             }
-        }
-        fetchTasks();
-        setEditingTask(null);
+            fetchTasks();
+            setEditingTask(null);
     }
+
+    const handleError = (error) => {
+        if (error.response?.data?.errors) {
+            const errors = error.response.data.errors;
+            const firstKey = Object.keys(errors)[0];
+            const firstError = errors[firstKey][0];
+            alert(firstError);
+        } else {
+            alert("An unexpected error occurred.");
+        }
+    };
 
     const handleDelete = async (taskId) => {
         if (window.confirm("Are you sure you want to delete this task?")) {

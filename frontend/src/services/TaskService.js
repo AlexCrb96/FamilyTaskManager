@@ -19,7 +19,7 @@ const TaskService = {
     updateTitle: async (taskId, title) => {
         const response = await axios.put(
             `/TaskItems/${taskId}/updateTitle`,
-            JSON.stringify(title),
+            { title },
             { headers: { "Content-type": "application/json" } });
         return response.data;
     },
