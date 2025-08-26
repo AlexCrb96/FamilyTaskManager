@@ -26,10 +26,6 @@ namespace FamilyTaskManagerAPI.Data
             // Index for unique email
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
-/*            // Default values for properties
-            modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(UserRole.Child);cd 
-            modelBuilder.Entity<TaskItem>().Property(t => t.Status).HasDefaultValue(TaskItemStatus.ToDo);*/
-
             // Create a ValueConverter for DateOnly to DateTime
             var nullableDateOnlyConverter = new ValueConverter<DateOnly?, DateTime?>(
                                                                             d => d.HasValue ? d.Value.ToDateTime(TimeOnly.MinValue) : null,
@@ -46,6 +42,12 @@ namespace FamilyTaskManagerAPI.Data
                 .WithOne(t => t.AssignedUser)
                 .HasForeignKey(t => t.AssignedUserId)
                 .OnDelete(DeleteBehavior.SetNull); // Set to null if user is deleted
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.CreatedTasks)
+                .WithOne(t => t.CreatedByUser)
+                .HasForeignKey(t => t.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent deletion if user has created tasks
         }
 
         // Add logging configuration for debugging purposes

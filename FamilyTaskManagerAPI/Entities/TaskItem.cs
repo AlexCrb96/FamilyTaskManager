@@ -13,9 +13,15 @@ namespace FamilyTaskManagerAPI.Entities
         public string? Description { get; set; } = string.Empty;
         public DateOnly? DueDate { get; set; }
         public TaskItemStatus Status { get; set; }
+        public string? Progress { get; set; } = string.Empty;
+        public DateOnly CreatedAt { get; set; }
+        public DateOnly? FinishedAt { get; set; }
+
 
         // Task relationships
         public string? AssignedUserId { get; set; }
         public User? AssignedUser { get; set; } = null;
+        public string CreatedByUserId { get; set; }
+        public User CreatedByUser { get; set; }
     }
 }
