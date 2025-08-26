@@ -13,7 +13,7 @@ namespace FamilyTaskManagerAPI.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class TaskItemsController : Controller
+    public class TaskItemsController : BaseApiController
     {
         private readonly TaskItemService _taskItemService;
 
@@ -274,11 +274,6 @@ namespace FamilyTaskManagerAPI.Controllers
                     title: "An error occurred while deleting the task item.");
             }
             return Ok("Task item deleted successfully.");
-        }
-
-        private string? GetCurrentUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

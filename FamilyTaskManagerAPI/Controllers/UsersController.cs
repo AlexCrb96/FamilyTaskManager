@@ -12,7 +12,7 @@ namespace FamilyTaskManagerAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : BaseApiController
     {
         private readonly UserService _userService;
 
@@ -155,6 +155,36 @@ namespace FamilyTaskManagerAPI.Controllers
             }
 
             return Ok("Password reset successfully.");
+        }
+
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _userService.ChangePasswordAsync(GetCurrentUserId(), dto.OldPassword, dto.NewPassword);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while changing the password.");
+            }
+            return Ok("Password changed successfully.");
         }
     }
 }

@@ -88,6 +88,20 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
+        public async Task ChangePasswordAsync(string userId, string oldPassword, string newPassword)
+        {
+            // Check if the user exists
+            var user = await _userValidator.ValidateAndGetUserById(userId);
+
+            // Verify the old password
+            await _userValidator.ValidateUserPassword(user, oldPassword);
+
+            // Update to the new password
+            user.PasswordHash = _userValidator.HashPassword(user, newPassword);
+            _repo.Update(user);
+            await _repo.SaveAsync();
+        }
+
         private void GeneratePasswordResetToken(User user)
         {
             // Generate a password reset token
