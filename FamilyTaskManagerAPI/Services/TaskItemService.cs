@@ -20,7 +20,7 @@ namespace FamilyTaskManagerAPI.Services
             _taskItemValidator = taskItemValidator;
         }
 
-        public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
+        public async Task<int> CreateTaskItemAsync(TaskItem taskItem, string currentUserId)
         {
             // Validate AssignedUser input
             await _userValidator.ValidateUserUnassignedOrExists(taskItem, taskItem.AssignedUserId);
@@ -28,6 +28,9 @@ namespace FamilyTaskManagerAPI.Services
             // Trim whitespace at the end of title and description
             taskItem.Title = taskItem.Title.Trim();
             taskItem.Description = taskItem.Description?.Trim();
+            taskItem.Progress = taskItem.Progress?.Trim();
+            taskItem.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
+            taskItem.CreatedByUserId = currentUserId;
 
             // Add to context and save changes
             await _repo.AddAsync(taskItem);
@@ -67,6 +70,12 @@ namespace FamilyTaskManagerAPI.Services
 
             // Update the status
             task.Status = newStatus;
+
+            // If the status is set to Done, set the FinishedAt date
+            if (newStatus == TaskItemStatus.Done)
+            {
+                task.FinishedAt = DateOnly.FromDateTime(DateTime.UtcNow);
+            }
             await _repo.SaveAsync();
         }
 
@@ -127,6 +136,25 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
+        public async Task UpdateTaskItemProgressAsync(int taskId, string progress, string currentUserId)
+        {
+            // Read the current user information from the database
+            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+
+            // Validate the task item exists
+            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+
+            // Check if the current user can edit the task
+            _userValidator.ValidateCanEditTask(currentUser, task);
+
+            // Trim title before assigning
+            progress = progress.Trim();
+
+            // Update Title
+            task.Progress = progress;
+            await _repo.SaveAsync();
+        }
+
         public async Task<List<TaskItem>> GetAllTaskItemsByStatusAsync(TaskItemStatus? status, string currentUserId)
         {
             // Fetch tasks by status
@@ -155,10 +183,14 @@ namespace FamilyTaskManagerAPI.Services
             DateOnly? dueDate,
             bool noDueDateOnly,
             TaskItemStatus? status,
-            string? keywords)
+            string? keywords,
+            string? createdBy,
+            DateOnly? createdAt,
+            DateOnly? finishedAt,
+            bool unfinishedOnly)
         {
             List<TaskItem> tasks = new List<TaskItem>();
-            TaskItemsFilter filter = new TaskItemsFilter(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords);
+            TaskItemsFilter filter = new TaskItemsFilter(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords, createdBy, createdAt, finishedAt, unfinishedOnly);
 
             if (!string.IsNullOrEmpty(userId) && unassignedOnly == false)
             {

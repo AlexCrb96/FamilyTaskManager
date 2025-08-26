@@ -12,6 +12,7 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
             {
                 Title = dto.Title,
                 Description = dto.Description,
+                Progress = dto.Progress,
                 DueDate = dto.DueDate,
                 Status = dto.Status ?? TaskItemStatus.ToDo, // Default to ToDo if not specified
                 AssignedUserId = dto.AssignedUserId
@@ -26,8 +27,11 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
+                Progress = task.Progress,
                 DueDate = task.DueDate,
                 Status = task.Status,
+                CreatedAt = task.CreatedAt,
+                CreatedByUserEmail = task.CreatedByUser.Email,
                 AssignedUserEmail = task.AssignedUser?.Email,
             };
             return dto;

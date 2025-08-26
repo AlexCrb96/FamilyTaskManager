@@ -33,7 +33,7 @@ namespace FamilyTaskManagerAPI.Controllers
             TaskItem input = dto.ToTaskItem();
             try
             {
-                await _taskItemService.CreateTaskItemAsync(input);
+                await _taskItemService.CreateTaskItemAsync(input, GetCurrentUserId());
             }
             catch (ArgumentException ex)
             {
@@ -222,18 +222,56 @@ namespace FamilyTaskManagerAPI.Controllers
             return Ok("Task item title updated successfully.");
         }
 
+        [HttpPut("{taskId}/updateProgress")]
+        public async Task<IActionResult> UpdateTaskItemProgress(int taskId, [FromBody] string progress)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _taskItemService.UpdateTaskItemProgressAsync(taskId, progress, GetCurrentUserId());
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "An error occurred while updating the task item progress.");
+            }
+            return Ok("Task item progress updated successfully.");
+        }
+
         [HttpGet()]
         public async Task<IActionResult> GetFilteredTaskItems(
             [FromQuery] string? userId,
             [FromQuery] DateOnly? dueDate,
             [FromQuery] TaskItemStatus? status,
             [FromQuery] string? keywords,
+            [FromQuery] string? createdBy,
+            [FromQuery] DateOnly? createdAt,
+            [FromQuery] DateOnly? finishedAt,
             [FromQuery] bool unassignedOnly = false,
-            [FromQuery] bool noDueDateOnly = false)
+            [FromQuery] bool noDueDateOnly = false,
+            [FromQuery] bool unfinishedOnly = false
+            )
         {
             try
             {
-                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords);
+                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords, createdBy, createdAt, finishedAt, unfinishedOnly);
                 List<TaskItemResponseDTO> taskItemsDto = taskItems.Select(t => t.ToTaskItemResponse()).ToList();
 
                 return Ok(taskItemsDto);

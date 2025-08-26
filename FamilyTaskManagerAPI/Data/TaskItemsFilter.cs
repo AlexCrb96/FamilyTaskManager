@@ -14,6 +14,13 @@ namespace FamilyTaskManagerAPI.Data
 
         public List<string> Keywords { get; set; }
 
+        public string? CreatedByUserId { get; set; }
+
+        public DateOnly? CreatedAt { get; set; }
+
+        public DateOnly? FinishedAt { get; set; }
+        public bool IsFinishedAtExplicitNull { get; set; }
+
         public TaskItemsFilter(
             string? userId = null,
             bool isUserIdExplicitNull = false,
@@ -23,7 +30,14 @@ namespace FamilyTaskManagerAPI.Data
 
             TaskItemStatus? status = null,       
 
-            string? keywords = null)
+            string? keywords = null,
+
+            string? createdByUserId = null,
+
+            DateOnly? createdAt = null,
+
+            DateOnly? finishedAt = null,
+            bool isFinishedAtExplicitNull = false)
         {
             UserId = userId;
             IsUserIdExplicitNull = isUserIdExplicitNull;
@@ -41,6 +55,13 @@ namespace FamilyTaskManagerAPI.Data
                                    .Select(k => k.ToLower())
                                    .ToList();
             }
+
+            CreatedByUserId = createdByUserId;
+
+            CreatedAt = createdAt;
+
+            FinishedAt = finishedAt;
+            IsFinishedAtExplicitNull = isFinishedAtExplicitNull;
         }
     }
 }
