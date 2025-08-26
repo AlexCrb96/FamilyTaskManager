@@ -54,6 +54,11 @@ const UserService = {
     resetPassword: async (token, newPassword) => {
         const response = await axios.post("/users/reset-password", { token, newPassword });
         return response.data;
+    },
+
+    changePassword: async (oldPassword, newPassword) => {
+        const response = await axios.post("users/change-password", { oldPassword, newPassword });
+        return response.data;
     }
 };
 

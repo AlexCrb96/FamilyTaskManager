@@ -9,6 +9,7 @@ import TopBarForm from "../components/forms/TopBarForm";
 import UtilitiesBarForm from "../components/forms/UtilitiesBarForm";
 import EditTaskModal from "../components/modals/EditTaskModal";
 import SessionExpiredModal from "../components/modals/SessionExpiredModal";
+import ChangePasswordModal from "../components/modals/ChangePasswordModal";
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function HomePage() {
     const [showMine, setShowMine] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
     const [sessionExpired, setSessionExpired] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
 
     useEffect(() => {
         fetchTasks();
@@ -180,11 +182,12 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-6 space-y-6">
-            <TopBarForm onLogout={handleLogout} />
+            <TopBarForm email={currentUserEmail} onChangePassword={()=>setShowChangePassword(true)} onLogout={handleLogout} />
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
             <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
             <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
+            <ChangePasswordModal show={showChangePassword} onClose={() => setShowChangePassword(false)} />
         </div>
     );
 }
