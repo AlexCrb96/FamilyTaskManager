@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PasswordField } from "./FormFields";
+import { PasswordField } from "../shared/InputFields";
 
 const labelClasses = "text-sm font-medium text-gray-700";
 

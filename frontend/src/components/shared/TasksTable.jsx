@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 
-const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
+const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
 
     const columnSortKeys = {
         "Due Date": "dueDate",
@@ -48,9 +48,9 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
                                 <div className="flex space-x-2 justify-start">
                                     <button
                                         className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
-                                        onClick={() => onEdit(task)}
+                                        onClick={() => onView(task)}
                                     >
-                                        Edit
+                                        View Task
                                     </button>
                                     <button
                                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
@@ -68,4 +68,4 @@ const ShowTasksForm = ({ tasks, onEdit, onDelete, onSort, sortConfig }) => {
     );
 };
 
-export default ShowTasksForm;
+export default TasksTable;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { InputField, PasswordField } from "../forms/FormFields";
+import { InputField, PasswordField } from "../shared/InputFields";
 
 const AuthForm = ({
     header,

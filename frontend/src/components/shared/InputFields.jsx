@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const inputClasses =
+export const inputClasses =
     "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
 export const InputField = ({ name, value, onChange, type = "text", placeholder, ...rest }) => {
@@ -30,19 +30,24 @@ export const InputField = ({ name, value, onChange, type = "text", placeholder, 
 }
 
 
-export const SelectField = ({ name, value, onChange, options }) => (
-    <select
-        className={inputClasses}
-        name={name}
-        value={value}
-        onChange={onChange}
-    >
-        {options.map(({ key, label, value }) => (
-            <option key={key} value={value}>{label}</option>
-        ))}
-    </select>
-);
+export const SelectField = ({ className, name, value, onChange, options = [], users = [] }) => {
+    const finalOptions = users.length > 0
+        ? [{ key: "none", label: "Unassigned", value: "unassigned" }, ...users.map(u => ({ key: u.id, label: u.email, value: u.id }))]
+        : options;
 
+    return (
+        <select
+            className={className}
+            name={name}
+            value={value}
+            onChange={onChange}
+        >
+            {finalOptions.map(opt => (
+                <option key={opt.key} value={opt.value}>{opt.label}</option>
+            ))}
+        </select>
+    );
+};
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
 
 export const PasswordField = ({ value, onChange }) => {

@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import UserService from "../services/UserService";
 import TaskService from "../services/TaskService";
-import ShowTasksForm from "../components/forms/ShowTasksForm";
-import TopBarForm from "../components/forms/TopBarForm";
+import TasksTable from "../components/shared/TasksTable";
+import TopBar from "../components/shared/TopBar";
 import UtilitiesBarForm from "../components/forms/UtilitiesBarForm";
 import EditTaskModal from "../components/modals/EditTaskModal";
 import SessionExpiredModal from "../components/modals/SessionExpiredModal";
 import ChangePasswordModal from "../components/modals/ChangePasswordModal";
+import ViewTaskModal from "../components/modals/ViewTaskModal";
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function HomePage() {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
     const [sessionExpired, setSessionExpired] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
+    const [viewingTask, setViewingTask] = useState(null);
 
     useEffect(() => {
         fetchTasks();
@@ -63,6 +65,15 @@ export default function HomePage() {
     const handleLogout = () => {
         logout();
         navigate("/");
+    };
+
+    const handleViewClick = (task) => {
+        setViewingTask(task);
+    };
+
+    const handleEditFromView = (task) => {
+        setViewingTask(null);
+        handleEditClick(task);
     };
 
     const handleEditClick = (task) => {
@@ -182,9 +193,10 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-6 space-y-6">
-            <TopBarForm email={currentUserEmail} onChangePassword={()=>setShowChangePassword(true)} onLogout={handleLogout} />
+            <TopBar email={currentUserEmail} onChangePassword={()=>setShowChangePassword(true)} onLogout={handleLogout} />
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
-            <ShowTasksForm tasks={sortedTasks} onEdit={handleEditClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
+            <TasksTable tasks={sortedTasks} onView={handleViewClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
+            <ViewTaskModal show={!!viewingTask} task={viewingTask} users={users} onClose={() => setViewingTask(null)} onEdit={handleEditFromView} />
             <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
             <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
             <ChangePasswordModal show={showChangePassword} onClose={() => setShowChangePassword(false)} />

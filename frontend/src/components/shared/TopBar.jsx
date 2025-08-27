@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function TopBarForm({ email, onChangePassword, onLogout }) {
+export default function TopBar({ email, onChangePassword, onLogout }) {
     const [open, setOpen] = useState(false);
     
     return (

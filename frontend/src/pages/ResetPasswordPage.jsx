@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
-import { PasswordField } from "../components/forms/FormFields";
+import { PasswordField } from "../components/shared/InputFields";
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");

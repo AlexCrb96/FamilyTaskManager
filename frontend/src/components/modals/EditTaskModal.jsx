@@ -15,7 +15,7 @@ const EditTaskModal = ({ show, task, users, onSave, onCancel }) => (
                 closeButton
             >
                 <h2 className="text-xl font-bold text-gray-900">
-                    {task?.id ? "Edit task" : "Create a task"}
+                    {task?.id ? `Edit Task ID: ${task.id}` : "Create a task"}
                 </h2>
             </Modal.Header>
             <Modal.Body className="p-0">
