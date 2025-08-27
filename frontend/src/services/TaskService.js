@@ -39,6 +39,13 @@ const TaskService = {
         const response = await axios.put(`/TaskItems/${taskId}/assignUser/${userId}`);
         return response.data;
     },
+    updateProgress: async (taskId, progress) => {
+        const response = await axios.put(
+            `/TaskItems/${taskId}/updateProgress`,
+            JSON.stringify(progress),
+            { headers: { "Content-type":  "application/json" } });
+        return response.data;
+    },
     updateTask: async (taskId, changedFields) => {
         const promises = [];
 
@@ -56,6 +63,9 @@ const TaskService = {
         }
         if ("assignedUserId" in changedFields) {
             promises.push(TaskService.assignUser(taskId, changedFields.assignedUserId));
+        }
+        if ("progress" in changedFields) {
+            promises.push(TaskService.updateProgress(taskId, changedFields.progress));
         }
 
         await Promise.all(promises);

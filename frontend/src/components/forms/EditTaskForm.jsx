@@ -8,7 +8,19 @@ const inputClasses =
 const labelClasses = "text-sm font-medium text-gray-700";
 
 const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
-    const [task, setTask] = useState(initialTask || { title: "", description: "", dueDate: "", status: "ToDo", assignedUserId: "unassigned" });
+    const [task, setTask] = useState(
+        initialTask ||
+        {
+            title: "",
+            description: "",
+            progress: "",
+            dueDate: "",
+            status: "ToDo",
+            assignedUserId: "unassigned",
+            createdBy: "",
+            createdAt: null,
+            finishedAt: null
+        });
 
     const handleChange = async (e) => {
         const { name, value } = e.target;
@@ -19,6 +31,10 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
         setTask((prev) => ({ ...prev, description: value }));
     };
 
+    const handleProgressChange = (value) => {
+        setTask((prev) => ({ ...prev, progress: value }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         onSubmit(task);
@@ -26,38 +42,82 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
+
+            {/* Title + Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label className={labelClasses}>Title</label>
+                    <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
+                </div>
+
+                <div>
+                    <label className={labelClasses}>Status</label>
+                    <SelectField
+                        className={inputClasses}
+                        name="status"
+                        value={task.status}
+                        onChange={handleChange}
+                        options={Object.entries(TaskItemStatus).map(([key, value]) => ({ key, label: value, value }))}
+                    />
+                </div>
+            </div>
             
-            <label className={labelClasses}>Title</label>
-            <InputField className={inputClasses} name="title" placeholder="Task title" value={task.title} onChange={handleChange} required />
+            {/* Description + Progress */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col">
+                    <label className={labelClasses}>Description</label>
+                    <TaskDescriptionEditor
+                        className="min-h-[275px] max-h-[450px] h-full"
+                        value={task.description}
+                        onChange={handleDescriptionChange} />
+                </div>
 
-            <label className={labelClasses}>Description</label>
-            <TaskDescriptionEditor value={task.description} onChange={handleDescriptionChange} />
+                <div className="flex flex-col">
+                    <label className={labelClasses}>Progress</label>
+                    <TaskDescriptionEditor
+                        className="min-h-[275px] max-h-[450px] h-full"
+                        value={task.progress}
+                        onChange={handleProgressChange} />
+                </div>
+            </div>
 
-            <label className={labelClasses}>Due Date</label>
-            <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
+            {/* Assigned user + Due date*/ }
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label className={labelClasses}>Assigned User</label>
+                    <SelectField
+                        className={inputClasses}
+                        name="assignedUserId"
+                        value={task.assignedUserId || "unassigned"}
+                        onChange={handleChange}
+                        options={[
+                            { key: "none", label: "Unassigned", value: "unassigned" },
+                            ...users.map((user) => (
+                                { key: user.id, label: user.email, value: user.id }))
+                        ]}
+                    />
+                </div>
 
-            <label className={labelClasses}>Status</label>
-            <SelectField
-                className={inputClasses}
-                name="status"
-                value={task.status}
-                onChange={handleChange}
-                options={Object.entries(TaskItemStatus).map(([key, value]) => ({ key, label: value, value }))}
-            />
+                <div>
+                    <label className={labelClasses}>Due Date</label>
+                    <InputField className={inputClasses} name="dueDate" placeholder="Task due date" value={task.dueDate} onChange={handleChange} type="date" />
+                </div>
+            </div>
+           
+            {/* Read-only lables */}
+            <div className="border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                <div>
+                    <span className="font-medium">Created by:</span> {task.createdByUserEmail || "-"}
+                </div>
+                <div>
+                    <span className="font-medium">Created at:</span> {task.createdAt || "-"}
+                </div>
+                <div>
+                    <span className="font-medium">Finished at:</span> {task.finishedAt || "-"}
+                </div>
+            </div>
 
-            <label className={labelClasses}>Assigned User</label>
-            <SelectField
-                className={inputClasses}
-                name="assignedUserId"
-                value={task.assignedUserId || "unassigned"}
-                onChange={handleChange}
-                options={[
-                    { key: "none", label: "Unassigned", value: "unassigned" },
-                    ...users.map((user) => (
-                        {key: user.id, label: user.email, value: user.id}))
-                ]}
-            />
-
+            {/* Buttons */}
             <div className="flex justify-end space-x-2 mt-2">
                 <button
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"

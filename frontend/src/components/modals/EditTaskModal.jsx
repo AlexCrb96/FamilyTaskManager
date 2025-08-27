@@ -6,7 +6,8 @@ const EditTaskModal = ({ show, task, users, onSave, onCancel }) => (
         show={show}
         onHide={onCancel}
         centered
-        dialogClassName="max-w-md w-full"
+        size="xl"
+        dialogClassName="!max-w-[1300px] w-full"
     >
         <div className="bg-white rounded-2xl shadow-md p-6">
             <Modal.Header

@@ -43,7 +43,7 @@ const MenuBar = ({ editor }) => {
     );
 }
 
-const TaskDescriptionEditor = ({ value, onChange }) => {
+const TaskDescriptionEditor = ({ value, onChange, className }) => {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ underline: true }),
@@ -62,7 +62,7 @@ const TaskDescriptionEditor = ({ value, onChange }) => {
     });
 
     return (
-        <div className="border rounded-lg min-h-[150px] max-h-[300px] overflow-y-auto"
+        <div className={`border rounded-lg h-full overflow-y-auto ${className}`}
             onClick={()=> editor?.commands.focus()}
         >
             <MenuBar editor={editor} />
