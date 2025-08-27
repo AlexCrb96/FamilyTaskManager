@@ -25,233 +25,50 @@ namespace FamilyTaskManagerAPI.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateTaskItem([FromBody] CreateTaskItemRequestDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             TaskItem input = dto.ToTaskItem();
-            try
-            {
-                await _taskItemService.CreateTaskItemAsync(input, GetCurrentUserId());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while creating the task item.");
-            }
+            await _taskItemService.CreateTaskItemAsync(input, GetCurrentUserId());
             return Ok("Task item created successfully.");
         }
 
         [HttpPut("{taskId}/assignUser/{userId}")]
         public async Task<IActionResult> AssignUserToTaskItem(int taskId, string userId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                await _taskItemService.AssignUserToTaskItemAsync(taskId, userId, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while assigning the user to the task item.");
-            }
+            await _taskItemService.AssignUserToTaskItemAsync(taskId, userId, GetCurrentUserId());                        
             return Ok("User assigned to task item successfully.");
         }
 
         [HttpPut("{taskId}/updateStatus/{newStatus}")]
         public async Task<IActionResult> UpdateTaskItemStatus(int taskId, TaskItemStatus newStatus)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item status.");
-            }
+            await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus, GetCurrentUserId());            
             return Ok("Task item status updated successfully.");
         }
 
         [HttpPut("{taskId}/updateDueDate")]
         public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateOnly? dueDate)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item due date.");
-            }
+            await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate, GetCurrentUserId());           
             return Ok("Task item due date updated successfully.");
         }
 
         [HttpPut("{taskId}/updateDescription")]
         public async Task<IActionResult> UpdateTaskItemDescription(int taskId, [FromBody] string description)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item description.");
-            }
+            await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description, GetCurrentUserId());            
             return Ok("Task item description updated successfully.");
         }
 
         [HttpPut("{taskId}/updateTitle")]
         public async Task<IActionResult> UpdateTaskItemTitle(int taskId, [FromBody] UpdateTaskTitleRequestDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                await _taskItemService.UpdateTaskItemTitleAsync(taskId, dto.Title, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item title.");
-            }
-
+            await _taskItemService.UpdateTaskItemTitleAsync(taskId, dto.Title, GetCurrentUserId());            
             return Ok("Task item title updated successfully.");
         }
 
         [HttpPut("{taskId}/updateProgress")]
         public async Task<IActionResult> UpdateTaskItemProgress(int taskId, [FromBody] string progress)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await _taskItemService.UpdateTaskItemProgressAsync(taskId, progress, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while updating the task item progress.");
-            }
+            await _taskItemService.UpdateTaskItemProgressAsync(taskId, progress, GetCurrentUserId());            
             return Ok("Task item progress updated successfully.");
         }
 
@@ -269,48 +86,15 @@ namespace FamilyTaskManagerAPI.Controllers
             [FromQuery] bool unfinishedOnly = false
             )
         {
-            try
-            {
-                List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords, createdBy, createdAt, finishedAt, unfinishedOnly);
-                List<TaskItemResponseDTO> taskItemsDto = taskItems.Select(t => t.ToTaskItemResponse()).ToList();
-
-                return Ok(taskItemsDto);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while retrieving task items by status.");
-            }
+            List<TaskItem> taskItems = await _taskItemService.GetFilteredTaskItems(userId, unassignedOnly, dueDate, noDueDateOnly, status, keywords, createdBy, createdAt, finishedAt, unfinishedOnly);
+            List<TaskItemResponseDTO> taskItemsDto = taskItems.Select(t => t.ToTaskItemResponse()).ToList();
+            return Ok(taskItemsDto);
         }
 
         [HttpDelete("{taskId}")]
         public async Task<IActionResult> DeleteTaskItem(int taskId)
         {
-            try
-            {
-                await _taskItemService.DeleteTaskItemAsync(taskId, GetCurrentUserId());
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(
-                    detail: ex.Message,
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    title: "An error occurred while deleting the task item.");
-            }
+            await _taskItemService.DeleteTaskItemAsync(taskId, GetCurrentUserId());            
             return Ok("Task item deleted successfully.");
         }
     }
