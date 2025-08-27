@@ -29,12 +29,7 @@ export const InputField = ({ name, value, onChange, type = "text", placeholder, 
     );
 }
 
-
-export const SelectField = ({ className, name, value, onChange, options = [], users = [] }) => {
-    const finalOptions = users.length > 0
-        ? [{ key: "none", label: "Unassigned", value: "unassigned" }, ...users.map(u => ({ key: u.id, label: u.email, value: u.id }))]
-        : options;
-
+export const SelectField = ({ className, name, value, onChange, options = [] }) => {
     return (
         <select
             className={className}
@@ -42,12 +37,13 @@ export const SelectField = ({ className, name, value, onChange, options = [], us
             value={value}
             onChange={onChange}
         >
-            {finalOptions.map(opt => (
+            {options.map(opt => (
                 <option key={opt.key} value={opt.value}>{opt.label}</option>
             ))}
         </select>
     );
 };
+
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
 
 export const PasswordField = ({ value, onChange }) => {

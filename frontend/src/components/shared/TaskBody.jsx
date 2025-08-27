@@ -72,6 +72,7 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                     {editable
                         ? <SelectField
                             className={inputClasses}
+                            name="assignedUserId"
                             value={task.assignedUserId || "unassigned"}
                             onChange={onChange}
                             options={[
