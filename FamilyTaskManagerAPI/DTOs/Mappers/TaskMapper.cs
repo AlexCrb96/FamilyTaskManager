@@ -33,6 +33,7 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
                 CreatedAt = task.CreatedAt,
                 CreatedByUserEmail = task.CreatedByUser.Email,
                 AssignedUserEmail = task.AssignedUser?.Email,
+                FinishedAt = task.FinishedAt,
             };
             return dto;
 

@@ -13,5 +13,6 @@ namespace FamilyTaskManagerAPI.DTOs.Responses
         public string CreatedByUserEmail { get; set; }
         public DateOnly CreatedAt { get; set; }
         public string? AssignedUserEmail { get; set; }
+        public DateOnly? FinishedAt { get; set; }
     }
 }
