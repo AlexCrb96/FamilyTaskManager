@@ -69,5 +69,13 @@ namespace FamilyTaskManagerAPI.Controllers
             await _userService.ChangePasswordAsync(GetCurrentUserId(), dto.OldPassword, dto.NewPassword);
             return Ok("Password changed successfully.");
         }
+
+        [Authorize]
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileRequestDTO dto)
+        {
+            await _userService.UpdateUserProfileAsync(GetCurrentUserId(), dto.FirstName, dto.LastName);
+            return Ok("User profile updated successfully.");
+        }
     }
 }

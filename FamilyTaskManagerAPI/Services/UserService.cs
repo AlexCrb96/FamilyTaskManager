@@ -70,10 +70,15 @@ namespace FamilyTaskManagerAPI.Services
 
             string resetLink = $"http://localhost:3000/reset-password?token={user.PasswordResetToken}";
 
+            string subject = "Password Reset Request";
+            string htmlBody = $"<html><body><a href={resetLink}>Click here to reset your password.</a></body></html>";
+
             _mailService.SendEmail(
-                toEmail,
-                "Password Reset Request",
-                $"<html><body><a href={resetLink}>Click here to reset your password.</a></body></html>"
+                user.Email,
+                user.FirstName,
+                user.LastName,
+                subject,
+                htmlBody
             );
         }
 
@@ -98,6 +103,26 @@ namespace FamilyTaskManagerAPI.Services
 
             // Update to the new password
             user.PasswordHash = _userValidator.HashPassword(user, newPassword);
+            _repo.Update(user);
+            await _repo.SaveAsync();
+        }
+
+        public async Task UpdateUserProfileAsync(string userId, string? firstName, string? lastName)
+        {
+            var user = await _userValidator.ValidateAndGetUserById(userId);
+
+            _userValidator.ValidateUserProfileInput(firstName, lastName);
+
+            if (firstName != null)
+            {
+                user.FirstName = Utilities.ToTitleCase(firstName);
+            }
+
+            if (lastName != null)
+            {
+                user.LastName = Utilities.ToTitleCase(lastName);
+            }
+
             _repo.Update(user);
             await _repo.SaveAsync();
         }

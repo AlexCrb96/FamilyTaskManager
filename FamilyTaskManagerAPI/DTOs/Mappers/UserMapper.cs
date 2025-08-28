@@ -11,6 +11,8 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
             User user = new User()
             {
                 Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
                 Role = dto.Role ?? UserRole.Child // Default to Child if not specified
             };
 
@@ -32,6 +34,8 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
             {
                 Id = user.Id,
                 Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
             return dto;
         }

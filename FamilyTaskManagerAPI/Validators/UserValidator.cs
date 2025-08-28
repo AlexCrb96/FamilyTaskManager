@@ -88,6 +88,14 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
+        public void ValidateUserProfileInput(string? firstName, string? lastName)
+        {
+            if (firstName == null && lastName == null)
+            {
+                throw new ValidationException("Provide at least one name to update.");
+            }
+        }
+
 
         // ----------------------
         // Permission checks

@@ -11,7 +11,7 @@ namespace FamilyTaskManagerAPI.Services
         {
             _configuration = configuration;
         }
-        public void SendEmail(string toEmail, string subject, string body)
+        public void SendEmail(string toEmail, string toFirstName, string toLastName, string subject, string htmlBody)
         {
             var smtpHost = _configuration["MailSettings:SmtpHost"];
             var smtpPort = int.Parse(_configuration["MailSettings:SmtpPort"]);
@@ -29,9 +29,9 @@ namespace FamilyTaskManagerAPI.Services
                     var mailMessage = new MailMessage();
 
                     mailMessage.From = new MailAddress(fromEmail, "Task Manager App");
-                    mailMessage.To.Add(new MailAddress(toEmail, "Recipient Name"));
+                    mailMessage.To.Add(new MailAddress(toEmail, $"{toFirstName} {toLastName}"));
                     mailMessage.Subject = subject;
-                    mailMessage.Body = body;
+                    mailMessage.Body = htmlBody;
                     mailMessage.IsBodyHtml = true;
 
                     client.Send(mailMessage);

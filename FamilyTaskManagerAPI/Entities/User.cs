@@ -13,6 +13,10 @@ namespace FamilyTaskManagerAPI.Entities
         [Required(ErrorMessage = "A user should have a password.")]
         [StringLength(256, ErrorMessage = "The password has must not exceed 256 characters.")]
         public string PasswordHash { get; set; } = string.Empty;
+        [Required, StringLength(50)]
+        public string FirstName { get; set; } = string.Empty;
+        [Required, StringLength(50)]
+        public string LastName { get; set; } = string.Empty;
         public UserRole Role { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiration { get; set; }
