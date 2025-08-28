@@ -28,8 +28,8 @@ namespace FamilyTaskManagerAPI.Services
 
                     var mailMessage = new MailMessage();
 
-                    mailMessage.From = new MailAddress(fromEmail);
-                    mailMessage.To.Add(toEmail);
+                    mailMessage.From = new MailAddress(fromEmail, "Task Manager App");
+                    mailMessage.To.Add(new MailAddress(toEmail, "Recipient Name"));
                     mailMessage.Subject = subject;
                     mailMessage.Body = body;
                     mailMessage.IsBodyHtml = true;
