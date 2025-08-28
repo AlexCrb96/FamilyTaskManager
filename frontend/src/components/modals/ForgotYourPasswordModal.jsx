@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserService from "../../services/UserService";
 import { InputField } from "../shared/InputFields";
 
 export default function ForgotPasswordModal({ show, onClose }) {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        if (show) {
+            setEmail("");
+            setMessage("");
+        }
+    }, [show]);
 
     if (!show) return null;
 
