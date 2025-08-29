@@ -71,10 +71,10 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileRequestDTO dto)
+        [HttpPut("change-name")]
+        public async Task<IActionResult> ChangeName([FromBody] UpdateUserProfileRequestDTO dto)
         {
-            await _userService.UpdateUserProfileAsync(GetCurrentUserId(), dto.FirstName, dto.LastName);
+            await _userService.ChangeNameAsync(GetCurrentUserId(), dto.FirstName, dto.LastName);
             return Ok("User profile updated successfully.");
         }
     }

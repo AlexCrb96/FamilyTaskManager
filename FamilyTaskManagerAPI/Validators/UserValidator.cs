@@ -88,7 +88,7 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public void ValidateUserProfileInput(string? firstName, string? lastName)
+        public void ValidateNamesInput(string? firstName, string? lastName)
         {
             if (firstName == null && lastName == null)
             {

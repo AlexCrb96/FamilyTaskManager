@@ -107,11 +107,11 @@ namespace FamilyTaskManagerAPI.Services
             await _repo.SaveAsync();
         }
 
-        public async Task UpdateUserProfileAsync(string userId, string? firstName, string? lastName)
+        public async Task ChangeNameAsync(string userId, string? firstName, string? lastName)
         {
             var user = await _userValidator.ValidateAndGetUserById(userId);
 
-            _userValidator.ValidateUserProfileInput(firstName, lastName);
+            _userValidator.ValidateNamesInput(firstName, lastName);
 
             if (firstName != null)
             {
