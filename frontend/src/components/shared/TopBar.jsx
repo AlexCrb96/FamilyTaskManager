@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function TopBar({ email, onChangePassword, onLogout }) {
+export default function TopBar({ email, onLogout }) {
     const [open, setOpen] = useState(false);
-    
+    const navigate = useNavigate();
+
     return (
         <div className="w-full max-w-3xl flex justify-end mb-4 relative">
             <div className="relative">
@@ -17,9 +19,9 @@ export default function TopBar({ email, onChangePassword, onLogout }) {
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                         <button
                             className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                            onClick={() => { setOpen(false); onChangePassword(); }}
+                            onClick={() => { setOpen(false); navigate("/account"); }}
                         >
-                            Change Password
+                            Account Details
                         </button>
                         <button
                             className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"

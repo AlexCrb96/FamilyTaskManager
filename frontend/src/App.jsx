@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import AccountPage from "./pages/AccountPage";
 
 import "./App.css";
 
@@ -22,7 +23,8 @@ export default function App() {
                     <Route path="/login" element={<LoginPage />}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-                    <Route path="/reset-password" element={<ResetPasswordPage/>} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/account" element={<AccountPage />} />
                     {/* Redirect root "/" to "/login": */}
                     <Route path="/" element={<Navigate to="/login" replace/>}/>
                 </Routes>
