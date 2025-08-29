@@ -77,5 +77,13 @@ namespace FamilyTaskManagerAPI.Controllers
             await _userService.ChangeNameAsync(GetCurrentUserId(), dto.FirstName, dto.LastName);
             return Ok("User profile updated successfully.");
         }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetLoggedInUser()
+        {
+            var user = await _userService.GetUser(GetCurrentUserId());
+            return Ok(user.ToUserResponse());
+        }
     }
 }

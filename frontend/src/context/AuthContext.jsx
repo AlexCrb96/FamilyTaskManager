@@ -1,10 +1,25 @@
-import { createContext, useState, useMemo } from "react";
-import { jwtDecode } from "jwt-decode";
+import { createContext, useState, useMemo, useEffect } from "react";
+import UserService from "../services/UserService";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(localStorage.getItem("token"));
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (!token) {
+                setCurrentUser(null);
+                return;
+            }
+            const userData = await UserService.getCurrentUser();
+            if (userData) {
+                setCurrentUser({ id: userData.id, email: userData.email, firstName: userData.firstName, lastName: userData.lastName });
+            }
+        };
+        fetchUser();
+    }, [token]);
 
     const login = (token) => {
         localStorage.setItem("token", token);
@@ -16,18 +31,8 @@ export function AuthProvider({ children }) {
         setToken(null);
     };
 
-    const currentUserEmail = useMemo(() => {
-        if (!token) return null;
-        try {
-            const decoded = jwtDecode(token);
-            return decoded.email;
-        } catch {
-            return null;
-        }
-    }, [token]);
-
     return (
-        <AuthContext.Provider value={{ token, login, logout, currentUserEmail }}>
+        <AuthContext.Provider value={{ token, login, logout, currentUser, setCurrentUser }}>
             { children }
         </AuthContext.Provider>
     );

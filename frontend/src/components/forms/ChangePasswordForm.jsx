@@ -6,10 +6,17 @@ const labelClasses = "text-sm font-medium text-gray-700";
 const ChangePasswordForm = ({ onSubmit, onCancel }) => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [feedback, setFeedback] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit({ oldPassword, newPassword });
+        try {
+            await onSubmit({ oldPassword, newPassword });
+            setFeedback("Password changed successfully.");
+        } catch (err) {
+            setFeedback("Failed to change password.");
+        }
+        
     };
 
     return (
@@ -19,6 +26,12 @@ const ChangePasswordForm = ({ onSubmit, onCancel }) => {
 
             <label className={labelClasses}>New Password</label>
             <PasswordField value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+
+            {feedback && (
+                <div className={`text-sm ${feedback.includes("successfully") ? "text-green-600" : "text-red-600"}`}>
+                    {feedback}
+                </div>
+            )}
 
             <div className="flex justify-end space-x-2 -mt-2">
                 <button

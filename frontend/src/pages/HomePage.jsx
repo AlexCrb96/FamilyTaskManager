@@ -16,7 +16,7 @@ export default function HomePage() {
     const navigate = useNavigate();
     const { logout } = useContext(AuthContext);
     const { token } = useContext(AuthContext);
-    const { currentUserEmail } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
@@ -163,7 +163,7 @@ export default function HomePage() {
     const visibleTasks = tasks.filter(task => {
         if (!showDone && task.status === "Done") return false;
 
-        if (showMine && task.assignedUserEmail !== currentUserEmail) return false;
+        if (showMine && task.assignedUserEmail !== currentUser?.email) return false;
 
         return true;
     });
@@ -193,7 +193,7 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-6 space-y-6">
-            <TopBar email={currentUserEmail} onChangePassword={()=>setShowChangePassword(true)} onLogout={handleLogout} />
+            <TopBar email={currentUser?.email} onLogout={handleLogout} />
             <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
             <TasksTable tasks={sortedTasks} onView={handleViewClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
             <ViewTaskModal show={!!viewingTask} task={viewingTask} users={users} onClose={() => setViewingTask(null)} onEdit={handleEditFromView} />

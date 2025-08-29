@@ -59,6 +59,16 @@ const UserService = {
     changePassword: async (oldPassword, newPassword) => {
         const response = await axios.post("users/change-password", { oldPassword, newPassword });
         return response.data;
+    },
+
+    changeNames: async (firstName, lastName) => {
+        const response = await axios.put("users/change-name", { firstName, lastName });
+        return response.data;
+    },
+
+    getCurrentUser: async () => {
+        const response = await axios.get("users/me");
+        return response.data;
     }
 };
 

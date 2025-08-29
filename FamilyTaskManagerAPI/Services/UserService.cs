@@ -59,6 +59,11 @@ namespace FamilyTaskManagerAPI.Services
             return await _repo.GetAllAsync();
         }
 
+        public async Task<User> GetUser(string userId)
+        {
+            return await _userValidator.ValidateAndGetUserById(userId);
+        }
+
         public async Task SendPasswordResetEmail(string toEmail)
         {
             // Check if the user exists

@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import UserService from "../services/UserService";
 import ChangePasswordForm from "../components/forms/ChangePasswordForm";
+import ChangeNameForm from "../components/forms/ChangeNameForm";
 export default function AccountPage() {
     const [activeTab, setActiveTab] = useState("account");
 
-    const handlePasswordChange = ({ oldPassword, newPassword }) => {
+    const { currentUser, setCurrentUser } = useContext(AuthContext);
+
+    const handlePasswordChange = async ({ oldPassword, newPassword }) => {
         UserService.changePassword(oldPassword, newPassword);
     }
+
+    const handleNameChange = ({ firstName, lastName }) => {
+        (async () => {
+            UserService.changeNames(firstName, lastName);
+
+            const updatedUser = await UserService.getCurrentUser();
+            setCurrentUser(updatedUser);
+        })();        
+    };
 
     return (
         <div className="flex min-h-screen">
@@ -38,6 +51,14 @@ export default function AccountPage() {
                 {activeTab === "account" && (
                     <div>
                         <h2 className="text-xl font-semibold mb-4">Account Details</h2>
+                        <div className="max-w-md bg-white p-6 rounded-lg shadow-md">
+                            <ChangeNameForm
+                                initialFirstName={currentUser?.firstName}
+                                initialLastName={currentUser?.lastName}
+                                onSubmit={handleNameChange}
+                                onCancel={() => setActiveTab("security")}
+                            />
+                        </div>
                     </div>
                 )}
 
