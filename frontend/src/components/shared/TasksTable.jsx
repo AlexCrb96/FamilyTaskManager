@@ -1,7 +1,10 @@
-﻿import React from "react";
+﻿import React, { useState } from "react";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 
+const MAX_DESCRIPTION_LENGTH = 150;
+
 const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
+    const [expandedRows, setExpandedRows] = useState({});
 
     const columnSortKeys = {
         "Due Date": "dueDate",
@@ -15,6 +18,35 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
         }
 
         return sortConfig.direction === "asc" ? <FaSortUp className="inline ml-1" /> : <FaSortDown className = "inline ml-1" />;
+    };
+
+    const toggleRow = (id) => {
+        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const renderDescription = (task) => {
+        const fullText = task.description;
+        const isExpanded = expandedRows[task.id];
+
+        if (!fullText) return null;
+
+        if (fullText.length <= MAX_DESCRIPTION_LENGTH) {
+            return <div dangerouslySetInnerHTML={{ __html: fullText }} />;
+        }
+
+        const displayedText = isExpanded ? fullText : fullText.substring(0, MAX_DESCRIPTION_LENGTH) + "...";
+
+        return (
+            <div>
+                <div dangerouslySetInnerHTML={{ __html: displayedText }} />
+                <button
+                    className="text-xs mt-1 hover:underline"
+                    onClick={() => toggleRow(task.id)}
+                >
+                    {isExpanded ? "Show less" : "Show more"}
+                </button>
+            </div>
+        );
     };
 
     return (
@@ -38,9 +70,7 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
                         <tr key={task.id}>
                             <td className="px-4 py-2">{task.id}</td>
                             <td className="px-4 py-2">{task.title}</td>
-                            <td className="px-4 py-2">
-                                <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: task.description }} />
-                            </td>
+                            <td className="px-4 py-2">{renderDescription(task)}</td>
                             <td className="px-4 py-2">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No due date"}</td>
                             <td className="px-4 py-2">{task.status}</td>
                             <td className="px-4 py-2">{task.assignedUserEmail || "Unassigned"}</td>
