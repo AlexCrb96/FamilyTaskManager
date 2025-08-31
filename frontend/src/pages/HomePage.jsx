@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { AuthContext } from "../context/AuthContext";
-import useAuthLogout from "../hooks/useAuthLogout";
+import { useSessionExpiry } from "../hooks/useSessionExpiry";
+import { useAuthLogout } from "../hooks/useAuthLogout";
+
 import UserService from "../services/UserService";
 import TaskService from "../services/TaskService";
 import TasksTable from "../components/shared/TasksTable";
@@ -15,6 +17,7 @@ import ViewTaskModal from "../components/modals/ViewTaskModal";
 export default function HomePage() {
     const { token } = useContext(AuthContext);
     const { currentUser } = useContext(AuthContext);
+    const { sessionExpired, setSessionExpired } = useSessionExpiry(token);
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
@@ -22,33 +25,13 @@ export default function HomePage() {
     const [showDone, setShowDone] = useState(false);
     const [showMine, setShowMine] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-    const [sessionExpired, setSessionExpired] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [viewingTask, setViewingTask] = useState(null);
 
     useEffect(() => {
         fetchTasks();
         fetchUsers();
-
-        if (!token) return;
-
-        const expTime = UserService.getTokenExpiration(token);
-        if (!expTime) return;
-
-        const now = Date.now();
-        const msBeforeExpiry = expTime - now;
-        const warningTime = msBeforeExpiry - 5 * 60 * 1000; // 5mins 60s 1000ms
-
-        if (warningTime > 0) {
-            const timer = setTimeout(() => {
-                setSessionExpired(true);
-            }, warningTime);
-
-            return () => clearTimeout(timer);
-        } else {
-            setSessionExpired(true);
-        }
-    }, [token]);
+    },[token]);
 
     const fetchTasks = async (keywords = "") => {
         const data = await TaskService.getFilteredTasks({ keywords });
@@ -154,7 +137,6 @@ export default function HomePage() {
         setSortConfig({ key, direction });
     };
 
-    //const visibleTasks = showDone ? tasks : tasks.filter((t) => t.status !== "Done");
     const visibleTasks = tasks.filter(task => {
         if (!showDone && task.status === "Done") return false;
 

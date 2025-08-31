@@ -1,16 +1,23 @@
 import React, { useState, useContext } from "react";
+
 import { AuthContext } from "../context/AuthContext";
-import useAuthLogout from "../hooks/useAuthLogout";
+import { useAuthLogout } from "../hooks/useAuthLogout";
+import { useSessionExpiry } from "../hooks/useSessionExpiry";
+
 import UserService from "../services/UserService";
 import ChangePasswordForm from "../components/forms/ChangePasswordForm";
 import ChangeNameForm from "../components/forms/ChangeNameForm";
 import TopBar from "../components/shared/TopBar";
-export default function AccountPage() {
-    const [activeTab, setActiveTab] = useState("account");
+import SessionExpiredModal from "../components/modals/SessionExpiredModal";
 
+export default function AccountPage() {
+    const { token } = useContext(AuthContext);
     const { currentUser, setCurrentUser } = useContext(AuthContext);
+    const { sessionExpired, setSessionExpired } = useSessionExpiry(token);
     const handleLogout = useAuthLogout();
 
+    const [activeTab, setActiveTab] = useState("account");
+    
     const handlePasswordChange = async ({ oldPassword, newPassword }) => {
         UserService.changePassword(oldPassword, newPassword);
     }
@@ -79,6 +86,8 @@ export default function AccountPage() {
                 </div>
 
             </div>
+            <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
+
         </>            
     );
 }
