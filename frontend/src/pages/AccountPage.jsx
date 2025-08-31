@@ -9,6 +9,7 @@ import ChangePasswordForm from "../components/forms/ChangePasswordForm";
 import ChangeNameForm from "../components/forms/ChangeNameForm";
 import TopBar from "../components/shared/TopBar";
 import SessionExpiredModal from "../components/modals/SessionExpiredModal";
+import Sidebar from "../components/shared/Sidebar";
 
 export default function AccountPage() {
     const { token } = useContext(AuthContext);
@@ -17,6 +18,10 @@ export default function AccountPage() {
     const handleLogout = useAuthLogout();
 
     const [activeTab, setActiveTab] = useState("account");
+    const tabs = [
+        { id: "account", label: "Account" },
+        { id: "security", label: "Security" }
+    ]
     
     const handlePasswordChange = async ({ oldPassword, newPassword }) => {
         UserService.changePassword(oldPassword, newPassword);
@@ -37,26 +42,15 @@ export default function AccountPage() {
             <div className="flex min-h-screen">
 
                 {/* Sidebar */}
-                <div className="w-64 bg-gray-100 p-4 border-r">
-                    <h2 className="text-lg font-semibold mb-4">Settings</h2>
-                    <ul>
-                        <li>
-                            <button className={`w-full text-left px-3 py-2 rounded ${activeTab === "account" ? "bg-indigo-600 text-white" : "hover:bg-gray-200"
-                                }`}
-                                onClick={() => setActiveTab("account")}
-                            >
-                                Account
-                            </button>
-                        </li>
-                        <li>
-                            <button className={`w-full text-left px-3 py-2 rounded ${activeTab === "security" ? "bg-indigo-600 text-white" : "hover:bg-gray-200"
-                                }`}
-                                onClick={() => setActiveTab("security")}>
-                                Security
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                <Sidebar
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    breadcrumbs={[
+                        {label: "Home", path: "/home"},
+                        {label: "Account", path: "/account"}
+                    ]}
+                />
 
                 {/* Content */}
                 <div className="flex-1 p-6">
