@@ -22,9 +22,12 @@ export default function App() {
                 <Routes>
                     <Route path="/login" element={<LoginPage />}/>
                     <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
-                    <Route path="/account" element={<AccountPage />} />
+
+                    {/* Routes  for authenticated users */}
+                    <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+                    <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
+
                     {/* Redirect root "/" to "/login": */}
                     <Route path="/" element={<Navigate to="/login" replace/>}/>
                 </Routes>
