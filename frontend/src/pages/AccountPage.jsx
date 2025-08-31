@@ -80,7 +80,7 @@ export default function AccountPage() {
                 </div>
 
             </div>
-            <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
+            {sessionExpired && <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />}
 
         </>            
     );

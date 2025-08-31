@@ -25,7 +25,6 @@ export default function HomePage() {
     const [showDone, setShowDone] = useState(false);
     const [showMine, setShowMine] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-    const [showChangePassword, setShowChangePassword] = useState(false);
     const [viewingTask, setViewingTask] = useState(null);
 
     useEffect(() => {
@@ -176,8 +175,7 @@ export default function HomePage() {
                 <TasksTable tasks={sortedTasks} onView={handleViewClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
                 <ViewTaskModal show={!!viewingTask} task={viewingTask} users={users} onClose={() => setViewingTask(null)} onEdit={handleEditFromView} />
                 <EditTaskModal show={!!editingTask} task={editingTask} users={users} onSave={handleSave} onCancel={handleCancel} />
-                <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />
-                <ChangePasswordModal show={showChangePassword} onClose={() => setShowChangePassword(false)} />
+                {sessionExpired && <SessionExpiredModal show={sessionExpired} onClose={() => setSessionExpired(false)} />}
             </div>
         </>        
     );
