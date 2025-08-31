@@ -4,7 +4,7 @@ import ActionButtonsPair from "../shared/ActionButtonsPair";
 
 const labelClasses = "text-sm font-medium text-gray-700";
 
-const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit, onCancel }) => {
+const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
     const [firstName, setFirstName] = useState(initialFirstName || "");
     const [lastName, setLastName] = useState(initialLastName || "");
 
@@ -46,8 +46,6 @@ const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit, onCancel 
                 primaryLabel="Save"
                 primaryType="submit"
                 primaryColor="bg-green-600 hover:bg-green-700 text-white"
-                secondaryLabel="Cancel"
-                onSecondaryClick={onCancel}
             />
 
         </form>

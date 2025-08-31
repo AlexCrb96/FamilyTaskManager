@@ -6,7 +6,7 @@ export default function TopBar({ email, onLogout }) {
     const navigate = useNavigate();
 
     return (
-        <div className="w-full max-w-3xl flex justify-end mb-4 relative">
+        <div className="w-full flex justify-end px-4 py-2 bg-gray-100 shadow-md top-0 left-0 right-0 z-50">
             <div className="relative">
                 <button
                     className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

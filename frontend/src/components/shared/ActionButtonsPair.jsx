@@ -20,13 +20,17 @@ const ActionButtonsPair = ({
             >
                 {primaryLabel}
             </button>
-            <button
-                className={`px-4 py-2 rounded-lg ${secondaryColor}`}
-                type={secondaryType}
-                onClick={onSecondaryClick}
-            >
-                {secondaryLabel}
-            </button>
+
+            {secondaryLabel && (
+                <button
+                    className={`px-4 py-2 rounded-lg ${secondaryColor}`}
+                    type={secondaryType}
+                    onClick={onSecondaryClick}
+                >
+                    {secondaryLabel}
+                </button>
+            )}
+            
         </div>
     );
 };

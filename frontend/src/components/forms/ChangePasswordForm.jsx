@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PasswordField } from "../shared/InputFields";
+import ActionButtonsPair from "../shared/ActionButtonsPair";
 
 const labelClasses = "text-sm font-medium text-gray-700";
 
@@ -33,22 +34,11 @@ const ChangePasswordForm = ({ onSubmit, onCancel }) => {
                 </div>
             )}
 
-            <div className="flex justify-end space-x-2 -mt-2">
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                >
-                    Save
-                </button>
-
-                <button
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-                    type="button"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </button>
-            </div>
+            <ActionButtonsPair
+                primaryType="submit"
+                primaryLabel="Save"
+                primaryColor="bg-green-600 hover:bg-green-700 text-white"
+            />
         </form>
     );
 };
