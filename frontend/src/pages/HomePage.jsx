@@ -11,7 +11,6 @@ import TopBar from "../components/shared/TopBar";
 import UtilitiesBarForm from "../components/forms/UtilitiesBarForm";
 import EditTaskModal from "../components/modals/EditTaskModal";
 import SessionExpiredModal from "../components/modals/SessionExpiredModal";
-import ChangePasswordModal from "../components/modals/ChangePasswordModal";
 import ViewTaskModal from "../components/modals/ViewTaskModal";
 
 export default function HomePage() {

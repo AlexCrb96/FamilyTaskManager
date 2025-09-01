@@ -1,5 +1,7 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
+
+import MarkdownRenderer from "../../utils/markdownUtils";
 
 const MAX_DESCRIPTION_LENGTH = 150;
 
@@ -30,21 +32,19 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
 
         if (!fullText) return null;
 
-        if (fullText.length <= MAX_DESCRIPTION_LENGTH) {
-            return <div dangerouslySetInnerHTML={{ __html: fullText }} />;
-        }
-
-        const displayedText = isExpanded ? fullText : fullText.substring(0, MAX_DESCRIPTION_LENGTH) + "...";
+        const displayedText = isExpanded ? fullText : fullText.slice(0, MAX_DESCRIPTION_LENGTH);
 
         return (
             <div>
-                <div dangerouslySetInnerHTML={{ __html: displayedText }} />
-                <button
-                    className="text-xs mt-1 hover:underline"
-                    onClick={() => toggleRow(task.id)}
-                >
-                    {isExpanded ? "Show less" : "Show more"}
-                </button>
+                <MarkdownRenderer markdown={displayedText} />
+                {fullText.length > MAX_DESCRIPTION_LENGTH && (
+                    <button
+                        className="text-xs mt-1 hover:underline"
+                        onClick={() => toggleRow(task.id)}
+                    >
+                        {isExpanded ? "Show less" : "Show more"}
+                    </button>
+                )}               
             </div>
         );
     };

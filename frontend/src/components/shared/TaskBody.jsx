@@ -1,7 +1,8 @@
 import { InputField, SelectField, inputClasses } from "./InputFields";
-import TaskDescriptionEditor from "./TaskDescriptionEditor";
+import RichTextEditor from "./RichTextEditor";
 import TaskInfoFooter from "./TaskInfoFooter";
 import TaskItemStatus from "../../enums/TaskItemStatus";
+import MarkdownRenderer from "../../utils/markdownUtils";
 
 const TaskBody = ({ task, users = [], editable = false, onChange }) => {
     if (!task) return null;
@@ -43,19 +44,19 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                 <div className="flex flex-col h-full">
                     <label className="font-semibold mb-1">Description</label>
                     {editable
-                        ? <TaskDescriptionEditor
+                        ? <RichTextEditor
                             className="max-h-[450px]"
                             value={task.description}
                             onChange={(val) => onChange({ target: { name: "description", value: val } })}
                         />
-                        : <div dangerouslySetInnerHTML={{ __html: task.description }} />
+                        : <MarkdownRenderer markdown={task.description} />
                     }
                 </div>
 
                 <div className="flex flex-col h-full">
                     <label className="font-semibold mb-1">Progress</label>
                     {editable
-                        ? <TaskDescriptionEditor
+                        ? <RichTextEditor
                             className="max-h-[450px]"
                             value={task.progress}
                             onChange={(val) => onChange({ target: { name: "progress", value: val } })}

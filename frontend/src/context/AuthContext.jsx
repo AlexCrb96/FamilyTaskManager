@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import UserService from "../services/UserService";
 
 export const AuthContext = createContext();
