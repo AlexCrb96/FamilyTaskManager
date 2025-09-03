@@ -169,7 +169,7 @@ export default function HomePage() {
     return (
         <>
             <TopBar email={currentUser?.email} onLogout={handleLogout} />
-            <div className="min-h-screen bg-gray-100 flex flex-col items-center px-4 py-6 space-y-6">
+            <div>
                 <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
                 <TasksTable tasks={sortedTasks} onView={handleViewClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
                 <ViewTaskModal show={!!viewingTask} task={viewingTask} users={users} onClose={() => setViewingTask(null)} onEdit={handleEditFromView} />

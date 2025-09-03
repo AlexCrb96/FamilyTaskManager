@@ -39,7 +39,7 @@ export default function AccountPage() {
     return (
         <>
             <TopBar email={currentUser?.email} onLogout={handleLogout} />
-            <div className="flex min-h-screen">
+            <div>
 
                 {/* Sidebar */}
                 <Sidebar
@@ -53,11 +53,11 @@ export default function AccountPage() {
                 />
 
                 {/* Content */}
-                <div className="flex-1 p-6">
+                <div>
                     {activeTab === "account" && (
                         <div>
-                            <h2 className="text-xl font-semibold mb-4">Account Details</h2>
-                            <div className="max-w-md bg-white p-6 rounded-lg shadow-md">
+                            <h2>Account Details</h2>
+                            <div>
                                 <ChangeNameForm
                                     initialFirstName={currentUser?.firstName}
                                     initialLastName={currentUser?.lastName}
@@ -69,8 +69,8 @@ export default function AccountPage() {
 
                     {activeTab === "security" && (
                         <div>
-                            <h2 className="text-xl font-semibold mb-4">Security</h2>
-                            <div className="max-w-md bg-white p-6 rounded-lg shadow-md">
+                            <h2>Security</h2>
+                            <div>
                                 <ChangePasswordForm
                                     onSubmit={handlePasswordChange}
                                 />

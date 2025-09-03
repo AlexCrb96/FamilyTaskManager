@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { PasswordField } from "../shared/InputFields";
 import ActionButtonsPair from "../shared/ActionButtonsPair";
 
-const labelClasses = "text-sm font-medium text-gray-700";
-
 const ChangePasswordForm = ({ onSubmit, onCancel }) => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -21,15 +19,15 @@ const ChangePasswordForm = ({ onSubmit, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <label className={labelClasses}>Current Password</label>
+        <form onSubmit={handleSubmit}>
+            <label>Current Password</label>
             <PasswordField value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} />
 
-            <label className={labelClasses}>New Password</label>
+            <label>New Password</label>
             <PasswordField value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
 
             {feedback && (
-                <div className={`text-sm ${feedback.includes("successfully") ? "text-green-600" : "text-red-600"}`}>
+                <div>
                     {feedback}
                 </div>
             )}
@@ -37,7 +35,6 @@ const ChangePasswordForm = ({ onSubmit, onCancel }) => {
             <ActionButtonsPair
                 primaryType="submit"
                 primaryLabel="Save"
-                primaryColor="bg-green-600 hover:bg-green-700 text-white"
             />
         </form>
     );

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { InputField, PasswordField } from "../shared/InputFields";
+import { PasswordField } from "../shared/InputFields";
 
 const AuthForm = ({
     header,
@@ -19,16 +19,16 @@ const AuthForm = ({
     onForgotPasswordClick
 }) => {
     return (
-        <div className={`${fullScreen ? "min-h-screen flex items-center justify-center bg-gray-50 px-4" : "w-full"}`}>
+        <div>
 
-            <div className={`w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-md ${fullScreen ? "" : "mx-auto"}`}>
+            <div>
 
-                <h1 className="text-2xl font-bold text-center text-gray-900">{header}</h1>
+                <h1>{header}</h1>
 
-                {error && (<p className="text-sm text-red-500 text-center">{error}</p>)}
+                {error && (<p>{error}</p>)}
 
-            <form onSubmit={onSubmit} className="space-y-5">
-                <InputField
+            <form onSubmit={onSubmit}>
+                <input
                     name="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -42,7 +42,6 @@ const AuthForm = ({
                 />
 
                 <button
-                    className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     type="submit"
                 >
                     {buttonText}
@@ -51,7 +50,6 @@ const AuthForm = ({
 
                 {showForgotPassword && onForgotPasswordClick && (
                     <button
-                        className="w-full text-sm text-blue-500 underline -mt-2"
                         type="button"
                         onClick={onForgotPasswordClick}
                     >
@@ -59,9 +57,9 @@ const AuthForm = ({
                     </button>
                 ) }
 
-            <p className="text-sm text-gray-600 text-center">
+            <p>
                 {hintText}{" "}
-                <Link to={hintLinkTo} className="text-indigo-600 hover:underline font-medium">
+                <Link to={hintLinkTo}>
                     {hintLinkText}
                 </Link>
             </p>

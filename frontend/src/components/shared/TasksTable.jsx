@@ -19,7 +19,7 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
             return null;
         }
 
-        return sortConfig.direction === "asc" ? <FaSortUp className="inline ml-1" /> : <FaSortDown className = "inline ml-1" />;
+        return sortConfig.direction === "asc" ? <FaSortUp /> : <FaSortDown />;
     };
 
     const toggleRow = (id) => {
@@ -39,7 +39,6 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
                 <MarkdownRenderer markdown={displayedText} />
                 {fullText.length > MAX_DESCRIPTION_LENGTH && (
                     <button
-                        className="text-xs mt-1 hover:underline"
                         onClick={() => toggleRow(task.id)}
                     >
                         {isExpanded ? "Show less" : "Show more"}
@@ -50,13 +49,12 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
     };
 
     return (
-        <div className="w-full overflow-x-auto bg-white rounded-2xl shadow-md p-4">
-            <table className="min-w-full table-auto divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+        <div>
+            <table>
+                <thead>
                     <tr>
                         {["ID", "Title", "Description", "Due Date", "Status", "Assigned User", "Actions"].map((col, idx) => (
                             <th
-                                className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none"
                                 key={idx}
                                 onClick={columnSortKeys[col] ? () => onSort(columnSortKeys[col]) : null}
                             >
@@ -65,25 +63,23 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
                         ))}
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                     {tasks.map((task) => (
                         <tr key={task.id}>
-                            <td className="px-4 py-2">{task.id}</td>
-                            <td className="px-4 py-2">{task.title}</td>
-                            <td className="px-4 py-2">{renderDescription(task)}</td>
-                            <td className="px-4 py-2">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No due date"}</td>
-                            <td className="px-4 py-2">{task.status}</td>
-                            <td className="px-4 py-2">{task.assignedUserEmail || "Unassigned"}</td>
-                            <td className="px-4 py-2">
-                                <div className="flex space-x-2 justify-start">
+                            <td>{task.id}</td>
+                            <td>{task.title}</td>
+                            <td>{renderDescription(task)}</td>
+                            <td>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No due date"}</td>
+                            <td>{task.status}</td>
+                            <td>{task.assignedUserEmail || "Unassigned"}</td>
+                            <td>
+                                <div>
                                     <button
-                                        className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                                         onClick={() => onView(task)}
                                     >
                                         View Task
                                     </button>
                                     <button
-                                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                                         onClick={() => onDelete(task.id)}
                                     >
                                         Delete

@@ -7,14 +7,13 @@ const ActionButtonsPair = ({
     onSecondaryClick,
     primaryType = "button",
     secondaryType = "button",
-    primaryColor = "bg-blue-600 hover:bg-blue-700 text-white",
-    secondaryColor = "bg-gray-300 hover:bg-gray-400 text-gray-800",
+    primaryColor = "",
+    secondaryColor = "",
     className = "",
 }) => {
     return (
-        <div className={`flex justify-end space-x-2 mt-2 ${className}`}>
+        <div>
             <button
-                className={`px-4 py-2 rounded-lg ${primaryColor}`}
                 type={primaryType}
                 onClick={onPrimaryClick}
             >
@@ -23,7 +22,6 @@ const ActionButtonsPair = ({
 
             {secondaryLabel && (
                 <button
-                    className={`px-4 py-2 rounded-lg ${secondaryColor}`}
                     type={secondaryType}
                     onClick={onSecondaryClick}
                 >

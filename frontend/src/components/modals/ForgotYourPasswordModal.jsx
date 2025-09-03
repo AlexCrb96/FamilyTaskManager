@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import UserService from "../../services/UserService";
-import { InputField } from "../shared/InputFields";
+import ActionButtonsPair from "../shared/ActionButtonsPair";
 
 export default function ForgotPasswordModal({ show, onClose }) {
     const [email, setEmail] = useState("");
@@ -27,21 +27,23 @@ export default function ForgotPasswordModal({ show, onClose }) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded shadow-md w-96">
-                <h2 className="text-lg font-bold mb-4">Forgot Password</h2>
-                {message && <p className="text-green-500 mb-2">{message}</p>}
-                <InputField
+        <div>
+            <div>
+                <h2>Forgot Password</h2>
+                {message && <p>{message}</p>}
+                <input
                     name="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="Email"
                     required
                 />
-                <div className="flex justify-end space-x-2">
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleSubmit}>Send</button>
-                    <button className="px-4 py-2 bg-gray-200 rounded" onClick={onClose}>Cancel</button>
-                </div>
+                <ActionButtonsPair
+                    primaryLabel="Send"
+                    onPrimaryClick={handleSubmit}
+                    secondaryLabel="Cancel"
+                    onSecondaryClick={onClose}
+                />
             </div>
         </div>
     );

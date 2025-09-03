@@ -28,9 +28,9 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <div className="max-w-md mx-auto p-4">
+        <div>
             <h1>Reset Password</h1>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p>{error}</p>}
             <PasswordField
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
@@ -40,7 +40,6 @@ export default function ResetPasswordPage() {
                 onChange={e=> setConfirmPassword(e.target.value)}
             />
             <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
                 disabled={!newPassword || !confirmPassword || newPassword!==confirmPassword} 
                 onClick={handleSubmit}
             >

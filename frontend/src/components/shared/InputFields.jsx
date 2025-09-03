@@ -1,49 +1,5 @@
 import React, { useState } from "react";
 
-export const inputClasses =
-    "block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
-
-export const InputField = ({ name, value, onChange, type = "text", placeholder, ...rest }) => {
-    if (type === "textarea") {
-        return (
-            <textarea
-                className={inputClasses}
-                name={name}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                {...rest}
-            />
-        );
-    }
-
-    return (
-        <input
-            className={inputClasses}
-            name={name}
-            value={value}
-            onChange={onChange}
-            type={type}
-            placeholder={placeholder}
-            {...rest} />
-    );
-}
-
-export const SelectField = ({ className, name, value, onChange, options = [] }) => {
-    return (
-        <select
-            className={className}
-            name={name}
-            value={value}
-            onChange={onChange}
-        >
-            {options.map(opt => (
-                <option key={opt.key} value={opt.value}>{opt.label}</option>
-            ))}
-        </select>
-    );
-};
-
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
 
 export const PasswordField = ({ value, onChange }) => {
@@ -61,7 +17,7 @@ export const PasswordField = ({ value, onChange }) => {
 
     return (
         <>
-            <InputField
+            <input
                 name="password"
                 type="password"
                 value={value}
@@ -69,7 +25,7 @@ export const PasswordField = ({ value, onChange }) => {
                 placeholder="Password"
                 required
             />
-            {error && (<p className="mt-1 text-xs text-red-500" >{error}</p>)}
+            {error && (<p>{error}</p>)}
         </>
     )
 };

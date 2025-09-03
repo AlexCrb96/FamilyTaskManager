@@ -36,8 +36,8 @@ const SessionExpiredModal = ({ show, onClose }) => {
                 <Modal.Title>Session Expired</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body className="flex justify-center items-center">
-                <div className="w-full max-w-md max-h-[60vh] overflow-y-auto">
+            <Modal.Body>
+                <div>
                     <AuthForm
                         header="Your session has expired. Please log in again."
                         buttonText="Login"

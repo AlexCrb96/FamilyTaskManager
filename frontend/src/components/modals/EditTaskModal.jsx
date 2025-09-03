@@ -6,19 +6,16 @@ const EditTaskModal = ({ show, task, users, onSave, onCancel }) => (
         show={show}
         onHide={onCancel}
         centered
-        size="xl"
-        dialogClassName="!max-w-[1300px] w-full"
     >
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div>
             <Modal.Header
-                className="border-b-0 p-0 mb-4"
                 closeButton
             >
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2>
                     {task?.id ? `Edit Task ID: ${task.id}` : "Create a task"}
                 </h2>
             </Modal.Header>
-            <Modal.Body className="p-0">
+            <Modal.Body>
                 {task && (
                     <EditTaskForm initialTask={task} users={users} onSubmit={onSave} onCancel={onCancel} />
                 )}

@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InputField } from "../shared/InputFields";
 import ActionButtonsPair from "../shared/ActionButtonsPair";
-
-const labelClasses = "text-sm font-medium text-gray-700";
 
 const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
     const [firstName, setFirstName] = useState(initialFirstName || "");
@@ -19,10 +16,10 @@ const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
             <div>
-                <label className={labelClasses}>First Name</label>
-                <InputField
+                <label>First Name</label>
+                <input
                     name="firstName"
                     type="text"
                     value={firstName}
@@ -32,8 +29,8 @@ const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
             </div>
 
             <div>
-                <label className={labelClasses}>Last Name</label>
-                <InputField
+                <label>Last Name</label>
+                <input
                     name="lastName"
                     type="text"
                     value={lastName}
@@ -45,7 +42,6 @@ const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
             <ActionButtonsPair
                 primaryLabel="Save"
                 primaryType="submit"
-                primaryColor="bg-green-600 hover:bg-green-700 text-white"
             />
 
         </form>
