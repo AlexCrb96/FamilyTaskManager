@@ -1,0 +1,69 @@
+/* AuthForm.css */
+
+.auth-wrapper {
+    width: 100%;
+    max-width: var(--card-max-width);
+    padding: var(--space-md);
+}
+
+.auth-card {
+    width: 100%;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-md);
+}
+
+.auth-title {
+    text-align: center;
+    font-size: var(--text-xxl);
+    margin-bottom: var(--space-md);
+}
+
+.auth-error {
+    color: var(--danger);
+    text-align: center;
+    margin-bottom: var(--space-xs);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.auth-form .btn {
+    background: var(--indigo);
+    color: var(--surface);
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    width: auto;
+}
+
+.auth-form .btn:hover {
+    background: var(--indigo-dark);
+}
+
+.auth-forgot {
+    background: none;
+    border: none;
+    color: var(--indigo);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.auth-hint {
+    text-align: center;
+    color: var(--muted);
+    margin-top: var(--space-sm);
+}
+.auth-hint a {
+    color: var(--indigo);
+    font-weight: var(--font-bold);
+    text-decoration: underline;
+}

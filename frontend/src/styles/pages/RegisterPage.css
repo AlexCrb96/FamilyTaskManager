@@ -1,0 +1,10 @@
+/* RegisterPage.css */
+
+.register-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg) var(--space-md);
+    background: var(--bg);
+}

@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../../styles/components/shared/TopBar.css";
 
 export default function TopBar({ email, onLogout }) {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
     return (
-        <div>
-            <div>
+        <div className="topbar">
+            <div className="user-dropdown">
                 <button
+                    className="btn btn-primary"
                     onClick={() => setOpen(!open)}
                 >
                     {email}
                 </button>
 
                 {open && (
-                    <div>
+                    <div className="user-menu">
                         <button
                             onClick={() => { setOpen(false); navigate("/account"); }}
                         >

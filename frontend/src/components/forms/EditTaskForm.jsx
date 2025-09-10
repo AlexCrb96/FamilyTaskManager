@@ -28,14 +28,13 @@ const EditTaskForm = ({ initialTask, users = [], onSubmit, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
 
             <TaskBody task={task} users={users} editable onChange={handleChange} />
-            {/* Buttons */}
             <ActionButtonsPair
                 primaryLabel="Save"
                 primaryType="submit"
-                primaryColor="bg-green-600 hover:bg-green-700 text-white"
+                primaryColor="success"
                 secondaryLabel="Cancel"
                 onSecondaryClick={onCancel}
             />

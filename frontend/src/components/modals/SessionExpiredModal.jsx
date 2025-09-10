@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "../../styles/components/modals/SessionExpiredModal.css";
 import AuthForm from "../forms/AuthForm";
 import { AuthContext } from "../../context/AuthContext"
 import UserService from "../../services/UserService";
@@ -37,21 +38,19 @@ const SessionExpiredModal = ({ show, onClose }) => {
             </Modal.Header>
 
             <Modal.Body>
-                <div>
-                    <AuthForm
-                        header="Your session has expired. Please log in again."
-                        buttonText="Login"
-                        hintText=""
-                        hintLinkText=""
-                        hintLinkTo=""
-                        email={email}
-                        password={password}
-                        setEmail={setEmail}
-                        setPassword={setPassword}
-                        onSubmit={handleSubmit}
-                        error={error}
-                    />
-                </div>                
+                <AuthForm
+                    header="Your session has expired. Please log in again."
+                    buttonText="Login"
+                    hintText=""
+                    hintLinkText=""
+                    hintLinkTo=""
+                    email={email}
+                    password={password}
+                    setEmail={setEmail}
+                    setPassword={setPassword}
+                    onSubmit={handleSubmit}
+                    error={error}
+                />             
             </Modal.Body>
         </Modal>
     )

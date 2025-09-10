@@ -1,5 +1,7 @@
+import "../../styles/components/shared/TaskInfoFooter.css";
+
 const TaskInfoFooter = ({ task }) => (
-    <div>
+    <div className="task-info-footer">
         <div>
             <span>Created by:</span> {task.createdByUserEmail || "-"}
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../../styles/components/forms/UtilitiesBarForm.css";
 
 export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone, onToggleShowMine }) {
     const [searchTerm, setSearchTerm] = useState("");    
@@ -16,9 +17,11 @@ export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone,
 
     return (
         <form
+            className="utilities-bar"
             onSubmit={handleSearchSubmit}
         >
             <button
+                className=" btn btn-create"
                 type="button"
                 onClick={onCreate}
             >
@@ -32,10 +35,12 @@ export default function UtilitiesBarForm({ onCreate, onSearch, onToggleShowDone,
                 onChange={handleSearchChange}
             />
             <button
+                className="btn btn-search"
                 type="submit"
             >
                 Search
             </button>
+            
 
             <label>
                 <input type="checkbox" onChange={(e) => onToggleShowDone(e.target.checked)} />

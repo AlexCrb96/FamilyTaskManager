@@ -1,0 +1,53 @@
+/* RichTextEditor.css */
+
+.rte {
+    background: var(--surface);
+    border-radius: var(--rte-radius);
+    border: var(--btn-border-subtle);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.rte-menubar {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+    .rte-menubar button {
+        padding: var(--space-xs) var(--space-s);
+        border-radius: var(--radius-sm);
+        border: var(--btn-border-subtle);
+        background: transparent;
+        cursor: pointer;
+    }
+
+.rte-content {
+    height: var(--rte-height);
+    min-height: var(--rte-height);
+    max-height: var(--rte-height);
+    padding: var(--space-s);
+    outline: none;
+    overflow-y: auto;
+    white-space: normal;
+    word-break: break-word;
+    cursor: text;
+    display: block;
+}
+
+.rte-content ul { padding-left: var(--list-indent); list-style: disc; }
+.rte-content ol { padding-left: var(--list-indent); list-style: decimal; }
+.rte-content h1, .rte-content h2 { margin: var(--space-xs) 0; }
+
+.ProseMirror {
+    min-height: var(--rte-height);
+    max-height: var(--rte-max-height);
+    height: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    outline: none;
+    caret-color: var(--text-dark);
+    user-select: text;
+}

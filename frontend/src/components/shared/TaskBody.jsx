@@ -1,3 +1,5 @@
+import "../../styles/components/shared/TaskBody.css";
+
 import RichTextEditor from "./RichTextEditor";
 import TaskInfoFooter from "./TaskInfoFooter";
 import TaskItemStatus from "../../enums/TaskItemStatus";
@@ -7,7 +9,7 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
     if (!task) return null;
 
     return (
-        <div>
+        <div className="task-body">
 
             {/* Title + Status */}
             <div>
@@ -26,12 +28,13 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                             name="status"
                             value={task.status}
                             onChange={onChange}
-                            options={Object.entries(TaskItemStatus).map(([key, value]) => ({
-                                key,
-                                label: value,
-                                value
-                            }))}
-                        />
+                        >
+                            {Object.entries(TaskItemStatus).map(([key, value]) => (
+                                <option key={key} value={value}>
+                                    {value}
+                                </option>
+                            ))}
+                        </select>
                         : <div>{task.status}</div>
                     }
                 </div>
@@ -43,10 +46,11 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                     <label>Description</label>
                     {editable
                         ? <RichTextEditor
+                            className="rich-text-editor"
                             value={task.description}
                             onChange={(val) => onChange({ target: { name: "description", value: val } })}
                         />
-                        : <MarkdownRenderer markdown={task.description} />
+                        : <MarkdownRenderer className="markdown-renderer" markdown={task.description} />
                     }
                 </div>
 
@@ -57,7 +61,7 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                             value={task.progress}
                             onChange={(val) => onChange({ target: { name: "progress", value: val } })}
                         />
-                        : <div dangerouslySetInnerHTML={{ __html: task.progress }} />
+                        : <MarkdownRenderer className="markdown-renderer" markdown={task.progress} />
                     }
                 </div>
             </div>
@@ -71,11 +75,14 @@ const TaskBody = ({ task, users = [], editable = false, onChange }) => {
                             name="assignedUserId"
                             value={task.assignedUserId || "unassigned"}
                             onChange={onChange}
-                            options={[
-                                { key: "none", label: "Unassigned", value: "unassigned" },
-                                ...users.map(u => ({ key: u.id, label: u.email, value: u.id }))
-                            ]}
-                        />
+                        >
+                            <option value="unassigned">Unassigned</option>
+                            {users.map(u => (
+                                <option key={u.id} value={u.id}>
+                                    {u.email}
+                                </option>
+                            ))}
+                        </select>
                         : <div>{task.assignedUserEmail || "Unassigned"}</div>
                     }
                 </div>

@@ -1,0 +1,13 @@
+/* TaskInfoFooter.css */
+
+.task-info-footer {
+    border-top: var(--divider-border);
+    padding-top: var(--space-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-md);
+    font-size: var(--text-sm);
+    color: var(--grey);
+}
+
+.task-info-footer span { font-weight: var(--font-bold); }

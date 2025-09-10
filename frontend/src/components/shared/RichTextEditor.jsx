@@ -1,16 +1,16 @@
 import React from "react";
+import "../../styles/components/shared/RichTextEditor.css";
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import { htmlToMarkdown, markdownToHtml } from "../../utils/markdownUtils";
 
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
 
 const MenuBar = ({ editor }) => {
     if (!editor) return null;
 
     return (
-        <div>
+        <div className="rte-menubar">
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -22,12 +22,6 @@ const MenuBar = ({ editor }) => {
                 onClick={() => editor.chain().focus().toggleItalic().run()}
             >
                 I
-            </button>
-            <button
-                type="button"
-                onClick={() => editor.chain().focus().toggleUnderline().run()}
-            >
-                U
             </button>
             <button
                 type="button"
@@ -74,7 +68,6 @@ const RichTextEditor = ({ value, onChange, className }) => {
                 bulletList: { keepMarks: true, keepAttributes: false },
                 orderedList: { keepMarks: true, keepAttributes: false },
             }),
-            Underline,
         ],
         content: markdownToHtml(value || ""),
         onUpdate: ({ editor }) => onChange(htmlToMarkdown(editor.getHTML())),
@@ -82,10 +75,11 @@ const RichTextEditor = ({ value, onChange, className }) => {
 
     return (
         <div
+            className="rte"
             onClick={()=> editor?.commands.focus()}
         >
             <MenuBar editor={editor} />
-            <EditorContent editor={editor} />
+            <EditorContent className="rte-content" editor={editor} />
         </div>
     );
 };

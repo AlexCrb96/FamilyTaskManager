@@ -42,6 +42,7 @@ const ChangeNameForm = ({ initialFirstName, initialLastName, onSubmit }) => {
             <ActionButtonsPair
                 primaryLabel="Save"
                 primaryType="submit"
+                primaryColor="success"
             />
 
         </form>

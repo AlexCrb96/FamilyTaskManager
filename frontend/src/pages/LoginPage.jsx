@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import "../styles/pages/RegisterPage.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AuthForm from "../components/forms/AuthForm";
@@ -21,7 +22,7 @@ const LoginPage = ({ onLogin }) => {
     };
 
     return (
-        <>
+        <div className="register-page">
             <AuthForm
                 header="Login"
                 buttonText="Login"
@@ -43,7 +44,7 @@ const LoginPage = ({ onLogin }) => {
                 show={showForgotPasswordModal}
                 onClose={() => setShowForgotPasswordModal(false)}
             />
-        </>
+        </div>
     );
 };
 

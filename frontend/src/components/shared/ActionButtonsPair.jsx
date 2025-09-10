@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/components/shared/ActionButtonsPair.css";
 
 const ActionButtonsPair = ({
     primaryLabel,
@@ -7,13 +8,15 @@ const ActionButtonsPair = ({
     onSecondaryClick,
     primaryType = "button",
     secondaryType = "button",
-    primaryColor = "",
-    secondaryColor = "",
+    primaryColor = "primary",
+    secondaryColor = "ghost",
     className = "",
 }) => {
+
     return (
-        <div>
+        <div className={`action-buttons ${className || ""}`}>
             <button
+                className={`btn btn-${primaryColor}`}
                 type={primaryType}
                 onClick={onPrimaryClick}
             >
@@ -22,6 +25,7 @@ const ActionButtonsPair = ({
 
             {secondaryLabel && (
                 <button
+                    className={`btn btn-${secondaryColor}`}
                     type={secondaryType}
                     onClick={onSecondaryClick}
                 >

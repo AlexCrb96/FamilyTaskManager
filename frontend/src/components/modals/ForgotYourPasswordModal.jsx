@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import "../../styles/components/modals/ForgotYourPasswordModal.css";
+
 import UserService from "../../services/UserService";
 import ActionButtonsPair from "../shared/ActionButtonsPair";
 
@@ -27,11 +29,12 @@ export default function ForgotPasswordModal({ show, onClose }) {
     };
 
     return (
-        <div>
-            <div>
+        <div className="modal-overlay">
+            <div className="modal-card">
                 <h2>Forgot Password</h2>
                 {message && <p>{message}</p>}
                 <input
+                    type="text"
                     name="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}

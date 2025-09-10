@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/components/forms/AuthForm.css";
 import { Link } from "react-router-dom";
 import { PasswordField } from "../shared/InputFields";
 
@@ -14,55 +15,52 @@ const AuthForm = ({
     setPassword,
     onSubmit,
     error,
-    fullScreen = false,
     showForgotPassword = false,
     onForgotPasswordClick
 }) => {
     return (
-        <div>
+        <div className="auth-wrapper">
+            <div className="auth-card">
+                <h1 className="auth-title">{header}</h1>
 
-            <div>
+                {error && <p className="auth-error">{error}</p>}
 
-                <h1>{header}</h1>
+                <form className="auth-form" onSubmit={onSubmit}>
+                    <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="Email"
+                        required
+                    />
 
-                {error && (<p>{error}</p>)}
+                    <PasswordField
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
 
-            <form onSubmit={onSubmit}>
-                <input
-                    name="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-
-                <PasswordField
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
-
-                <button
-                    type="submit"
-                >
-                    {buttonText}
-                </button>
-            </form>
+                    <div className="center">
+                        <button className="btn btn-primary" type="submit">{buttonText}</button>
+                    </div>
+                </form>
 
                 {showForgotPassword && onForgotPasswordClick && (
-                    <button
-                        type="button"
-                        onClick={onForgotPasswordClick}
-                    >
-                        Forgot your password?
-                    </button>
-                ) }
+                    <div className="center">
+                        <button
+                            className="auth-forgot"
+                            type="button"
+                            onClick={onForgotPasswordClick}
+                        >
+                            Forgot your password?
+                        </button>
+                    </div>
+                )}
 
-            <p>
-                {hintText}{" "}
-                <Link to={hintLinkTo}>
-                    {hintLinkText}
-                </Link>
-            </p>
+                <p className="auth-hint">
+                    {hintText}{" "}
+                    <Link to={hintLinkTo}>{hintLinkText}</Link>
+                </p>
             </div>
         </div>
     );

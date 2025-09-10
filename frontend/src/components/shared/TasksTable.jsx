@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 
+import "../../styles/components/shared/TasksTable.css";
 import MarkdownRenderer from "../../utils/markdownUtils";
+import ActionButtonsPair from "./ActionButtonsPair";
 
 const MAX_DESCRIPTION_LENGTH = 150;
 
@@ -38,7 +40,7 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
             <div>
                 <MarkdownRenderer markdown={displayedText} />
                 {fullText.length > MAX_DESCRIPTION_LENGTH && (
-                    <button
+                    <button className="show-more"
                         onClick={() => toggleRow(task.id)}
                     >
                         {isExpanded ? "Show less" : "Show more"}
@@ -49,7 +51,7 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
     };
 
     return (
-        <div>
+        <div className="tasks-card">
             <table>
                 <thead>
                     <tr>
@@ -58,7 +60,9 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
                                 key={idx}
                                 onClick={columnSortKeys[col] ? () => onSort(columnSortKeys[col]) : null}
                             >
-                                {col} {renderSortArrow(columnSortKeys[col])}
+                                <div className="th-content">
+                                    {col} {renderSortArrow(columnSortKeys[col])}
+                                </div>
                             </th>
                         ))}
                     </tr>
@@ -73,18 +77,14 @@ const TasksTable = ({ tasks, onView, onDelete, onSort, sortConfig }) => {
                             <td>{task.status}</td>
                             <td>{task.assignedUserEmail || "Unassigned"}</td>
                             <td>
-                                <div>
-                                    <button
-                                        onClick={() => onView(task)}
-                                    >
-                                        View Task
-                                    </button>
-                                    <button
-                                        onClick={() => onDelete(task.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>                                
+                                <ActionButtonsPair
+                                    primaryLabel="View Task"
+                                    onPrimaryClick={() => onView(task)}
+                                    secondaryLabel="Delete"
+                                    onSecondaryClick={() => onDelete(task.id)}
+                                    primaryColor="accent"
+                                    secondaryColor="danger"
+                                />                               
                             </td>
                         </tr>
                     ))}

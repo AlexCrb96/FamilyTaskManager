@@ -1,0 +1,9 @@
+/* AccountPage.css */
+
+.account-page-container {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md);
+}
+
+.account-content { flex: 1; min-width: 0; }

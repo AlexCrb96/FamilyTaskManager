@@ -3,11 +3,13 @@ import EditTaskForm from "../forms/EditTaskForm";
 
 const EditTaskModal = ({ show, task, users, onSave, onCancel }) => (
     <Modal
+        dialogClassName="task-modal-dialog"
         show={show}
         onHide={onCancel}
         centered
+        size="xl"
     >
-        <div>
+        <div className="task-modal-content">
             <Modal.Header
                 closeButton
             >

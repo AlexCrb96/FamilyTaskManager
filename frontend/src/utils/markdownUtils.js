@@ -3,23 +3,7 @@ import Showdown from "showdown";
 import ReactMarkdown from "react-markdown";
 
 const turndownService = new TurndownService();
-
-turndownService.addRule("underline", {
-    filter: "u",
-    replacement: (content) => `__${content}__`,
-});
-
-const showdownConverter = new Showdown.Converter({
-    extensions: [
-        () => [
-            {
-                type: "lang",
-                regex: /__(.+?)__/g,
-                replace: "<u>$1</u>",
-            },
-        ],
-    ],
-});
+const showdownConverter = new Showdown.Converter();
 
 const MarkdownRenderer = ({ markdown }) => {
     return (

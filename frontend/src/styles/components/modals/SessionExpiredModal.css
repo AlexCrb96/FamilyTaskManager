@@ -1,0 +1,13 @@
+/* SessionExpiredModal.css */
+
+.modal .auth-card {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.modal .auth-wrapper {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+}

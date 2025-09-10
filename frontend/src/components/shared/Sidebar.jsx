@@ -1,23 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../../styles/components/shared/Sidebar.css";
 
 const Sidebar = ({ tabs = [], activeTab, setActiveTab, title = "Settings", breadcrumbs = [] }) => {
     return (
-        <div>
+        <div className="sidebar">
 
             {/* Breadcrumbs */}
             {breadcrumbs.length > 0 && (
-                <nav>
+                <nav className="breadcrumbs">
                     {breadcrumbs.map((crumb, index) => (
-                        <span key={index}>
-                            {crumb.path ? (
-                                <Link to={crumb.path}>
-                                    {crumb.label}
-                                </Link>
-                            ) : (
-                                    <span>{crumb.label}</span>
-                            ) }
-                            {index < breadcrumbs.length - 1 && " > "}
+                        <span key={index} className={index === breadcrumbs.length - 1 ? "active" : ""}>
+                            {crumb.path ? <Link to={crumb.path}>{crumb.label}</Link> : <span>{crumb.label}</span>}
                         </span>
                     ))}
                 </nav>
@@ -31,6 +25,7 @@ const Sidebar = ({ tabs = [], activeTab, setActiveTab, title = "Settings", bread
                 {tabs.map((tab) => (
                     <li key={tab.id}>
                         <button
+                            className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
                             onClick={() => setActiveTab(tab.id)}
                         >
                             {tab.label}

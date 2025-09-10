@@ -1,4 +1,5 @@
 import { Modal } from "react-bootstrap";
+
 import TaskBody from "../shared/TaskBody";
 import ActionButtonsPair from "../shared/ActionButtonsPair";
 
@@ -7,6 +8,7 @@ const ViewTaskModal = ({ show, task, onClose, onEdit }) => (
         show={show}
         onHide={onClose}
         centered
+        size="xl"
     >
         <div>
             <Modal.Header closeButton>

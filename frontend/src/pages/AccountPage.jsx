@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import "../styles/pages/AccountPage.css";
 
 import { AuthContext } from "../context/AuthContext";
 import { useAuthLogout } from "../hooks/useAuthLogout";
@@ -39,7 +40,7 @@ export default function AccountPage() {
     return (
         <>
             <TopBar email={currentUser?.email} onLogout={handleLogout} />
-            <div>
+            <div className="account-page-container">
 
                 {/* Sidebar */}
                 <Sidebar
@@ -53,7 +54,7 @@ export default function AccountPage() {
                 />
 
                 {/* Content */}
-                <div>
+                <div className="account-content">
                     {activeTab === "account" && (
                         <div>
                             <h2>Account Details</h2>

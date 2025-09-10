@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../styles/pages/RegisterPage.css";
 import UserService from '../services/UserService';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/forms/AuthForm';
@@ -22,18 +23,20 @@ export default function RegisterPage() {
     }; 
 
     return (
-        <AuthForm
-            header="Register"
-            buttonText="Register"
-            hintText="Already have an account?"
-            hintLinkText="Login here"
-            hintLinkTo="/login"
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            onSubmit={handleRegister}
-            error={error}
-        />
+        <div className="register-page">
+            <AuthForm
+                header="Register"
+                buttonText="Register"
+                hintText="Already have an account?"
+                hintLinkText="Login here"
+                hintLinkTo="/login"
+                email={email}
+                password={password}
+                setEmail={setEmail}
+                setPassword={setPassword}
+                onSubmit={handleRegister}
+                error={error}
+            />
+        </div>        
     );
 }

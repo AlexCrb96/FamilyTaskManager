@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import "../styles/pages/HomePage.css";
 
 import { AuthContext } from "../context/AuthContext";
 import { useSessionExpiry } from "../hooks/useSessionExpiry";
@@ -169,7 +170,7 @@ export default function HomePage() {
     return (
         <>
             <TopBar email={currentUser?.email} onLogout={handleLogout} />
-            <div>
+            <div className="homepage">
                 <UtilitiesBarForm onCreate={handleCreateClick} onSearch={fetchTasks} onToggleShowDone={setShowDone} onToggleShowMine={setShowMine} />
                 <TasksTable tasks={sortedTasks} onView={handleViewClick} onDelete={handleDelete} onSort={handleSort} sortConfig={sortConfig} />
                 <ViewTaskModal show={!!viewingTask} task={viewingTask} users={users} onClose={() => setViewingTask(null)} onEdit={handleEditFromView} />

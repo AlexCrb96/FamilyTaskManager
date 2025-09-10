@@ -1,0 +1,32 @@
+/* Sidebar.css */
+
+.sidebar {
+    width: var(--sidebar-width);
+    min-height: calc(100vh - var(--topbar-height));
+    background: var(--bg);
+    padding: var(--space-md);
+    border-right: var(--sidebar-border);
+}
+
+.sidebar h2 { margin-bottom: var(--space-sm); font-size: var(--text-md); }
+.sidebar nav { margin-bottom: var(--space-sm); color: var(--muted); font-size: var(--text-sm); }
+.sidebar ul { list-style: none; padding: 0; margin: 0; display: block; }
+.sidebar li { margin-bottom: var(--space-sm); }
+
+.sidebar .tab-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-s) var(--space-m);
+    border-radius: var(--btn-radius);
+    background: transparent;
+    border: 0;
+}
+
+.sidebar .tab-button.active { background: var(--indigo); color: var(--text-white); }
+
+.breadcrumbs span:not(:last-child)::after {
+    content: "\203A"; margin: 0 var(--space-xs); color: var(--muted);
+}
+
+.breadcrumbs .active { font-weight: var(--font-bold); color: var(--indigo); }

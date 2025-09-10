@@ -25,7 +25,7 @@ export const PasswordField = ({ value, onChange }) => {
                 placeholder="Password"
                 required
             />
-            {error && (<p>{error}</p>)}
+            {error && (<p className="password-error">{error}</p>)}
         </>
     )
 };

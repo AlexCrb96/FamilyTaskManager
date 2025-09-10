@@ -1,0 +1,48 @@
+/* TaskBody.css */
+
+.task-body {
+    background: var(--surface);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    margin: var(--space-md) auto;
+    max-width: var(--max-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.task-body > div:not(.task-info-footer) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.task-body label {
+    display: block;
+    font-weight: var(--font-bold);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-xs);
+    color: var(--text);
+}
+
+.task-body input,
+.task-body select,
+.task-body textarea {
+    width: 100%;
+    padding: var(--space-xs);
+    border: var(--rte-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm-md);
+    background: var(--surface);
+}
+
+    .task-body .rich-text-editor,
+    .task-body .markdown-renderer {
+        width: 100%;
+        min-height: var(--rte-min-height);
+        padding: var(--space-xs);
+        border: var(--rte-border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+    }

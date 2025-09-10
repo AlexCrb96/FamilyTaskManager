@@ -35,6 +35,7 @@ const ChangePasswordForm = ({ onSubmit, onCancel }) => {
             <ActionButtonsPair
                 primaryType="submit"
                 primaryLabel="Save"
+                primaryColor="success"
             />
         </form>
     );

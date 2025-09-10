@@ -1,0 +1,60 @@
+/* TasksTable.css */
+
+.tasks-card {
+    background: var(--table-bg);
+    border-radius: var(--table-radius);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+    width: 100%;
+}
+
+.tasks-card table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: var(--tasks-table-min-width);
+}
+
+.tasks-card table th {
+    padding: var(--table-cell-padding);
+    text-align: left;
+    font-size: var(--table-font-xs);
+    font-weight: var(--font-bold);
+    color: var(--table-header-color);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    background: var(--table-header-bg);
+    cursor: pointer;
+    user-select: none;
+}
+
+.tasks-card table th:first-child{ border-top-left-radius: var(--radius-md); }
+.tasks-card table th:last-child{ border-top-right-radius: var(--radius-md); }
+
+.tasks-card table th .th-content { display: inline-flex; align-items: center; gap: var(--space-xs); }
+
+.tasks-card table td {
+    padding: var(--table-cell-padding);
+    border-top: 1px solid var(--table-border);
+    vertical-align: top;
+    white-space: normal;
+}
+
+.tasks-card table td:last-child { white-space: nowrap; }
+
+.show-more {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: var(--show-more-font);
+    color: var(--show-more-color);
+    cursor: pointer;
+    margin-top: var(--show-more-margin-top);
+}
+
+.show-more:hover { text-decoration: underline; }
+
+@media (max-width: var(--bp-md)) {
+    .tasks-card table { min-width: var(--tasks-table-min-width-mobile); }
+}

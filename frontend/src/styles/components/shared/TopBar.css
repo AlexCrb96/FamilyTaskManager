@@ -1,0 +1,36 @@
+/* TopBar.css */
+
+.topbar {
+    width: 100%;
+    background: var(--surface);
+    border-bottom: var(--divider-border);
+    padding: var(--topbar-padding-y) var(--topbar-padding-x);
+    position: sticky;
+    top: 0;
+    z-index: var(--overlay-z-index);
+    box-shadow: var(--topbar-shadow);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-dropdown { position: relative; display: inline-block; }
+.user-menu {
+    position: absolute;
+    right: var(--space-md);
+    margin-top: var(--space-s);
+    background: var(--surface);
+    border: var(--divider-border);
+    border-radius: var(--btn-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+    .user-menu button {
+        display: block;
+        width: 100%;
+        padding: var(--btn-padding-y) var(--btn-padding-x);
+        text-align: left;
+        background: transparent;
+        border: 0;
+    }
