@@ -1,16 +1,24 @@
-name: Deploy FamilyTaskManagerAPI to Azure
+name: Build, Migrate and Deploy FamilyTaskManagerAPI to Azure
 
 on:
   push:
     branches:
       - master
+    paths:
+      - 'FamilyTaskManagerAPI/Migrations/**'
 
 jobs:
-  build-and-deploy:
+  build-migrate-deploy-backend:
     runs-on: ubuntu-latest
+    permissions:
+       id-token: write
+       contents: read
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
+          lfs: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -29,7 +37,7 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: false
 
       - name: Install EF Core Tools
         run: dotnet tool install --global dotnet-ef
