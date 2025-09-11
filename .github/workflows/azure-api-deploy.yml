@@ -22,18 +22,6 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj
-        
-      - name: Install EF Core Tools
-        run: dotnet tool install --global dotnet-ef
-        
-      - name: Run EF Core Migrations
-        run: |
-          dotnet ef database update \
-            --project ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj \
-            --startup-project ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj \
-            --configuration Release
-        env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
 
       - name: Publish
         run: dotnet publish --configuration Release --output ./publish ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj
