@@ -1,34 +1,30 @@
-﻿using System.Net;
+﻿using FamilyTaskManagerAPI.Utils;
+using Microsoft.Extensions.Options;
+using System.Net;
 using System.Net.Mail;
 
 namespace FamilyTaskManagerAPI.Services
 {
     public class MailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly MailSettings _settings;
 
-        public MailService(IConfiguration configuration)
+        public MailService(IOptions<MailSettings> options)
         {
-            _configuration = configuration;
+            _settings = options.Value;
         }
         public void SendEmail(string toEmail, string toFirstName, string toLastName, string subject, string htmlBody)
         {
-            var smtpHost = _configuration["MailSettings:SmtpHost"];
-            var smtpPort = int.Parse(_configuration["MailSettings:SmtpPort"]);
-            var smtpUser = _configuration["MailSettings:SmtpUser"];
-            var smtpPass = _configuration["MailSettings:SmtpPass"];
-            var fromEmail = _configuration["MailSettings:FromEmail"];
-
             try
             {
-                using (var client = new SmtpClient(smtpHost, smtpPort))
+                using (var client = new SmtpClient(_settings.SmtpHost, _settings.SmtpPort))
                 {
-                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                    client.Credentials = new NetworkCredential(_settings.SmtpUser, _settings.SmtpPass);
                     client.EnableSsl = true;
 
                     var mailMessage = new MailMessage();
 
-                    mailMessage.From = new MailAddress(fromEmail, "Task Manager App");
+                    mailMessage.From = new MailAddress(_settings.FromEmail, "Task Manager App");
                     mailMessage.To.Add(new MailAddress(toEmail, $"{toFirstName} {toLastName}"));
                     mailMessage.Subject = subject;
                     mailMessage.Body = htmlBody;

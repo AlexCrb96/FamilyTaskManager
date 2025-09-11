@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext for Entity Framework Core
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FamilyTaskManagerDB")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure JWT authentication
 builder.Services.AddAuthentication(options =>
@@ -39,14 +39,18 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
         };
     });
+
+// Init JwtSettings from environment variables or use user-secrets for development
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// Init MailSettings from environment variables or use user-secrets for development
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<JwtProvider>();
 builder.Services.AddScoped<UserService>();
-//builder.Services.AddScoped<UserHandler>();
 builder.Services.AddScoped<TaskItemService>();
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped<UserRepository>();
@@ -87,15 +91,34 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddControllers().AddJsonOptions(options => 
 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+// Configure CORS to allow requests from any origin (adjust as needed for production)
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>()
+    ?? (Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")?
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        ?? Array.Empty<string>());
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        if (allowedOrigins.Length > 0)
+        {
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+        else
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }            
     });
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -127,12 +150,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
