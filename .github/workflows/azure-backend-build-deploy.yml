@@ -1,0 +1,48 @@
+name: Build and Deploy FamilyTaskManagerAPI to Azure
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'FamilyTaskManagerAPI/Migrations/**'
+
+jobs:
+  build-deploy-backend:
+    runs-on: ubuntu-latest
+    permissions:
+       id-token: write
+       contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+            submodules: true
+            lfs: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj
+
+      - name: Publish
+        run: dotnet publish --configuration Release --output ./publish ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          enable-AzPSSession: false
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: FamilyTaskManagerAPI
+          slot-name: Production
+          package: ./publish
