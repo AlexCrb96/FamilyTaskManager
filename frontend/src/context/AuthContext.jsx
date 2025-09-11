@@ -13,6 +13,15 @@ export function AuthProvider({ children }) {
                 setCurrentUser(null);
                 return;
             }
+
+            const expiration = UserService.getTokenExpiration(token);
+            if (!expiration || expiration < Date.now()) {
+                localStorage.removeItem("token");
+                setToken(null);
+                setCurrentUser(null);
+                return;
+            }
+
             const userData = await UserService.getCurrentUser();
             if (userData) {
                 setCurrentUser({ id: userData.id, email: userData.email, firstName: userData.firstName, lastName: userData.lastName });
