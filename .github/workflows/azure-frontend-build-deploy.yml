@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'frontend/**'
+      - '.github/workflows/azure-frontend-build-deploy.yml'
 
 jobs:
   build-deploy-frontend:
@@ -13,7 +14,6 @@ jobs:
     permissions:
        id-token: write
        contents: read
-
 
     steps:
       - name: Checkout repository
@@ -34,6 +34,15 @@ jobs:
       - name: Build frontend
         run: npm run build --if-present
         working-directory: ./frontend
+
+      - name: Get Id Token
+        uses: actions/github-script@v6
+        id: idtoken
+        with:
+          script: |
+              const coredemo = require('@actions/core')
+              return await coredemo.getIDToken()
+          result-encoding: string
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
