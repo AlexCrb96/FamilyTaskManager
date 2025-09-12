@@ -6,7 +6,10 @@ on:
       - master
     paths-ignore:
       - 'FamilyTaskManagerAPI/Migrations/**'
-
+      - 'frontend/**'
+      - '.github/workflows/azure-frontend-build-deploy.yml'
+  workflow_dispatch:
+  
 jobs:
   build-deploy-backend:
     runs-on: ubuntu-latest
