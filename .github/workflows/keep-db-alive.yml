@@ -10,14 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install SQL Server Client
-        run: sudo apt-get update && sudo apt-get install -y mssql-tools unixodbc-dev
-
       - name: Ping Database
-        env:
-          DB_SERVER: ${{ secrets.AZURE_SQL_SERVER }}        # e.g., yourserver.database.windows.net
-          DB_NAME: ${{ secrets.AZURE_DB_NAME }}            # your database name
-          DB_USER: ${{ secrets.AZURE_DB_USER }}            # username
-          DB_PASSWORD: ${{ secrets.AZURE_DB_PASSWORD }}    # password
-        run: |
-          echo "SELECT 1;" | sqlcmd -S $DB_SERVER -d $DB_NAME -U $DB_USER -P $DB_PASSWORD
+        uses: azure/sql-action@v2
+        with:
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          sql-query: "SELECT 1;"
