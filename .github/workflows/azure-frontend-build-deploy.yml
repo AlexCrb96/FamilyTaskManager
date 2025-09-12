@@ -7,6 +7,7 @@ on:
     paths:
       - 'frontend/**'
       - '.github/workflows/azure-frontend-build-deploy.yml'
+  workflow_dispatch:
 
 jobs:
   build-deploy-frontend:

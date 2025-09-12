@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'FamilyTaskManagerAPI/Migrations/**'
+  workflow_dispatch:
 
 jobs:
   build-migrate-deploy-backend:
