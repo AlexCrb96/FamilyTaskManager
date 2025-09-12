@@ -1,8 +1,9 @@
 {
-  "routes": [
-    {
-      "route": "/*",
-      "rewrite": "/index.html"
-    }
-  ]
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [ "/static/*", "/favicon.ico", "/manifest.json" ]
+  },
+  "globalHeaders": {
+    "Cache-Control": "no-cache"
+  }
 }
