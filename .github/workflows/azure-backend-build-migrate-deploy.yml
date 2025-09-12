@@ -1,4 +1,4 @@
-name: Build, Migrate and Deploy FamilyTaskManagerAPI to Azure
+name: Build, Migrate and Deploy Backend to Azure
 
 on:
   push:

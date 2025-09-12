@@ -1,4 +1,4 @@
-name: Build and Deploy FamilyTaskManagerAPI to Azure
+name: Build and Deploy Backend to Azure
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - 'FamilyTaskManagerAPI/Migrations/**'
       - 'frontend/**'
-      - '.github/workflows/azure-frontend-build-deploy.yml'
+      - '.github/workflows/azure-static-web-apps-salmon-beach-0c4446003.yml'
   workflow_dispatch:
   
 jobs:
