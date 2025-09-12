@@ -11,5 +11,6 @@ namespace FamilyTaskManagerAPI.Data.Repositories
         void Delete(TEntity entity);
         Task SaveAsync();
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<bool> PingAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -27,5 +27,21 @@ namespace FamilyTaskManagerAPI.Data.Repositories
         public async Task SaveAsync() => await _db.SaveChangesAsync();
 
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate) => await _dbSet.AnyAsync(predicate);
+
+        public async Task<bool> PingAsync(CancellationToken cancellationToken = default)
+        {
+            bool result = false;
+
+            try
+            {
+                await _db.Database.ExecuteSqlRawAsync("SELECT 1;", cancellationToken);
+                result = true;
+            }catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
     }
 }
