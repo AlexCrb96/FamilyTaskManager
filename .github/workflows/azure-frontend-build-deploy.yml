@@ -35,6 +35,9 @@ jobs:
         run: npm run build --if-present
         working-directory: ./frontend
 
+      - name: Install OIDC Client from Core Package
+        run: npm install @actions/core@1.6.0 @actions/http-client
+
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
