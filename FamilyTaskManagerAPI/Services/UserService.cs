@@ -73,7 +73,7 @@ namespace FamilyTaskManagerAPI.Services
             _repo.Update(user);
             await _repo.SaveAsync();
 
-            string resetLink = $"https://blue-grass-0ff222603.2.azurestaticapps.net/reset-password?token={user.PasswordResetToken}";
+            string resetLink = $"https://salmon-beach-0c4446003.1.azurestaticapps.net/reset-password?token={user.PasswordResetToken}";
 
             string subject = "Password Reset Request";
             string htmlBody = $"<html><body><a href={resetLink}>Click here to reset your password.</a></body></html>";
