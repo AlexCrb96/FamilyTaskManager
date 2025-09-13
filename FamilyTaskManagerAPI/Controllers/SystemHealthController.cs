@@ -1,3 +1,4 @@
+using FamilyTaskManagerAPI.DTOs.Responses;
 using FamilyTaskManagerAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace FamilyTaskManagerAPI.Controllers
         [HttpGet("health")]
         public IActionResult GetHealth()
         {
-            return Ok(new
+            var healthDto = new HealthResponseDTO
             {
                 DatabaseOk = SystemHealthService.LastDbPingSuccessful,
                 LastChecked = SystemHealthService.LastDbPingTime
-            });
+            };
+
+            return Ok(healthDto);
         }
     }
 }

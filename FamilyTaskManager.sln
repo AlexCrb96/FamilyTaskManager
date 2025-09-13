@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamilyTaskManagerAPI", "FamilyTaskManagerAPI\FamilyTaskManagerAPI.csproj", "{14BFC33F-756D-46B8-A41B-135FD678453E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeepAliveFunctionApp", "KeepAliveFunctionApp\KeepAliveFunctionApp.csproj", "{EE3D0700-A6AF-4923-95DB-AC9C84DF5264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{14BFC33F-756D-46B8-A41B-135FD678453E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14BFC33F-756D-46B8-A41B-135FD678453E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14BFC33F-756D-46B8-A41B-135FD678453E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE3D0700-A6AF-4923-95DB-AC9C84DF5264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE3D0700-A6AF-4923-95DB-AC9C84DF5264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE3D0700-A6AF-4923-95DB-AC9C84DF5264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE3D0700-A6AF-4923-95DB-AC9C84DF5264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
