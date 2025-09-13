@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace FamilyTaskManagerAPI.Services
 {
@@ -13,7 +16,38 @@ namespace FamilyTaskManagerAPI.Services
         {
             _settings = options.Value;
         }
-        public void SendEmail(string toEmail, string toFirstName, string toLastName, string subject, string htmlBody)
+
+        public async Task SendEmailAsync(string toEmail, string toFirstName, string toLastName, string subject, string htmlBody)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Task Manager App", _settings.FromEmail));
+            message.To.Add(new MailboxAddress($"{toFirstName} {toLastName}", toEmail));
+            message.Subject = subject;
+            message.Body = new TextPart("html")
+            {
+                Text = htmlBody
+            };
+
+            try
+            {
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+
+                client.LocalDomain = "danielmanoliu.ro";
+                await client.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(_settings.SmtpUser, _settings.SmtpPass);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+                Console.WriteLine("Email sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error sending email.");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
+/*        public void SendEmail(string toEmail, string toFirstName, string toLastName, string subject, string htmlBody)
         {
             try
             {
@@ -40,6 +74,6 @@ namespace FamilyTaskManagerAPI.Services
                 Console.WriteLine(ex.ToString());
                 throw;
             }
-        }
+        }*/
     }
 }

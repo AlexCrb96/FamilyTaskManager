@@ -78,7 +78,7 @@ namespace FamilyTaskManagerAPI.Services
             string subject = "Password Reset Request";
             string htmlBody = $"<html><body><a href={resetLink}>Click here to reset your password.</a></body></html>";
 
-            _mailService.SendEmail(
+            await _mailService.SendEmailAsync(
                 user.Email,
                 user.FirstName,
                 user.LastName,
