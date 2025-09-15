@@ -45,7 +45,7 @@ jobs:
             --startup-project ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj \
             --configuration Release
         env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          ConnectionStrings__DefaultConnection: ${{ secrets.SUPABASE_POSTGRESQL_CONNECTION_STRING }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
