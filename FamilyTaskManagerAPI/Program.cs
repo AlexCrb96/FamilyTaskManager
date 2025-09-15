@@ -31,7 +31,8 @@ else
     // Use PostgreSQL in production
     builder.Services.AddDbContext<TaskManagerDbContext>(options =>
         options.UseNpgsql(
-            builder.Configuration.GetConnectionString("PostgreSQL_Connection")
+            builder.Configuration.GetConnectionString("PostgreSQL_Connection"),
+            npgsqlOptions => npgsqlOptions.CommandTimeout(300) // increase value to 5mins because Supabase doesnot support GitHub Actions via direct connection
             )
         );
 }
