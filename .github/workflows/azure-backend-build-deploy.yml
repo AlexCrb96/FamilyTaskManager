@@ -8,6 +8,7 @@ on:
       - 'FamilyTaskManagerAPI/Migrations/**'
       - 'frontend/**'
       - '.github/workflows/azure-static-web-apps-salmon-beach-0c4446003.yml'
+      - '.github/workflows/azure-backend-build-migrate-deploy.yml'
   workflow_dispatch:
   
 jobs:
