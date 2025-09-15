@@ -21,13 +21,19 @@ if (builder.Environment.IsDevelopment())
 {
     // Use SQL Server in development
     builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("SQL_Connection")
+            )
+        );
 }
 else
 {
     // Use PostgreSQL in production
     builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("PostgreSQL_Connection")
+            )
+        );
 }
 
 
