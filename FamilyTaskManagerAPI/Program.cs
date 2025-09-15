@@ -17,8 +17,21 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext for Entity Framework Core
-builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsDevelopment())
+{
+    // Use SQL Server in development
+    builder.Services.AddDbContext<TaskManagerDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    // Use PostgreSQL in production
+    builder.Services.AddDbContext<TaskManagerDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+
+
+    
 
 // Configure JWT authentication
 builder.Services.AddAuthentication(options =>
