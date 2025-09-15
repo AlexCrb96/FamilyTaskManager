@@ -78,6 +78,7 @@ builder.Services.AddScoped<UserValidator>();
 builder.Services.AddScoped<TaskItemRepository>();
 builder.Services.AddSingleton<MailService>();
 builder.Services.AddHostedService<SystemHealthService>();
+builder.Services.AddApplicationInsightsTelemetry();
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>

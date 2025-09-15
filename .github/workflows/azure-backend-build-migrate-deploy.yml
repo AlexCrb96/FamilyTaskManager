@@ -46,6 +46,7 @@ jobs:
             --startup-project ./FamilyTaskManagerAPI/FamilyTaskManagerAPI.csproj \
             --configuration Release
         env:
+          DOTNET_ENVIRONMENT: Production
           ConnectionStrings__DefaultConnection: ${{ secrets.SUPABASE_POSTGRESQL_CONNECTION_STRING }}
 
       - name: Deploy to Azure Web App
