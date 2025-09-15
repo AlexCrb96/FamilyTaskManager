@@ -26,6 +26,8 @@ builder.Services.AddDbContext<TaskManagerDbContext>(options =>
                             maxRetryDelay: TimeSpan.FromSeconds(10),
                             errorCodesToAdd: null)
         )
+    .EnableSensitiveDataLogging()
+    .EnableDetailedErrors()
     );
 
 
