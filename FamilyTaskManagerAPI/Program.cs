@@ -17,25 +17,12 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext for Entity Framework Core
-if (builder.Environment.IsDevelopment())
-{
-    // Use SQL Server in development
-    builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString("SQL_Connection")
-            )
-        );
-}
-else
-{
-    // Use PostgreSQL in production
+    // Use PostgreSQL
     builder.Services.AddDbContext<TaskManagerDbContext>(options =>
         options.UseNpgsql(
-            builder.Configuration.GetConnectionString("PostgreSQL_Connection"),
-            npgsqlOptions => npgsqlOptions.CommandTimeout(300) // increase value to 5mins because Supabase doesnot support GitHub Actions via direct connection
+            builder.Configuration.GetConnectionString("PostgreSQL_Connection")
             )
         );
-}
 
 
     
