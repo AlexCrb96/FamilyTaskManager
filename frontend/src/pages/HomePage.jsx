@@ -90,7 +90,7 @@ export default function HomePage() {
     const handleSave = async (task) => {
         try {
             if (!task.id) {
-                await TaskService.addTask(task).catch(handleError);
+                await TaskService.addTask(task);
             } else {
                 const changedFields = {};
 
@@ -112,29 +112,8 @@ export default function HomePage() {
         }
             
     }
- /*   const handleError = (error) => {
-        if (!error.response) {
-            alert("Network error or server not responding. Please try again.");
-            return;
-        }
 
-        const { status, data } = error.response;
-        if (status === 403) {
-            alert(data || "You don't have permission to perform this action."); 
-            return
-        }
-
-        if (error.response?.data?.errors) {
-            const errors = error.response.data.errors;
-            const firstKey = Object.keys(errors)[0];
-            const firstError = errors[firstKey][0];
-            alert(firstError);
-        } else {
-            alert("An unexpected error occurred.");
-        }
-    };*/
-
-    const handleDelete = async (taskId) => {
+        const handleDelete = async (taskId) => {
         if (window.confirm("Are you sure you want to delete this task?")) {
             try {
                 await TaskService.deleteTask(taskId);
