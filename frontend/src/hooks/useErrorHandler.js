@@ -1,5 +1,7 @@
+import { useCallback } from "react"
+
 export const useErrorHandler = () => {
-    const handleError = (error) => {
+    const handleError = useCallback((error) => {
         if (!error.response) {
             alert("Network error or server not responding. Please try again.");
             return;
@@ -10,7 +12,7 @@ export const useErrorHandler = () => {
         const details = data?.validationErrors || null;
 
         return { message, details, status };
-    };
+    }, []);
 
     return handleError;
 }
