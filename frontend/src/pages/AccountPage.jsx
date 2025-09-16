@@ -4,6 +4,8 @@ import "../styles/pages/AccountPage.css";
 import { AuthContext } from "../context/AuthContext";
 import { useAuthLogout } from "../hooks/useAuthLogout";
 import { useSessionExpiry } from "../hooks/useSessionExpiry";
+import { useErrorHandler } from "../hooks/useErrorHandler";
+import { showErrorToast } from "../components/shared/ErrorToast";
 
 import UserService from "../services/UserService";
 import ChangePasswordForm from "../components/forms/ChangePasswordForm";
@@ -17,6 +19,7 @@ export default function AccountPage() {
     const { currentUser, setCurrentUser } = useContext(AuthContext);
     const { sessionExpired, setSessionExpired } = useSessionExpiry(token);
     const handleLogout = useAuthLogout();
+    const handleError = useErrorHandler();
 
     const [activeTab, setActiveTab] = useState("account");
     const tabs = [
@@ -25,16 +28,26 @@ export default function AccountPage() {
     ]
     
     const handlePasswordChange = async ({ oldPassword, newPassword }) => {
-        UserService.changePassword(oldPassword, newPassword);
+        try {
+            UserService.changePassword(oldPassword, newPassword);
+        } catch (error) {
+            const errorObj = handleError(error);
+            showErrorToast(errorObj);
+        }        
     }
 
-    const handleNameChange = ({ firstName, lastName }) => {
-        (async () => {
-            UserService.changeNames(firstName, lastName);
-
-            const updatedUser = await UserService.getCurrentUser();
-            setCurrentUser(updatedUser);
-        })();        
+    const handleNameChange = async ({ firstName, lastName }) => {
+        try {
+            await UserService.changeNames(firstName, lastName);
+            setCurrentUser((prev) => ({
+                ...prev,
+                firstName,
+                lastName
+            }));
+        } catch (error) {
+            const errorObj = handleError(error);
+            showErrorToast(errorObj);
+        }       
     };
 
     return (

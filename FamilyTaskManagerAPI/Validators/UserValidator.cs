@@ -91,7 +91,7 @@ namespace FamilyTaskManagerAPI.Validators
 
         public void ValidateNamesInput(string? firstName, string? lastName)
         {
-            if (firstName == null && lastName == null)
+            if (string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
             {
                 throw new ValidationException("Provide at least one name to update.");
             }
