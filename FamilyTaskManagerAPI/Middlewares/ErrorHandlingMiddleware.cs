@@ -81,8 +81,8 @@ namespace FamilyTaskManagerAPI.Middlewares
 
                 case KeyNotFoundException notFoundEx:
                     response.StatusCode = (int)HttpStatusCode.NotFound;
-                    response.Error = notFoundEx.Message;
-                    response.ValidationErrors = null;
+                    response.Error = "Resource not found.";
+                    response.ValidationErrors = new List<string> { notFoundEx.Message };
                     _logger.LogWarning("Not found: {Message}", notFoundEx.Message);
                     TrackExceptionRecursive(exception);
                     break;
