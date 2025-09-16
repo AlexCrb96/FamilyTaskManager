@@ -71,7 +71,7 @@ namespace FamilyTaskManagerAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut("change-name")]
+        [HttpPatch("change-name")]
         public async Task<IActionResult> ChangeName([FromBody] UpdateUserProfileRequestDTO dto)
         {
             await _userService.ChangeNameAsync(GetCurrentUserId(), dto.FirstName, dto.LastName);

@@ -62,7 +62,7 @@ const UserService = {
     },
 
     changeNames: async (firstName, lastName) => {
-        const response = await axios.put("users/change-name", { firstName, lastName });
+        const response = await axios.patch("users/change-name", { firstName, lastName });
         return response.data;
     },
 

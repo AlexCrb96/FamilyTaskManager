@@ -10,14 +10,14 @@ const TaskService = {
         return response.data;
     },
     updateDescription: async (taskId, description) => {
-        const response = await axios.put(
+        const response = await axios.patch(
             `/TaskItems/${taskId}/updateDescription`,
             JSON.stringify(description),
             { headers: { "Content-type": "application/json" } });
         return response.data;
     },
     updateTitle: async (taskId, title) => {
-        const response = await axios.put(
+        const response = await axios.patch(
             `/TaskItems/${taskId}/updateTitle`,
             { title },
             { headers: { "Content-type": "application/json" } });
@@ -25,22 +25,22 @@ const TaskService = {
     },
     updateDueDate: async (taskId, dueDate) => {
         const payload = dueDate === null || dueDate === "" ? null : dueDate;
-        const response = await axios.put(
+        const response = await axios.patch(
             `/TaskItems/${taskId}/updateDueDate`,
             JSON.stringify(payload),
             { headers: { "Content-type": "application/json" } });
         return response.data;
     },
     updateStatus: async (taskId, newStatus) => {
-        const response = await axios.put(`/TaskItems/${taskId}/updateStatus/${newStatus}`);
+        const response = await axios.patch(`/TaskItems/${taskId}/updateStatus/${newStatus}`);
         return response.data;
     },
     assignUser: async (taskId, userId) => {
-        const response = await axios.put(`/TaskItems/${taskId}/assignUser/${userId}`);
+        const response = await axios.patch(`/TaskItems/${taskId}/assignUser/${userId}`);
         return response.data;
     },
     updateProgress: async (taskId, progress) => {
-        const response = await axios.put(
+        const response = await axios.patch(
             `/TaskItems/${taskId}/updateProgress`,
             JSON.stringify(progress),
             { headers: { "Content-type":  "application/json" } });
