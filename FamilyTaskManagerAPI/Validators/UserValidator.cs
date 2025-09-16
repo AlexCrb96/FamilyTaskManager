@@ -20,6 +20,7 @@ namespace FamilyTaskManagerAPI.Validators
         // ----------------------
         // General helpers
         // ----------------------
+        #region General helpers
         public async Task ValidateUserExists(string userId)
         {
             var exists = await _repo.ExistsAsync(u => u.Id == userId);
@@ -95,11 +96,12 @@ namespace FamilyTaskManagerAPI.Validators
                 throw new ValidationException("Provide at least one name to update.");
             }
         }
-
+        #endregion
 
         // ----------------------
         // Permission checks
         // ----------------------
+        #region Permission checks
         public void ValidateCanCreateTask(User user)
         {
             if (!RolePermissions.HasPermission(user.Role, Permission.CreateTask))
@@ -141,5 +143,6 @@ namespace FamilyTaskManagerAPI.Validators
                 throw new UnauthorizedAccessException("User does not have permission to delete tasks.");
             }
         }
+        #endregion
     }
 }

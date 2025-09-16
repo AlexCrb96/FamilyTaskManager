@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights;
+﻿using FamilyTaskManagerAPI.DTOs.Responses;
+using Microsoft.ApplicationInsights;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
@@ -34,8 +35,14 @@ namespace FamilyTaskManagerAPI.Middlewares
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            HttpStatusCode code = HttpStatusCode.InternalServerError;
-            string resultMessage = "An unexpected error occurred.";
+            var response = new ErrorResponseDTO
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+                Error = "An unexpected error occurred.",
+                Path = context.Request.Path,
+                Timestamp = DateTime.UtcNow
+            };
+
             var telemetry = context.RequestServices.GetRequiredService<TelemetryClient>();
 
             void TrackExceptionRecursive(Exception ex)
@@ -56,48 +63,41 @@ namespace FamilyTaskManagerAPI.Middlewares
             switch (exception)
             {
                 case ValidationException validationEx:
-                    code = HttpStatusCode.BadRequest;
-                    resultMessage = validationEx.Message;
-                    _logger.LogWarning("Validation error: {Message}", validationEx.Message);
-                    TrackExceptionRecursive(exception);
-                    break;
-
                 case ArgumentException argumentEx:
-                    code = HttpStatusCode.BadRequest;
-                    resultMessage = argumentEx.Message;
-                    _logger.LogWarning("Argument error: {Message}", argumentEx.Message);
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    response.Error = "One or more validation errors occured.";
+                    response.ValidationErrors = new List<string> { exception.Message };
+                    _logger.LogWarning("Validation error: {Message}", exception.Message);
                     TrackExceptionRecursive(exception);
                     break;
 
                 case UnauthorizedAccessException unauthorizedEx:
-                    code = HttpStatusCode.Forbidden;
-                    resultMessage = unauthorizedEx.Message;
+                    response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    response.Error = "You are not authorized to perform this action.";
+                    response.ValidationErrors = new List<string> { unauthorizedEx.Message };
                     _logger.LogWarning("Unauthorized access: {Message}", unauthorizedEx.Message);
                     TrackExceptionRecursive(exception);
                     break;
 
                 case KeyNotFoundException notFoundEx:
-                    code = HttpStatusCode.NotFound;
-                    resultMessage = notFoundEx.Message;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    response.Error = "Resource not found.";
+                    response.ValidationErrors = new List<string> { notFoundEx.Message };
                     _logger.LogWarning("Not found: {Message}", notFoundEx.Message);
                     TrackExceptionRecursive(exception);
                     break;
 
                 default:
-                    code = HttpStatusCode.InternalServerError;
-                    resultMessage = "An internal server error occurred.";
+                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    response.Error = "An internal server error occurred.";
+                    response.ValidationErrors = null;
                     _logger.LogError(exception, "Unhandled exception: {Message}", exception.Message);
                     TrackExceptionRecursive(exception);
                     break;
             }
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
-
-            var response = new { 
-                error = resultMessage,
-                statusCode = (int)code
-            };
+            context.Response.StatusCode = (int)response.StatusCode;
 
             await context.Response.WriteAsJsonAsync(response);
         }
