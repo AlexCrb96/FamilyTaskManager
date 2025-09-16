@@ -4,6 +4,8 @@ import "../styles/pages/HomePage.css";
 import { AuthContext } from "../context/AuthContext";
 import { useSessionExpiry } from "../hooks/useSessionExpiry";
 import { useAuthLogout } from "../hooks/useAuthLogout";
+import { useErrorHandler } from "../hooks/useErrorHandler";
+import { showErrorToast } from "../components/shared/ErrorToast";
 
 import UserService from "../services/UserService";
 import TaskService from "../services/TaskService";
@@ -18,6 +20,7 @@ export default function HomePage() {
     const { token } = useContext(AuthContext);
     const { currentUser } = useContext(AuthContext);
     const { sessionExpired, setSessionExpired } = useSessionExpiry(token);
+    const handleError = useErrorHandler(); 
 
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
@@ -33,8 +36,13 @@ export default function HomePage() {
     },[token]);
 
     const fetchTasks = async (keywords = "") => {
-        const data = await TaskService.getFilteredTasks({ keywords });
-        setTasks(data);
+        try {
+            const data = await TaskService.getFilteredTasks({ keywords });
+            setTasks(data);
+        } catch (error) {
+            const errorObj = handleError(error);
+            showErrorToast(errorObj);
+        }        
     };
 
     const fetchUsers = async() => {
@@ -75,7 +83,7 @@ export default function HomePage() {
     };
 
     const handleSave = async (task) => {
-
+        try {
             if (!task.id) {
                 await TaskService.addTask(task).catch(handleError);
             } else {
@@ -88,14 +96,18 @@ export default function HomePage() {
                 });
 
                 if (Object.keys(changedFields).length > 0) {
-                    await TaskService.updateTask(editingTask.id, changedFields).catch(handleError);
+                    await TaskService.updateTask(editingTask.id, changedFields);
                 }
             }
             fetchTasks();
             setEditingTask(null);
+        } catch (error) {
+            const errorObj = handleError(error);
+            showErrorToast(errorObj);
+        }
+            
     }
-
-    const handleError = (error) => {
+ /*   const handleError = (error) => {
         if (!error.response) {
             alert("Network error or server not responding. Please try again.");
             return;
@@ -115,12 +127,17 @@ export default function HomePage() {
         } else {
             alert("An unexpected error occurred.");
         }
-    };
+    };*/
 
     const handleDelete = async (taskId) => {
         if (window.confirm("Are you sure you want to delete this task?")) {
-            await TaskService.deleteTask(taskId);
-            await fetchTasks();
+            try {
+                await TaskService.deleteTask(taskId);
+                await fetchTasks();
+            } catch (error) {
+                const errorObj = handleError(error);
+                showErrorToast(errorObj);
+            }            
         }
     };
 
