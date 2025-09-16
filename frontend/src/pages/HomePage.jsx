@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "../styles/pages/HomePage.css";
 
 import { AuthContext } from "../context/AuthContext";
@@ -30,25 +30,30 @@ export default function HomePage() {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
     const [viewingTask, setViewingTask] = useState(null);
 
-    useEffect(() => {
-        fetchTasks();
-        fetchUsers();
-    },[token]);
-
-    const fetchTasks = async (keywords = "") => {
+    const fetchTasks = useCallback(async (keywords = "") => {
         try {
             const data = await TaskService.getFilteredTasks({ keywords });
             setTasks(data);
         } catch (error) {
             const errorObj = handleError(error);
             showErrorToast(errorObj);
-        }        
-    };
+        }
+    }, [handleError]);
 
-    const fetchUsers = async() => {
-        const data = await UserService.getAllUsers();
-        setUsers(data);
-    };
+    const fetchUsers = useCallback(async () => {
+        try {
+            const data = await UserService.getAllUsers();
+            setUsers(data);
+        } catch (error) {
+            const errorObj = handleError(error);
+            showErrorToast(errorObj);
+        }        
+    }, [handleError]);
+
+    useEffect(() => {
+        fetchTasks();
+        fetchUsers();
+    },[token, fetchTasks, fetchUsers]);
 
     const handleLogout = useAuthLogout();
 
