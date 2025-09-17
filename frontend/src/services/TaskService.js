@@ -9,66 +9,20 @@ const TaskService = {
         const response = await axios.post("/TaskItems/create", task);
         return response.data;
     },
-    updateDescription: async (taskId, description) => {
-        const response = await axios.patch(
-            `/TaskItems/${taskId}/updateDescription`,
-            JSON.stringify(description),
-            { headers: { "Content-type": "application/json" } });
-        return response.data;
-    },
-    updateTitle: async (taskId, title) => {
-        const response = await axios.patch(
-            `/TaskItems/${taskId}/updateTitle`,
-            { title },
-            { headers: { "Content-type": "application/json" } });
-        return response.data;
-    },
-    updateDueDate: async (taskId, dueDate) => {
-        const payload = dueDate === null || dueDate === "" ? null : dueDate;
-        const response = await axios.patch(
-            `/TaskItems/${taskId}/updateDueDate`,
-            JSON.stringify(payload),
-            { headers: { "Content-type": "application/json" } });
-        return response.data;
-    },
-    updateStatus: async (taskId, newStatus) => {
-        const response = await axios.patch(`/TaskItems/${taskId}/updateStatus/${newStatus}`);
-        return response.data;
-    },
-    assignUser: async (taskId, userId) => {
-        const response = await axios.patch(`/TaskItems/${taskId}/assignUser/${userId}`);
-        return response.data;
-    },
-    updateProgress: async (taskId, progress) => {
-        const response = await axios.patch(
-            `/TaskItems/${taskId}/updateProgress`,
-            JSON.stringify(progress),
-            { headers: { "Content-type":  "application/json" } });
-        return response.data;
-    },
     updateTask: async (taskId, changedFields) => {
-        const promises = [];
+        const payload = {};
+        Object.keys(changedFields).forEach((key) => {
+            if (changedFields[key] !== undefined) {
+                payload[key] = changedFields[key];
+            }
+        });
 
-        if ("description" in changedFields) {
-            promises.push(TaskService.updateDescription(taskId, changedFields.description));
-        }
-        if ("title" in changedFields) {
-            promises.push(TaskService.updateTitle(taskId, changedFields.title));
-        }
-        if ("dueDate" in changedFields) {
-            promises.push(TaskService.updateDueDate(taskId, changedFields.dueDate));
-        }
-        if ("status" in changedFields) {
-            promises.push(TaskService.updateStatus(taskId, changedFields.status));
-        }
-        if ("assignedUserId" in changedFields) {
-            promises.push(TaskService.assignUser(taskId, changedFields.assignedUserId));
-        }
-        if ("progress" in changedFields) {
-            promises.push(TaskService.updateProgress(taskId, changedFields.progress));
-        }
+        const response = await axios.patch(
+            `/TaskItems/${taskId}/editTask`,
+            payload,
+            { headers: { "Content-type": "application/json" } });
 
-        await Promise.all(promises);
+        return response.data;
     },
     deleteTask: async (taskId) => {
         await axios.delete(`/TaskItems/${taskId}`);

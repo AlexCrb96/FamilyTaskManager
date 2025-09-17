@@ -20,6 +20,27 @@ namespace FamilyTaskManagerAPI.DTOs.Mappers
             return task;
         }
 
+        public static void ApplyEdits(this TaskItem task, EditTaskItemRequestDTO dto)
+        {
+            if (!string.IsNullOrEmpty(dto.Title))
+                task.Title = dto.Title.Trim();
+
+            if (dto.Description != null)
+                task.Description = dto.Description.Trim();
+
+            if (dto.Progress != null)
+                task.Progress = dto.Progress.Trim();
+
+            if (dto.DueDate.HasValue)
+                task.DueDate = dto.DueDate.Value;
+
+            if (dto.Status.HasValue)
+                task.Status = dto.Status.Value;
+
+            if (!string.IsNullOrEmpty(dto.AssignedUserId))
+                task.AssignedUserId = dto.AssignedUserId;
+        }
+
         public static TaskItemResponseDTO ToTaskItemResponse(this TaskItem task)
         {
             TaskItemResponseDTO dto = new TaskItemResponseDTO
