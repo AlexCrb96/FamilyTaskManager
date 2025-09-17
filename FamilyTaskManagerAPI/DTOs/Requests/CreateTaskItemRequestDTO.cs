@@ -1,17 +1,14 @@
-﻿using FamilyTaskManagerAPI.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FamilyTaskManagerAPI.DTOs.Requests
 {
-    public class CreateTaskItemRequestDTO
+    public class CreateTaskItemRequestDTO : BaseTaskItemDTO
     {
         [Required(ErrorMessage = "A task should have a title.")]
-        [StringLength(100, ErrorMessage = "The title should not exceed 100 characters.")]
-        public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public string? Progress { get; set; }
-        public DateOnly? DueDate { get; set; }
-        public TaskItemStatus? Status { get; set; }
-        public string? AssignedUserId { get; set; }
+        public override string Title 
+        { 
+            get => base.Title; 
+            set => base.Title = value; 
+        }
     }
 }

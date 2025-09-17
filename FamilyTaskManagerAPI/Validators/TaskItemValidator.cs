@@ -1,5 +1,7 @@
-﻿using FamilyTaskManagerAPI.Entities;
-using FamilyTaskManagerAPI.Data.Repositories;
+﻿using FamilyTaskManagerAPI.Data.Repositories;
+using FamilyTaskManagerAPI.DTOs.Requests;
+using FamilyTaskManagerAPI.Entities;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace FamilyTaskManagerAPI.Validators
@@ -17,29 +19,36 @@ namespace FamilyTaskManagerAPI.Validators
             return await _repo.GetByIdAsync(taskId) ?? throw new KeyNotFoundException($"Task with ID {taskId} does not exist.");
         }
 
-        public async Task<TaskItemStatus> ValidateStatus(string status)
-        {
-            if (!Enum.TryParse<TaskItemStatus>(status, out var taskStatus))
-            {
-                throw new ArgumentException("Invalid status value.");
-            }
-            return taskStatus;
-        }
-
-        public void ValidateDueDate(DateOnly? dueDate)
-        {
-            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
-            if (dueDate < today)
-            {
-                throw new ArgumentException("Due date cannot be in the past.");
-            }
-        }
-
         public void ValidateTasksNotEmpty (List<TaskItem> tasks)
         {
             if (tasks == null || tasks.Count == 0)
             {
                 throw new KeyNotFoundException("No tasks found.");
+            }
+        }
+
+        public void ValidateEditInput(EditTaskItemRequestDTO dto)
+        {
+            ValidateTitle(dto.Title);
+            ValidateDueDate(dto.DueDate);
+        }
+
+        private void ValidateTitle(string? title)
+        {
+            if (title != null)
+            {
+                if (string.IsNullOrEmpty(title.Trim()))
+                {
+                    throw new ValidationException("A task should have a title.");
+                }
+            }
+        }
+        private void ValidateDueDate(DateOnly? dueDate)
+        {
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+            if (dueDate < today)
+            {
+                throw new ArgumentException("Due date cannot be in the past.");
             }
         }
     }

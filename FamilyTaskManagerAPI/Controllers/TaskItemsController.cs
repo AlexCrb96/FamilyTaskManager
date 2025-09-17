@@ -30,46 +30,11 @@ namespace FamilyTaskManagerAPI.Controllers
             return Ok("Task item created successfully.");
         }
 
-        [HttpPatch("{taskId}/assignUser/{userId}")]
-        public async Task<IActionResult> AssignUserToTaskItem(int taskId, string userId)
+        [HttpPatch("{taskId}/editTask")]
+        public async Task<IActionResult> EditTaskItem(int taskId, [FromBody] EditTaskItemRequestDTO dto)
         {
-            await _taskItemService.AssignUserToTaskItemAsync(taskId, userId, GetCurrentUserId());                        
-            return Ok("User assigned to task item successfully.");
-        }
-
-        [HttpPatch("{taskId}/updateStatus/{newStatus}")]
-        public async Task<IActionResult> UpdateTaskItemStatus(int taskId, TaskItemStatus newStatus)
-        {
-            await _taskItemService.UpdateTaskStatusAsync(taskId, newStatus, GetCurrentUserId());            
-            return Ok("Task item status updated successfully.");
-        }
-
-        [HttpPatch("{taskId}/updateDueDate")]
-        public async Task<IActionResult> UpdateTaskItemDueDate(int taskId, [FromBody] DateOnly? dueDate)
-        {
-            await _taskItemService.UpdateTaskDueDateAsync(taskId, dueDate, GetCurrentUserId());           
-            return Ok("Task item due date updated successfully.");
-        }
-
-        [HttpPatch("{taskId}/updateDescription")]
-        public async Task<IActionResult> UpdateTaskItemDescription(int taskId, [FromBody] string description)
-        {
-            await _taskItemService.UpdateTaskItemDescriptionAsync(taskId, description, GetCurrentUserId());            
-            return Ok("Task item description updated successfully.");
-        }
-
-        [HttpPatch("{taskId}/updateTitle")]
-        public async Task<IActionResult> UpdateTaskItemTitle(int taskId, [FromBody] UpdateTaskTitleRequestDTO dto)
-        {
-            await _taskItemService.UpdateTaskItemTitleAsync(taskId, dto.Title, GetCurrentUserId());            
-            return Ok("Task item title updated successfully.");
-        }
-
-        [HttpPatch("{taskId}/updateProgress")]
-        public async Task<IActionResult> UpdateTaskItemProgress(int taskId, [FromBody] string progress)
-        {
-            await _taskItemService.UpdateTaskItemProgressAsync(taskId, progress, GetCurrentUserId());            
-            return Ok("Task item progress updated successfully.");
+            await _taskItemService.EditTaskItemAsync(taskId, dto, GetCurrentUserId());            
+            return Ok("Task item edited successfully.");
         }
 
         [HttpGet()]

@@ -1,4 +1,5 @@
 ﻿using FamilyTaskManagerAPI.Data.Repositories;
+using FamilyTaskManagerAPI.DTOs.Requests;
 using FamilyTaskManagerAPI.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
@@ -74,19 +75,9 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public async Task ValidateUserUnassignedOrExists(TaskItem task, string userId)
+        public bool IsTargetUserUnassigned(string userId)
         {
-            bool isUnassigned = userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
-            if (isUnassigned)
-            {
-                task.AssignedUserId = null;
-                task.AssignedUser = null;
-            }
-            else
-            {
-                // Check if the assigned user exists
-                await ValidateUserExists(userId);
-            }
+            return userId.Equals("unassigned", StringComparison.OrdinalIgnoreCase);
         }
 
         public void ValidateNamesInput(string? firstName, string? lastName)
@@ -110,10 +101,12 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public void ValidateCanEditTask(User user, TaskItem task)
-        {    
+        public void ValidateCanEditTask(User user, TaskItem task, string? effectiveAssignedUserId = null)
+        {   
+            string assignedUserIdToCheck = effectiveAssignedUserId ?? task.AssignedUserId;
+
             bool canEdit = RolePermissions.HasPermission(user.Role, Permission.EditAnyTask) ||
-                           (RolePermissions.HasPermission(user.Role, Permission.EditOwnTask) && task.AssignedUserId == user.Id);
+                           (RolePermissions.HasPermission(user.Role, Permission.EditOwnTask) && assignedUserIdToCheck == user.Id);
 
             if (!canEdit)
             {
@@ -141,6 +134,21 @@ namespace FamilyTaskManagerAPI.Validators
             if (!RolePermissions.HasPermission(user.Role, Permission.DeleteTask))
             {
                 throw new UnauthorizedAccessException("User does not have permission to delete tasks.");
+            }
+        }
+
+        public void ValidatePermissions(User currentUser, TaskItem currentTask, EditTaskItemRequestDTO inputTask, string? targetUserId)
+        {
+
+            // If the assigned user is being changed, validate the permission to assign
+            if (!string.IsNullOrEmpty(inputTask.AssignedUserId) && inputTask.AssignedUserId != currentTask.AssignedUserId)
+            {
+                ValidateCanAssignTask(currentUser, currentTask, inputTask.AssignedUserId);
+            }
+
+            if (inputTask.Title != null || inputTask.Description != null ||  inputTask.Progress != null || inputTask.DueDate.HasValue || inputTask.Status.HasValue)
+            {
+                ValidateCanEditTask(currentUser, currentTask, targetUserId);
             }
         }
         #endregion

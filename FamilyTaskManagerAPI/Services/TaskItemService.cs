@@ -1,5 +1,7 @@
 ﻿using FamilyTaskManagerAPI.Data;
 using FamilyTaskManagerAPI.Data.Repositories;
+using FamilyTaskManagerAPI.DTOs.Mappers;
+using FamilyTaskManagerAPI.DTOs.Requests;
 using FamilyTaskManagerAPI.Entities;
 using FamilyTaskManagerAPI.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,15 @@ namespace FamilyTaskManagerAPI.Services
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem, string currentUserId)
         {
             // Validate AssignedUser input
-            await _userValidator.ValidateUserUnassignedOrExists(taskItem, taskItem.AssignedUserId);
+            if (_userValidator.IsTargetUserUnassigned(taskItem.AssignedUserId))
+            {
+                taskItem.AssignedUser = null;
+                taskItem.AssignedUserId = null;
+            }
+            else
+            {
+                await _userValidator.ValidateUserExists(taskItem.AssignedUserId);
+            }
 
             // Trim whitespace at the end of title and description
             taskItem.Title = taskItem.Title.Trim();
@@ -38,120 +48,26 @@ namespace FamilyTaskManagerAPI.Services
             return taskItem.Id;
         }
 
-        public async Task AssignUserToTaskItemAsync(int taskId, string userId, string currentUserId)
+        public async Task EditTaskItemAsync(int taskId, EditTaskItemRequestDTO inputTask, string? currentUserId)
         {
             // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
+            User user = await _userValidator.ValidateAndGetUserById(currentUserId);
 
             // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
+            var task = await _taskItemValidator.ValidateAndGetTask(taskId);
 
-            // Check if the current user can assign the task
-            _userValidator.ValidateCanAssignTask(currentUser, task, userId);
+            string targetUserId = inputTask.AssignedUserId ?? task.AssignedUserId;
 
-            // Validate AssignedUser input
-            await _userValidator.ValidateUserUnassignedOrExists(task, userId);
+            _userValidator.ValidatePermissions(user, task, inputTask, targetUserId);
 
-            // Assign the user to the task item
-            task.AssignedUserId = userId;
-            await _repo.SaveAsync();
-        }
+            _taskItemValidator.ValidateEditInput(inputTask);
+            task.ApplyEdits(inputTask);
 
-        public async Task UpdateTaskStatusAsync(int taskId, TaskItemStatus newStatus, string currentUserId)
-        {
-            // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
-
-            // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user can edit the task
-            _userValidator.ValidateCanEditTask(currentUser, task);
-
-            // Update the status
-            task.Status = newStatus;
-
-            // If the status is set to Done, set the FinishedAt date
-            if (newStatus == TaskItemStatus.Done)
+            if (task.Status == TaskItemStatus.Done)
             {
                 task.FinishedAt = DateOnly.FromDateTime(DateTime.UtcNow);
             }
-            await _repo.SaveAsync();
-        }
 
-        public async Task UpdateTaskDueDateAsync(int taskId, DateOnly? dueDate, string currentUserId)
-        {
-            // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
-
-            // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user can edit the task
-            _userValidator.ValidateCanEditTask(currentUser, task);
-
-            // Validate the due date
-            _taskItemValidator.ValidateDueDate(dueDate);
-
-            // Update the due date
-            task.DueDate = dueDate;
-            await _repo.SaveAsync();
-        }
-
-        public async Task UpdateTaskItemDescriptionAsync(int taskId, string description, string currentUserId)
-        {
-            // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
-
-            // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user can edit the task
-            _userValidator.ValidateCanEditTask(currentUser, task);
-
-            // Trim description before assigning
-            description = description.Trim();
-
-            // Update the description
-            task.Description = description;
-            await _repo.SaveAsync();
-        }
-
-        public async Task UpdateTaskItemTitleAsync(int taskId, string title, string currentUserId)
-        {
-            // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
-
-            // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user can edit the task
-            _userValidator.ValidateCanEditTask(currentUser, task);
-
-            // Trim title before assigning
-            title = title.Trim();
-
-            // Update Title
-            task.Title = title;
-            await _repo.SaveAsync();
-        }
-
-        public async Task UpdateTaskItemProgressAsync(int taskId, string progress, string currentUserId)
-        {
-            // Read the current user information from the database
-            User currentUser = await _userValidator.ValidateAndGetUserById(currentUserId);
-
-            // Validate the task item exists
-            TaskItem task = await _taskItemValidator.ValidateAndGetTask(taskId);
-
-            // Check if the current user can edit the task
-            _userValidator.ValidateCanEditTask(currentUser, task);
-
-            // Trim title before assigning
-            progress = progress.Trim();
-
-            // Update Title
-            task.Progress = progress;
             await _repo.SaveAsync();
         }
 
