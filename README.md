@@ -40,7 +40,7 @@ FamilyTaskManager/
 Required environment variables:
 ```env
 # Database
-PostgreSQL_Connection="Host=...;Port=5432;Database=...;Username=...;Password=..."
+ConnectionStrings:PostgreSQL_Connection="Host=...;Port=5432;Database=...;Username=...;Password=..."
 
 # JWT
 JwtSettings:Issuer="your-issuer"
