@@ -93,7 +93,7 @@ namespace FamilyTaskManagerAPI.Validators
         // Permission checks
         // ----------------------
         #region Permission checks
-        public void ValidateCanCreateTask(User user)
+        private void ValidateCanCreateTask(User user)
         {
             if (!RolePermissions.HasPermission(user.Role, Permission.CreateTask))
             {
@@ -101,7 +101,7 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public void ValidateCanEditTask(User user, TaskItem task, string? effectiveAssignedUserId = null)
+        private void ValidateCanEditTask(User user, TaskItem task, string? effectiveAssignedUserId = null)
         {   
             string assignedUserIdToCheck = effectiveAssignedUserId ?? task.AssignedUserId;
 
@@ -114,7 +114,7 @@ namespace FamilyTaskManagerAPI.Validators
             }
         }
 
-        public void ValidateCanAssignTask(User user, TaskItem task, string targetUserId)
+        private void ValidateCanAssignTask(User user, TaskItem task, string targetUserId)
         {
             if (user.Role == UserRole.Child)
             {
