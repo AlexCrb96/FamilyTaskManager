@@ -120,7 +120,7 @@ builder.Services.AddScoped<TaskItemValidator>();
 builder.Services.AddScoped<UserValidator>();
 builder.Services.AddScoped<TaskItemRepository>();
 builder.Services.AddSingleton<MailService>();
-builder.Services.AddHostedService<SystemHealthService>();
+//builder.Services.AddHostedService<SystemHealthService>(); // Commnet out periodic DB checks. Neon only offers 100 Compute Hours per month on free tier.
 
 #endregion
 
