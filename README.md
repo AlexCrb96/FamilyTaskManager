@@ -12,11 +12,11 @@ A complete family task management system composed of:
 
 FamilyTaskManager/
 
-├── FamilyTaskManagerAPI/  #Backend API (ASP.NET Core 8, EF Core, PostgreSQL)
+├── FamilyTaskManagerAPI/    **Backend API (ASP.NET Core 8, EF Core, PostgreSQL)**
 
-├── frontend/  #Frontend (React + Vite + Tailwind)
+├── frontend/                **Frontend (React + CSS)**
 
-└── KeepAliveFunctionApp/  #Azure Function App (TimerTrigger keep-alive pings)
+└── KeepAliveFunctionApp/    **Azure Function App (TimerTrigger keep-alive pings)**
 
 ---
 
